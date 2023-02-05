@@ -15,7 +15,7 @@ const Navbar: FC = () => {
   const [showError, setShowError] = useState(false)
 
   const signout = async () => {
-/*     const response = await API.signout()
+    const response = await API.signout()
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -25,7 +25,7 @@ const Navbar: FC = () => {
     } else {
       authStore.signout()
       navigate(routes.HOME)
-    } */
+    }
   }
   return (
     <>
