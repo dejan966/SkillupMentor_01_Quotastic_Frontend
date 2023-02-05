@@ -30,7 +30,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
     defaultValues,
   })
 
-  const { data: rolesData } = useQuery(['roles'], API.fetchRoles)
+  const { data: userData } = useQuery(API.fetchUsers())
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
@@ -46,7 +46,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
   )
 
   const handleAdd = async (data: CreateUserFields) => {
-    if (!file) return
+/*     if (!file) return
     const response = await API.createUser(data)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
@@ -70,7 +70,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
       } else {
         navigate('/users')
       }
-    }
+    } */
   }
 
   const handleUpdate = async (data: UpdateUserFields) => {
@@ -240,35 +240,6 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
               {errors.email && (
                 <div className="invalid-feedback text-danger">
                   {errors.email.message}
-                </div>
-              )}
-            </Form.Group>
-          )}
-        />
-        <Controller
-          control={control}
-          name="role_id"
-          render={({ field }) => (
-            <Form.Group className="mb-3">
-              <FormLabel htmlFor="role_id">Role</FormLabel>
-              <Form.Select
-                className={
-                  errors.role_id ? 'form-control is-invalid' : 'form-control'
-                }
-                {...field}
-                aria-label="Role"
-                aria-describedby="role_id"
-              >
-                <option></option>
-                {rolesData?.data.map((role: RoleType, index: number) => (
-                  <option key={index} value={role.id}>
-                    {role.name}
-                  </option>
-                ))}
-              </Form.Select>
-              {errors.role_id && (
-                <div className="invalid-feedback text-danger">
-                  {errors.role_id.message}
                 </div>
               )}
             </Form.Group>
