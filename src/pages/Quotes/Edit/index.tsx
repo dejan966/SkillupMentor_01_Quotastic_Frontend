@@ -1,13 +1,13 @@
-import DashboardLayout from '../../../components/ui/DashboardLayout'
-import CreateUpdateUserForm from '../../../components/user/CreateUpdateUserForm'
+import Layout from '../../../components/ui/Layout'
 import { FC } from 'react'
+import CreateUpdateQuoteForm from '../../../components/quote/CreateUpdateQuoteForm'
 
 const QuotesEdit: FC = () => {
   return (
-    <DashboardLayout>
+    <Layout>
       <h1 className="mb-4 text-center">Create new quote</h1>
-      <CreateUpdateUserForm />
-    </DashboardLayout>
+      <CreateUpdateQuoteForm />
+    </Layout>
   )
 }
 

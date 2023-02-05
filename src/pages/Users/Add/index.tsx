@@ -1,13 +1,13 @@
-import DashboardLayout from '../../../components/ui/DashboardLayout'
+import Layout from '../../../components/ui/Layout'
 import CreateUpdateUserForm from '../../../components/user/CreateUpdateUserForm'
 import { FC } from 'react'
 
 const UsersAdd: FC = () => {
   return (
-    <DashboardLayout>
+    <Layout>
       <h1 className="mb-4 text-center">Create new user</h1>
       <CreateUpdateUserForm />
-    </DashboardLayout>
+    </Layout>
   )
 }
 

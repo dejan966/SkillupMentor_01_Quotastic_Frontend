@@ -1,4 +1,4 @@
-import DashboardLayout from '../../components/ui/DashboardLayout'
+import Layout from '../../components/ui/Layout'
 import { useState } from 'react'
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
@@ -54,7 +54,7 @@ const Users: FC = () => {
   }
 
   return (
-    <DashboardLayout>
+    <Layout>
       <div className="mb-4">
         <h1 className="mb-4">Users</h1>
         <Link
@@ -124,7 +124,7 @@ const Users: FC = () => {
           </Toast>
         </ToastContainer>
       )}
-    </DashboardLayout>
+    </Layout>
   )
 }
 
