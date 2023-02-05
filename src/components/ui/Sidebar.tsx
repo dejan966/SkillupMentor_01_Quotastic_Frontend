@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button'
 import Offcanvas from 'react-bootstrap/Offcanvas'
-import { routes } from 'constants/routesConstants'
+import { routes } from '../../constants/routesConstants'
 import { Dispatch, FC, SetStateAction, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
@@ -15,25 +15,13 @@ interface ISidebarItem {
 
 const sidebarItems: ISidebarItem[] = [
   {
-    title: 'Dashboard',
-    href: routes.DASHBOARD_PREFIX,
-  },
-  {
     title: 'Users',
-    href: `${routes.DASHBOARD_PREFIX}/users`,
+    href: '/users',
   },
   {
-    title: 'Roles',
-    href: `${routes.DASHBOARD_PREFIX}/roles`,
-  },
-  {
-    title: 'Products',
-    href: `${routes.DASHBOARD_PREFIX}/products`,
-  },
-  {
-    title: 'Orders',
-    href: `${routes.DASHBOARD_PREFIX}/orders`,
-  },
+    title: 'Quotes',
+    href: '/quotes',
+  }
 ]
 
 const Item: FC<ItemProps> = ({ href, setOpen, title }) => {

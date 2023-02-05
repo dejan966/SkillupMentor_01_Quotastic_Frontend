@@ -1,13 +1,13 @@
 import Button from 'react-bootstrap/Button'
-import { routes } from 'constants/routesConstants'
+import { routes } from '../../constants/routesConstants'
 import { FC, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import Toast from 'react-bootstrap/Toast'
-import authStore from 'stores/auth.store'
+import authStore from '../../stores/auth.store'
 import ToastContainer from 'react-bootstrap/ToastContainer'
-import { StatusCode } from 'constants/errorConstants'
-import * as API from 'api/Api'
+import { StatusCode } from '../../constants/errorConstants'
+import * as API from '../../api/Api'
 
 const Navbar: FC = () => {
   const navigate = useNavigate()
@@ -15,7 +15,7 @@ const Navbar: FC = () => {
   const [showError, setShowError] = useState(false)
 
   const signout = async () => {
-    const response = await API.signout()
+/*     const response = await API.signout()
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -25,7 +25,7 @@ const Navbar: FC = () => {
     } else {
       authStore.signout()
       navigate(routes.HOME)
-    }
+    } */
   }
   return (
     <>
@@ -58,11 +58,6 @@ const Navbar: FC = () => {
                 <li className="nav-item pe-4">
                   <NavLink className="nav-link" to={routes.HOME}>
                     Home
-                  </NavLink>
-                </li>
-                <li className="nav-item pe-4">
-                  <NavLink className="nav-link" to={routes.DASHBOARD_PREFIX}>
-                    Dashboard
                   </NavLink>
                 </li>
                 {authStore.user ? (

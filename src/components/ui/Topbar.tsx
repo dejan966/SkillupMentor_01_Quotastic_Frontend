@@ -1,13 +1,13 @@
 import Button from 'react-bootstrap/Button'
-import { routes } from 'constants/routesConstants'
+import { routes } from '../../constants/routesConstants'
 import { FC, useState } from 'react'
-import authStore from 'stores/auth.store'
-import { StatusCode } from 'constants/errorConstants'
+import authStore from '../../stores/auth.store'
+import { StatusCode } from '../../constants/errorConstants'
 import Toast from 'react-bootstrap/Toast'
 import ToastContainer from 'react-bootstrap/ToastContainer'
-import * as API from 'api/Api'
+import * as API from '../../api/Api'
 import { useNavigate } from 'react-router-dom'
-import useMediaQuery from 'hooks/useMediaQuery'
+import useMediaQuery from '../../hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 import Avatar from 'react-avatar'
 
@@ -18,7 +18,7 @@ const Topbar: FC = () => {
   const [showError, setShowError] = useState(false)
 
   const signout = async () => {
-    const response = await API.signout()
+/*     const response = await API.signout()
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -28,7 +28,7 @@ const Topbar: FC = () => {
     } else {
       authStore.signout()
       navigate(routes.HOME)
-    }
+    } */
   }
 
   return (
@@ -38,13 +38,12 @@ const Topbar: FC = () => {
           {isMobile ? (
             <Link
               className="btn btn-dark text-decoration-none text-light me-3"
-              to={`${routes.DASHBOARD_PREFIX}/users/edit`}
+              to={'/users/edit'}
               state={{
                 id: authStore.user?.id,
                 first_name: authStore.user?.first_name,
                 last_name: authStore.user?.last_name,
                 email: authStore.user?.email,
-                role_id: authStore.user?.role?.id,
                 avatar: authStore.user?.avatar,
                 isActiveUser: true,
               }}
@@ -67,13 +66,12 @@ const Topbar: FC = () => {
           ) : (
             <Link
               className="btn btn-dark text-decoration-none text-light me-3"
-              to={`${routes.DASHBOARD_PREFIX}/users/edit`}
+              to={'/users/edit'}
               state={{
                 id: authStore.user?.id,
                 first_name: authStore.user?.first_name,
                 last_name: authStore.user?.last_name,
                 email: authStore.user?.email,
-                role_id: authStore.user?.role?.id,
                 avatar: authStore.user?.avatar,
                 isActiveUser: true,
               }}
