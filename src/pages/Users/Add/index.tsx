@@ -1,8 +1,8 @@
-import DashboardLayout from 'components/ui/DashboardLayout'
-import CreateUpdateUserForm from 'components/user/CreateUpdateUserForm'
+import DashboardLayout from '../../../components/ui/DashboardLayout'
+import CreateUpdateUserForm from '../../../components/user/CreateUpdateUserForm'
 import { FC } from 'react'
 
-const DashboardUsersAdd: FC = () => {
+const UsersAdd: FC = () => {
   return (
     <DashboardLayout>
       <h1 className="mb-4 text-center">Create new user</h1>
@@ -11,4 +11,4 @@ const DashboardUsersAdd: FC = () => {
   )
 }
 
-export default DashboardUsersAdd
+export default UsersAdd

@@ -1,4 +1,4 @@
-import DashboardLayout from 'components/ui/DashboardLayout'
+import DashboardLayout from '../../components/ui/DashboardLayout'
 import { useState } from 'react'
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
@@ -7,14 +7,14 @@ import Toast from 'react-bootstrap/Toast'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { useQuery, useMutation } from 'react-query'
-import useMediaQuery from 'hooks/useMediaQuery'
-import * as API from 'api/Api'
-import { routes } from 'constants/routesConstants'
-import { StatusCode } from 'constants/errorConstants'
-import { UserType } from 'models/auth'
-import authStore from 'stores/auth.store'
+import useMediaQuery from '../../hooks/useMediaQuery'
+import * as API from '../../api/Api'
+import { routes } from '../../constants/routesConstants'
+import { StatusCode } from '../../constants/errorConstants'
+import { UserType } from '../../models/auth'
+import authStore from '../../stores/auth.store'
 
-const DashboardUsers: FC = () => {
+const Users: FC = () => {
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
   const { isMobile } = useMediaQuery(768)
@@ -59,7 +59,7 @@ const DashboardUsers: FC = () => {
         <h1 className="mb-4">Users</h1>
         <Link
           className="btn btn-dark"
-          to={`${routes.DASHBOARD_PREFIX}/users/add`}
+          to={'/users/add'}
         >
           Add
         </Link>
@@ -77,7 +77,6 @@ const DashboardUsers: FC = () => {
                   <tr>
                     <th>Email</th>
                     <th>Full name</th>
-                    <th>Role</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -89,38 +88,6 @@ const DashboardUsers: FC = () => {
                         {item.first_name || item.last_name
                           ? `${item.first_name ?? ''} ${item.last_name ?? ''}`
                           : '/'}
-                      </td>
-                      <td>{item.role?.name ?? '/'}</td>
-                      <td>
-                        <Link
-                          className={
-                            isMobile
-                              ? 'btn btn-warning btn-sm me-2 mb-2'
-                              : 'btn btn-warning btn-sm me-2'
-                          }
-                          to={`${routes.DASHBOARD_PREFIX}/roles/edit`}
-                          state={{
-                            id: item.id,
-                            first_name: item.first_name,
-                            last_name: item.last_name,
-                            email: item.email,
-                            role: item.role?.name,
-                            avatar: item.avatar,
-                            isActiveUser:
-                              authStore.user?.email === item.email
-                                ? true
-                                : false,
-                          }}
-                        >
-                          Edit
-                        </Link>
-                        <Button
-                          className={
-                            isMobile ? 'btn-danger mb-2' : 'btn-danger'
-                          }
-                          size="sm"
-                          onClick={() => handleDelete(item.id)}
-                        ></Button>
                       </td>
                     </tr>
                   ))}
@@ -161,4 +128,4 @@ const DashboardUsers: FC = () => {
   )
 }
 
-export default DashboardUsers
+export default Users

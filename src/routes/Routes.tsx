@@ -18,8 +18,13 @@ type AppRoute = RouteProps & {
 const Home = lazy(() => import('../pages/Home'))
 
 /* Private routes */
+const Users = lazy(() => import('../pages/Users'))
+const UsersAdd = lazy(() => import('../pages/Users/Add'))
+const UsersEdit = lazy(() => import('../pages/Users/Edit'))
+
+const Quotes = lazy(() => import('../pages/Quotes'))
 const QuotesAdd = lazy(() => import('../pages/Quotes/Add'))
-const DashboardUsersEdit = lazy(() => import('../pages/Dashboard/Users/Edit'))
+const QuotesEdit = lazy(() => import('../pages/Quotes/Edit'))
 
 /* Restricted routes */
 const Login = lazy(() => import('../pages/Login'))
@@ -43,64 +48,39 @@ export const AppRoutes: AppRoute[] = [
   // Private Routes
   {
     type: RouteType.PRIVATE,
-    path: '/dashboard',
-    children: <Dashboard />,
+    path: '/users',
+    children: <Users />,
   },
   {
     type: RouteType.PRIVATE,
-    path: '/dashboard/users',
-    children: <DashboardUsers />,
+    path: '/users/add',
+    children: <UsersAdd />,
   },
   {
     type: RouteType.PRIVATE,
-    path: '/dashboard/users/add',
-    children: <DashboardUsersAdd />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/dashboard/users/edit',
-    children: <DashboardUsersEdit />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/dashboard/roles',
-    children: <DashboardRoles />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/dashboard/roles/add',
-    children: <DashboardRolesAdd />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/dashboard/roles/edit',
-    children: <DashboardRolesEdit />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/dashboard/products',
-    children: <DashboardProducts />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/dashboard/products/add',
-    children: <DashboardProductsAdd />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/dashboard/products/edit',
-    children: <DashboardProductsEdit />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/dashboard/orders',
-    children: <DashboardOrders />,
+    path: '/users/edit',
+    children: <UsersEdit />,
   },
   // Public Routes
   {
     type: RouteType.PUBLIC,
     path: '/',
     children: <Home />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/quotes',
+    children: <Quotes />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/quotes/add',
+    children: <QuotesAdd />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/quotes/edit',
+    children: <QuotesEdit />,
   },
   // 404 Error
   {

@@ -1,9 +1,9 @@
-import DashboardLayout from 'components/ui/DashboardLayout'
-import CreateUpdateUserForm from 'components/user/CreateUpdateUserForm'
+import DashboardLayout from '../../../components/ui/DashboardLayout'
+import CreateUpdateUserForm from '../../../components/user/CreateUpdateUserForm'
 import { FC } from 'react'
 import { useLocation } from 'react-router-dom'
 
-const DashboardUsersEdit: FC = () => {
+const UsersEdit: FC = () => {
   const location = useLocation()
   return (
     <DashboardLayout>
@@ -13,4 +13,4 @@ const DashboardUsersEdit: FC = () => {
   )
 }
 
-export default DashboardUsersEdit
+export default UsersEdit
