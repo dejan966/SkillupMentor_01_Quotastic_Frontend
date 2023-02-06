@@ -56,13 +56,7 @@ const Users: FC = () => {
   return (
     <Layout>
       <div className="mb-4">
-        <h1 className="mb-4">Users</h1>
-        <Link
-          className="btn btn-dark"
-          to={'/users/add'}
-        >
-          Add
-        </Link>
+        <h1 className="mb-4">User Info</h1>
       </div>
       {isLoading ? (
         <div>Loading...</div>
