@@ -30,7 +30,6 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
     defaultValues,
   })
 
-  const { data: userData } = useQuery(API.fetchUsers())
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
@@ -46,7 +45,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
   )
 
   const handleAdd = async (data: CreateUserFields) => {
-/*     if (!file) return
+    if (!file) return
     const response = await API.createUser(data)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
@@ -70,7 +69,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
       } else {
         navigate('/users')
       }
-    } */
+    }
   }
 
   const handleUpdate = async (data: UpdateUserFields) => {
