@@ -31,7 +31,7 @@ const Navbar: FC = () => {
   return (
     <>
       <header>
-        <nav className="navbar navbar-expand-lg bg-light">
+        <nav className="navbar navbar-expand-lg">
           <div className="container-xxl pb-0">
             <Link className="navbar.brand" to={routes.HOME}>
               <img
@@ -66,14 +66,14 @@ const Navbar: FC = () => {
                   <>
                     <li className="nav-item pe-4">
                       <NavLink className="nav-link" to={routes.SIGNUP}>
-                        <Button className='btns'>
+                        <Button className='btnRegister'>
                           Sign up
                         </Button>
                       </NavLink> 
                     </li>
                     <li className="nav-item">
                       <NavLink className="nav-link pe-0" to={routes.LOGIN}>
-                        <Button className='btns'>
+                        <Button className='btnLogin'>
                           Login
                         </Button>
                       </NavLink>

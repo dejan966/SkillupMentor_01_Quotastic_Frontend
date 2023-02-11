@@ -36,6 +36,8 @@ const LoginForm: FC = () => {
   return (
     <>
       <Form className="login-form" onSubmit={onSubmit}>
+        <h1 className="display-5 text">Welcome <span style={{color:'#DE8667'}}>back</span></h1>
+        <p className="text fs-6">Thank you for coming back. Hope you have a good day and continue to inspire others</p>    
         <Controller
           control={control}
           name="email"
@@ -51,6 +53,7 @@ const LoginForm: FC = () => {
                 className={
                   errors.email ? 'form-control is-invalid' : 'form-control'
                 }
+                style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
               />
               {errors.email && (
                 <div className="invalid-feedback text-danger">
@@ -75,6 +78,7 @@ const LoginForm: FC = () => {
                 className={
                   errors.password ? 'form-control is-invalid' : 'form-control'
                 }
+                style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
               />
               {errors.password && (
                 <div className="invalid-feedback text-danger">
@@ -84,15 +88,15 @@ const LoginForm: FC = () => {
             </Form.Group>
           )}
         />
+        <Button className="w-100 btnLogin" style={{borderColor:'#DE8667'}} type="submit">
+          Login
+        </Button>
         <div className="d-flex justify-content-between align-items-center mb-2">
           <p className="mb-0">Dont have an account yet?</p>
           <Link className="text-decoration-none text-end" to={routes.SIGNUP}>
-            Create account
+            Sign up
           </Link>
         </div>
-        <Button className="w-100" type="submit">
-          Login
-        </Button>
       </Form>
       {showError && (
         <ToastContainer className="p-3" position="top-end">
