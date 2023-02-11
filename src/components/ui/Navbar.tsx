@@ -34,7 +34,7 @@ const Navbar: FC = () => {
           <div className="container-xxl p-4 pb-0">
             <Link className="navbar.brand" to={routes.HOME}>
               <img
-                src="/images/logo.png"
+                src="/images/Logo.png"
                 alt="SkillUp Mentor img"
                 width={123}
               />

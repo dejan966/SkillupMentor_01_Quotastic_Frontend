@@ -18,12 +18,14 @@ type AppRoute = RouteProps & {
 const Home = lazy(() => import('../pages/Home'))
 
 /* Private routes */
-const UserInfo = lazy(() => import('../pages/Users'))
-const UsersEdit = lazy(() => import('../pages/Users/Edit'))
+const UserEdit = lazy(() => import('../pages/Users/Edit'))
 
 const Quotes = lazy(() => import('../pages/Quotes'))
 const QuotesAdd = lazy(() => import('../pages/Quotes/Add'))
 const QuotesEdit = lazy(() => import('../pages/Quotes/Edit'))
+
+const Upvote = lazy(()=>import('../pages/Votes/Upvote'))
+const Downvote = lazy(()=>import('../pages/Votes/Downvote'))
 
 /* Restricted routes */
 const Login = lazy(() => import('../pages/Login'))
@@ -48,18 +50,17 @@ export const AppRoutes: AppRoute[] = [
   {
     type: RouteType.PRIVATE,
     path: '/me',
-    children: <UserInfo />,
+    children: <UserEdit />,
   },
   {
     type: RouteType.PRIVATE,
-    path: '/users/edit',
-    children: <UsersEdit />,
+    path: '/me/update-password',
+    children: <UserEdit />,
   },
-  // Public Routes
   {
-    type: RouteType.PUBLIC,
-    path: '/',
-    children: <Home />,
+    type: RouteType.PRIVATE,
+    path: '/me/update-avatar',
+    children: <UserEdit />,
   },
   {
     type: RouteType.PRIVATE,
@@ -68,13 +69,29 @@ export const AppRoutes: AppRoute[] = [
   },
   {
     type: RouteType.PRIVATE,
-    path: '/quotes/add',
+    path: '/me/myquote',
     children: <QuotesAdd />,
   },
   {
     type: RouteType.PRIVATE,
-    path: '/quotes/edit',
+    path: '/me/myquote/id',
     children: <QuotesEdit />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/quotes/id/upvote',
+    children: <Upvote />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/quotes/id/downvote',
+    children: <Downvote />,
+  },
+  // Public Routes
+  {
+    type: RouteType.PUBLIC,
+    path: '/',
+    children: <Home />,
   },
   // 404 Error
   {

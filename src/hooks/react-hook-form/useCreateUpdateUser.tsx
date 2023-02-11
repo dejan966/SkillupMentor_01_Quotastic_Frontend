@@ -42,7 +42,7 @@ export const useCreateUpdateUserForm = ({ defaultValues }: Props) => {
   const UpdateUserSchema = Yup.object().shape({
     first_name: Yup.string().notRequired(),
     last_name: Yup.string().notRequired(),
-    email: Yup.string().email().required('Please enter a valid email'),
+    email: Yup.string().email().notRequired(),
     password: Yup.string().notRequired(),
     confirm_password: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords do not match')

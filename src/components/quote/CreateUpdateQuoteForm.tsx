@@ -1,5 +1,5 @@
-import { observer } from "mobx-react"
-import { FC } from "react"
+import { observer } from 'mobx-react'
+import { FC } from 'react'
 
 const CreateUpdateQuoteForm: FC = ({ }) =>{
     return(

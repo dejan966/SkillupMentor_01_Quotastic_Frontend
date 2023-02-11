@@ -20,7 +20,8 @@ const Users: FC = () => {
   const [showError, setShowError] = useState(false)
   const { isMobile } = useMediaQuery(768)
   const [pageNumber, setPageNumber] = useState(1)
-/* 
+
+  /* 
   const { data, isLoading, refetch } = useQuery(
     ['featchUsers', pageNumber],
     () => API.fetchUsers(pageNumber),
@@ -63,8 +64,10 @@ const Users: FC = () => {
         <Table striped bordered hover responsive>
           <thead>
             <tr>
-              <th>Full name</th>
+              <th>First Name</th>
+              <th>Last Name</th>
               <th>Email</th>
+              <th>Password</th>
             </tr>
           </thead>
 {/*           <tbody>
