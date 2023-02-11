@@ -32,7 +32,7 @@ const Navbar: FC = () => {
     <>
       <header>
         <nav className="navbar navbar-expand-lg bg-light">
-          <div className="container-xxl p-4 pb-0">
+          <div className="container-xxl pb-0">
             <Link className="navbar.brand" to={routes.HOME}>
               <img
                 src={logo}
@@ -58,7 +58,7 @@ const Navbar: FC = () => {
               <ul className="navbar-nav mb-2 mb-lg-0">
                 {authStore.user ? (
                   <li className="nav-item pe-4">
-                    <Button className="btn btn-dark" onClick={signout}>
+                    <Button className="btns" onClick={signout}>
                       Signout
                     </Button>
                   </li>
@@ -67,7 +67,7 @@ const Navbar: FC = () => {
                     <li className="nav-item pe-4">
                       <NavLink className="nav-link" to={routes.SIGNUP}>
                         <Button className='btns'>
-                          Signup
+                          Sign up
                         </Button>
                       </NavLink> 
                     </li>

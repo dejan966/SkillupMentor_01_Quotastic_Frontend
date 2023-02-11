@@ -40,3 +40,23 @@
     padding:8px, 16px, 8px, 16px;
     font-size: 16px;
 }
+
+.footerText{
+    background-color:#DE8667;
+    color: #fff;
+    font-family: 'Raleway';
+    font-size: 1px;
+}
+
+.text{
+    font-family: 'Raleway';
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(2, 2fr);
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}

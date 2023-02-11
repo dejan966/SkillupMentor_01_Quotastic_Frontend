@@ -1,10 +1,14 @@
-import React from 'react'
+import { FC } from 'react'
 import Routes from './routes/Routes'
+import { usePageIdentification } from './hooks/usePageIdentification'
+import { observer } from 'mobx-react'
+import useAuth from './hooks/useAuth'
 
-function App() {
-  return (
-    <Routes />
-  )
+const App: FC = () => {
+  usePageIdentification()
+  useAuth()
+
+  return <Routes />
 }
 
-export default App
+export default observer(App)
