@@ -30,7 +30,6 @@ const Topbar: FC = () => {
       navigate(routes.HOME)
     }
   }
-
   return (
     <>
       <div className="topbar d-flex flex-grow-1 justify-content-end-align-items-center bg-dark px-3 py-2">

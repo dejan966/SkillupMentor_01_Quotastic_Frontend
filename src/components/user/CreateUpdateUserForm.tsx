@@ -10,7 +10,6 @@ import Toast from 'react-bootstrap/Toast'
 import { Form } from 'react-bootstrap'
 import { Controller } from 'react-hook-form'
 import FormLabel from 'react-bootstrap/FormLabel'
-import { routes } from '../../constants/routesConstants'
 import Button from 'react-bootstrap/Button'
 import * as API from '../../api/Api'
 import { StatusCode } from '../../constants/errorConstants'
@@ -18,7 +17,6 @@ import authStore from '../../stores/auth.store'
 import Avatar from 'react-avatar'
 import { observer } from 'mobx-react'
 import { UserType } from '../../models/auth'
-import { useQuery } from 'react-query'
 
 interface Props {
   defaultValues?: UserType & { isActiveUser?: boolean }
@@ -113,7 +111,6 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
             authStore.login(userResponse.data)
           }
         }
-        navigate('/users')
       }
     }
   }

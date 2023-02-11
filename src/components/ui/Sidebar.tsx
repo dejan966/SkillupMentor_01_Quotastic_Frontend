@@ -3,6 +3,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas'
 import { routes } from '../../constants/routesConstants'
 import { Dispatch, FC, SetStateAction, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import logo from '../../images/Logo.png'
 
 interface ItemProps extends ISidebarItem {
   setOpen: Dispatch<SetStateAction<boolean>>
@@ -73,7 +74,7 @@ const Sidebar: FC = () => {
       >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
-            <img src="/images/logo.png" width={123} alt="SkillUp Mentor" />
+            <img src={logo} width={123} alt="SkillUp Mentor" />
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>

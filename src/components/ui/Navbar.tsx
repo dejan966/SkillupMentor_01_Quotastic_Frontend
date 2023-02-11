@@ -8,6 +8,7 @@ import authStore from '../../stores/auth.store'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import { StatusCode } from '../../constants/errorConstants'
 import * as API from '../../api/Api'
+import logo from '../../images/Logo.png'
 
 const Navbar: FC = () => {
   const navigate = useNavigate()
@@ -34,7 +35,7 @@ const Navbar: FC = () => {
           <div className="container-xxl p-4 pb-0">
             <Link className="navbar.brand" to={routes.HOME}>
               <img
-                src="/images/Logo.png"
+                src={logo}
                 alt="SkillUp Mentor img"
                 width={123}
               />
@@ -55,11 +56,6 @@ const Navbar: FC = () => {
               id="navbarTogglerDemo02"
             >
               <ul className="navbar-nav mb-2 mb-lg-0">
-                <li className="nav-item pe-4">
-                  <NavLink className="nav-link" to={routes.HOME}>
-                    Home
-                  </NavLink>
-                </li>
                 {authStore.user ? (
                   <li className="nav-item pe-4">
                     <Button className="btn btn-dark" onClick={signout}>
@@ -69,13 +65,17 @@ const Navbar: FC = () => {
                 ) : (
                   <>
                     <li className="nav-item pe-4">
-                      <NavLink className="nav-link" to={routes.LOGIN}>
-                        Login
-                      </NavLink>
+                      <NavLink className="nav-link" to={routes.SIGNUP}>
+                        <Button className='btns'>
+                          Signup
+                        </Button>
+                      </NavLink> 
                     </li>
                     <li className="nav-item">
-                      <NavLink className="nav-link pe-0" to={routes.SIGNUP}>
-                        Signup
+                      <NavLink className="nav-link pe-0" to={routes.LOGIN}>
+                        <Button className='btns'>
+                          Login
+                        </Button>
                       </NavLink>
                     </li>
                   </>
