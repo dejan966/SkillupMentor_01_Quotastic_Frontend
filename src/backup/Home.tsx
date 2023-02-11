@@ -1,5 +1,6 @@
 import Layout from '../components/ui/Layout'
 import { FC } from 'react'
+import React from 'react'
 
 const Home: FC = () => {
   return (
