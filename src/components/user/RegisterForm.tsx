@@ -19,7 +19,7 @@ import { observer } from 'mobx-react'
 
 const RegisterForm: FC = () => {
   const navigate = useNavigate()
-  const { handleSubmit, errors, control } = useRegisterForm()
+  const { handleSubmit, errors } = useRegisterForm()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
@@ -220,7 +220,7 @@ const RegisterForm: FC = () => {
               {errors.confirm_password.message}
             </div>
           )}
-        </Form.Group>
+        </Form.Group> 
         <Button className="w-100 btnRegister" style={{borderColor:'#DE8667'}} type="submit" onMouseUp={handleFileError}>
           Sign up
         </Button>
