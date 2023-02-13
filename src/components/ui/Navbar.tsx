@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button'
 import { routes } from '../../constants/routesConstants'
 import { FC, useState } from 'react'
-import { NavLink, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import Toast from 'react-bootstrap/Toast'
 import authStore from '../../stores/auth.store'
@@ -93,7 +93,7 @@ const Navbar: FC = () => {
               >
                 <ul className="navbar-nav mb-2 mb-lg-0">
                 <li className="nav-item">
-                  <NavLink className="nav-link pe-0" to={routes.LOGIN}>
+                  <NavLink className="nav-link pe-0" to={routes.SIGNUP}>
                     <Button className='btnRegister'>
                       Signup
                     </Button>
@@ -135,11 +135,33 @@ const Navbar: FC = () => {
             >
               <ul className="navbar-nav mb-2 mb-lg-0">
                 {authStore.user ? (
+                  <>
                   <li className="nav-item pe-4">
-                    <Button className="btnRegister" onClick={signout}>
-                      Signout
-                    </Button>
+                    <a className="text-decoration-none textColor" href={routes.HOME}>
+                      Home
+                    </a>
                   </li>
+                  <li className="nav-item pe-4">
+                    <a className="text-decoration-none textColor" onClick={signout}>
+                      Sign out
+                    </a>
+                  </li>
+                  <li className="nav-item pe-4">
+                    <a className="text-decoration-none textColor" href={routes.HOME}>
+                      Setings
+                    </a>
+                  </li>
+                  <li className="nav-item pe-4">
+                    <a className="text-decoration-none textColor">
+                      Profile
+                    </a>
+                  </li>
+                  <li className="nav-item pe-4">
+                    <a className="text-decoration-none textColor" href={routes.ADDNEWQUOTE}>
+                      +
+                    </a>
+                  </li>
+                  </>
                 ) : (
                   <>
                     <li className="nav-item pe-4">

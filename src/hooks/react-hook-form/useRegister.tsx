@@ -29,6 +29,7 @@ export const useRegisterForm = () => {
   const {
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm({
     defaultValues: {
       first_name: '',
@@ -44,6 +45,7 @@ export const useRegisterForm = () => {
   return {
     handleSubmit,
     errors,
+    control,
   }
 }
 

@@ -7,8 +7,7 @@
     flex-direction: column;
 } */
 
-.login-form,
-.register-form {
+.forms {
     width: 100%;
     width: min(100%, 420px);
     margin: 0 auto;
@@ -37,6 +36,14 @@
     font-size: 16px;
 }
 
+.textfield{
+    border-radius: 15px;
+    border-color:#DE8667;
+    resize: none;
+    width: 300px;
+    height: 100px;
+}
+
 .footerText{
     background-color:#DE8667;
     color: #fff;
@@ -46,6 +53,11 @@
 
 .text{
     font-family: 'Raleway';
+}
+
+.textColor{
+    font-family: 'Raleway';
+    color:#DE8667;
 }
 
 .grid{

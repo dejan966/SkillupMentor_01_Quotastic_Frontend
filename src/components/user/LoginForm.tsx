@@ -35,9 +35,11 @@ const LoginForm: FC = () => {
 
   return (
     <>
-      <Form className="login-form" onSubmit={onSubmit}>
-        <h1 className="display-5 text">Welcome <span style={{color:'#DE8667'}}>back</span></h1>
-        <p className="text fs-6">Thank you for coming back. Hope you have a good day and continue to inspire others</p>    
+    <div className="text-center text">
+      <h1 className="display-5">Welcome <span style={{color:'#DE8667'}}>back</span></h1>
+        <p className="fs-6">Thank you for coming back. Hope you have a good day and continue to inspire others</p>
+    </div>
+      <Form className="forms" onSubmit={onSubmit}>
         <Form.Group className="mb-3">
           <FormLabel htmlFor="email">Email</FormLabel>
           <input
