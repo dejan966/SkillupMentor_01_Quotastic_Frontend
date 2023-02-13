@@ -40,17 +40,7 @@ const Navbar: FC = () => {
                 width={123}
               />
             </Link>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarTogglerDemo02"
-              aria-controls="navbarTogglerDemo02"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
+           
             <div
               className="collapse navbar-collapse justify-content-end align-items-center"
               id="navbarTogglerDemo02"
@@ -58,7 +48,7 @@ const Navbar: FC = () => {
               <ul className="navbar-nav mb-2 mb-lg-0">
                 {authStore.user ? (
                   <li className="nav-item pe-4">
-                    <Button className="btns" onClick={signout}>
+                    <Button className="btnRegister" onClick={signout}>
                       Signout
                     </Button>
                   </li>

@@ -1,6 +1,11 @@
 .layout-container {
     height: calc(100vh - 200px);
 }
+/* .div{
+    display: flex;
+    //min-height: 100vh;
+    flex-direction: column;
+} */
 
 .login-form,
 .register-form {
@@ -10,25 +15,10 @@
     padding: 25px 0;
 }
 
-.sidebar__btn-menu,
-.topbar {
-    height: 80px;
-}
-
-.topbar__avatar {
-    width: 50px !important;
-    height: 50px !important;
-}
-
-.topbar__avatar img {
-    width: 50px !important;
-    height: 50px !important;
-}
-
 .btnRegister {
     width:137px;
     height:40px;
-    font-family: 'Raleway';
+    font-family: raleway;
     background-color: #DE8667;
     color: #fff;
     border-radius: 32px;
