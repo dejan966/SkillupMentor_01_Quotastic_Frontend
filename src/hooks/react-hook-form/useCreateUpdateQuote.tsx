@@ -1,18 +1,23 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
+import { QuoteType } from '../../models/quote'
 
 export interface CreateQuoteFields {
-  quote?:string
+  quote:string
 }
 
 export interface UpdateQuoteFields {
   quote?:string
 }
 
-export const useCreateUpdateQuoteForm = () => {
-  const CreateUserSchema = Yup.object().shape({
-    quote: Yup.string().notRequired(),
+interface Props {
+  defaultValues?: QuoteType
+}
+
+export const useCreateUpdateQuoteForm = ({ defaultValues }: Props) => {
+  const CreateQuoteSchema = Yup.object().shape({
+    quote: Yup.string().required(),
   })
 
   const UpdateQuoteSchema = Yup.object().shape({
@@ -25,13 +30,13 @@ export const useCreateUpdateQuoteForm = () => {
     control,
   } = useForm({
     defaultValues: {
-      //old quote value
-      // ...defaultValues,
+      quote: '',
+      ...defaultValues
     },
     mode: 'onSubmit',
-/*     resolver: defaultValues
-      ? yupResolver(UpdateUserSchema)
-      : yupResolver(CreateUserSchema), */
+    resolver: defaultValues
+      ? yupResolver(UpdateQuoteSchema)
+      : yupResolver(CreateQuoteSchema),
   })
 
   return {

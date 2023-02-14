@@ -18,10 +18,10 @@ export async function apiRequest<D = Record<string, unknown>, R = unknown>(
       withCredentials: true,
     })
     return response
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return error.response
   }
 }
 
 export * from './User'
+export * from './Quote'

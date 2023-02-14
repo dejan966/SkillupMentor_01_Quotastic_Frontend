@@ -8,8 +8,8 @@ import { RegisterUserFields } from '../hooks/react-hook-form/useRegister'
 import { UserType } from '../models/auth'
 import { apiRequest } from './Api'
 
-export const fetchUser = async () =>
-  apiRequest<undefined, UserType>('post', apiRoutes.FETCH_USER)
+export const fetchUser = async (id:number) =>
+  apiRequest<undefined, UserType>('post', `${apiRoutes.FETCH_USERS}/${id}`)
 
 export const signout = async () =>
   apiRequest<undefined, void>('post', apiRoutes.SIGNOUT)
@@ -23,7 +23,7 @@ export const register = async (data: RegisterUserFields) =>
 export const refreshTokens = async () =>
   apiRequest<undefined, UserType>('get', apiRoutes.REFRESH_TOKENS)
 
-export const uploadAvatar = async (formData: FormData, id: string) =>
+export const uploadAvatar = async (formData: FormData, id: number) =>
   apiRequest<FormData, void>(
     'post',
     `${apiRoutes.UPLOAD_AVATAR_IMAGE}/${id}`,
@@ -39,5 +39,5 @@ export const updateUser = async (data: UpdateUserFields, id: number) =>
     `${apiRoutes.USERS_PREFIX}/${id}`,
   )
 
-export const deleteUser = async (id: string) =>
+export const deleteUser = async (id: number) =>
   apiRequest<string, UserType>('delete', `${apiRoutes.USERS_PREFIX}/${id}`)

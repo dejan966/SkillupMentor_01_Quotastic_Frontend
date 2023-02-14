@@ -1,11 +1,11 @@
 export type VoteType ={
     id:number
-    value:boolean
-    quote?:{
+    value?:boolean
+    quote:{
         id:number
         quote:string
     }
-    user?:{
+    user:{
         id:number
         email:string
     }
