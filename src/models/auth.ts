@@ -5,3 +5,7 @@ export type UserType = {
   email: string
   avatar: string
 }
+
+export type QuoteType = {
+
+}

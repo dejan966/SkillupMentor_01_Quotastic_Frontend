@@ -11,12 +11,6 @@ import { apiRequest } from './Api'
 export const fetchUser = async () =>
   apiRequest<undefined, UserType>('post', apiRoutes.FETCH_USER)
 
-export const fetchUsers = async (pageNumber: number) =>
-  apiRequest<number, UserType[]>(
-    'get',
-    `${apiRoutes.FETCH_USERS}/?page=${pageNumber}`,
-  )
-
 export const signout = async () =>
   apiRequest<undefined, void>('post', apiRoutes.SIGNOUT)
 

@@ -8,7 +8,7 @@
 } */
 
 .forms {
-    width: 100%;
+    //width: 100%;
     width: min(100%, 420px);
     margin: 0 auto;
     padding: 25px 0;
@@ -17,7 +17,7 @@
 .btnRegister {
     width:137px;
     height:40px;
-    font-family: raleway;
+    font-family: 'Raleway';
     background-color: #DE8667;
     color: #fff;
     border-radius: 32px;
@@ -44,11 +44,16 @@
     height: 100px;
 }
 
-.footerText{
+*{
+    margin: 0;
+}
+.footer{
     background-color:#DE8667;
     color: #fff;
     font-family: 'Raleway';
     font-size: 1px;
+    //position: absolute;
+    //width: 100%;
 }
 
 .text{
@@ -61,20 +66,19 @@
 }
 
 .grid{
-    display: grid;
+    display:grid;
     grid-template-columns: repeat(2, 2fr);
-    gap: 20px;
+    //gap: 20px;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    //height: 100%;
 }
 
-.first_last_name_grid{
-    grid-template-columns: repeat(2, 2fr);
+.display{
+    display:flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
-
-// #formProperties{
-//     border-radius:32;
-//     border-color:'#DE8667';
-//     font-family:'Raleway'
-// }
+.main{
+    flex-grow:1;
+}
