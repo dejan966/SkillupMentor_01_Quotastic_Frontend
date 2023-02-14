@@ -33,7 +33,7 @@ export const uploadAvatar = async (formData: FormData, id: string) =>
 export const createUser = async (data: CreateUserFields) =>
   apiRequest<CreateUserFields, void>('post', apiRoutes.USERS_PREFIX, data)
 
-export const updateUser = async (data: UpdateUserFields, id: string) =>
+export const updateUser = async (data: UpdateUserFields, id: number) =>
   apiRequest<UpdateUserFields, UserType>(
     'patch',
     `${apiRoutes.USERS_PREFIX}/${id}`,

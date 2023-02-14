@@ -71,7 +71,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
   }
 
   const handleUpdate = async (data: UpdateUserFields) => {
-    const response = await API.updateUser(data, defaultValues?.id as string)
+    const response = await API.updateUser(data, defaultValues?.id as number)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)

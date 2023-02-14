@@ -1,6 +1,6 @@
 import { apiRoutes } from '../constants/apiConstants'
-import { QuoteType } from '../models/auth'
+import { QuoteType } from '../models/quote'
 import { apiRequest } from './Api'
 
-export const fetchUserQuotes = async () =>
+export const fetchQuotes = async () =>
   apiRequest<undefined, QuoteType>('post', apiRoutes.FETCH_QUOTES)
