@@ -71,13 +71,12 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
                   <textarea {...field} className="textfield" id="newQuote"></textarea>
               </Form.Group>
           )}/>
-            
-            <div className="d-flex justify-content-start">
-                <Button className="quoteButton w-100 btnRegister col-md-3" style={{borderColor:'#DE8667'}} type="submit">
-                    Submit
-                </Button>
-                <a className="text-decoration-none textColor" href={routes.HOME}>Cancel</a>
-            </div>
+          <div className="d-flex justify-content-start">
+              <Button className="quoteButton w-100 btnRegister col-md-3" style={{borderColor:'#DE8667'}} type="submit">
+                  Submit
+              </Button>
+              <a className="text-decoration-none textColor" href={routes.HOME}>Cancel</a>
+          </div>
         </div>
         {showError && (
         <ToastContainer className="p-3" position="top-end">

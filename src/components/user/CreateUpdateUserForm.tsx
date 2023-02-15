@@ -64,7 +64,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
         setApiError(fileResponse.data.message)
         setShowError(true)
       } else {
-        navigate('/users')
+        navigate('/me')
       }
     }
   }
@@ -82,7 +82,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
         if (defaultValues?.isActiveUser) {
           authStore.login(response.data)
         }
-        navigate('/users')
+        navigate('/me')
         return
       }
       const formData = new FormData()
@@ -288,6 +288,10 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
             </Form.Group>
           )}
         />
+        {/*Display user info*/}
+        {/*Submit - me/edit*/}
+        {/*Update password button*/}
+        {/*Update avatar button*/}
         <Button className="w-100" type="submit" onMouseUp={handleFileError}>
           {defaultValues ? 'Update user' : 'Create new user'}
         </Button>

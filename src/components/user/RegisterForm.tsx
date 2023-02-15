@@ -37,7 +37,6 @@ const RegisterForm: FC = () => {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      // Login user before uploading an avatar image
       const loginResponse = await API.login({
         email: data.email,
         password: data.password,
@@ -51,7 +50,6 @@ const RegisterForm: FC = () => {
         setApiError(loginResponse.data.message)
         setShowError(true)
       } else {
-        // Upload avatar
         const formData = new FormData()
         formData.append('avatar', file, file.name)
         const fileResponse = await API.uploadAvatar(
@@ -67,7 +65,6 @@ const RegisterForm: FC = () => {
           setApiError(fileResponse.data.message)
           setShowError(true)
         } else {
-          // Get user with avatar image
           const userResponse = await API.fetchUser(response.data?.id)
           if (
             userResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
@@ -110,10 +107,10 @@ const RegisterForm: FC = () => {
 
   return (
     <>
-    <div className="text-center text">
-      <h1 className="display-5">What is your <span style={{color:'#DE8667'}}>name?</span></h1>
-      <p className="fs-6">Your name will appear on quotes and your public profile</p>
-    </div>
+      <div className="text-center text">
+        <h1 className="display-5">What is your <span style={{color:'#DE8667'}}>name?</span></h1>
+        <p className="fs-6">Your name will appear on quotes and your public profile</p>
+      </div>
       <Form className="forms" onSubmit={onSubmit}>
         <Form.Group className="d-flex flex-column justify-content-center align-items-center">
           <FormLabel htmlFor="avatar" id="avatar-p">
@@ -160,7 +157,7 @@ const RegisterForm: FC = () => {
           )}
         />
         <div className="d-flex justify-content-between mb-3">
-          <div className='col-md-5'>
+          <div className="col-md-5">
             <Controller
             control={control}
             name="first_name"

@@ -15,76 +15,33 @@ import { UserType } from '../../models/auth'
 import authStore from '../../stores/auth.store'
 
 const Users: FC = () => {
-  //show other users info
-  const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
-  const { isMobile } = useMediaQuery(768)
   const [pageNumber, setPageNumber] = useState(1)
-
-  /* 
-  const { data, isLoading, refetch } = useQuery(
-    ['featchUsers', pageNumber],
-    () => API.fetchUsers(pageNumber),
+  
+  const { data } = useQuery(
+    ['fetchUser', pageNumber],
+    () => API.fetchUser(pageNumber),
     {
       keepPreviousData: true,
       refetchOnWindowFocus: false,
     },
   )
 
-  const { mutate } = useMutation((id: string) => API.deleteUser(id), {
-    onSuccess: (response) => {
-      if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-        setApiError(response.data.message)
-        setShowError(true)
-      } else if (
-        response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
-      ) {
-        setApiError(response.data.message)
-        setShowError(true)
-      } else {
-        refetch()
-      }
-    },
-    onError: () => {
-      setApiError('Something went wrong while deleting a user')
-      setShowError(true)
-    },
-  })
-
-  const handleDelete = (id: string) => {
-    mutate(id)
-  } */
-
   return (
     <Layout>
-      <h1 className="mb-4 text-center">{/*First name and last name*/}</h1>
-      {/*Most liked quotes - editing quotes(me/myquote/{id})*/} 
-      {/*Most recent quotes*/}
-      {/*Liked*/}
       <div className="mb-4">
-        <h1 className="mb-4">User Info</h1>
-      </div>
-      <div>
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Password</th>
-            </tr>
-          </thead>
-{/*           <tbody>
-            {data?.data.data.map((item: UserType, index: number) => (
-              <tr key={index}>
-                <td>
-                  {item.first_name || ' ' || item.last_name}
-                </td>
-                <td>{item.email}</td>
-              </tr>
-            ))}
-          </tbody> */}
-        </Table>
+        {data?.data.data.map((item: UserType, index: number) => (
+          <>
+            <div key={index} className="textColorReverse">
+              <img src={item.avatar} alt="User avatar" />
+              <h1 className="mb-4 text-center">{item.first_name || ' ' || item.last_name}</h1>
+            </div>
+            <div>
+              {/*Most liked quotes*/} 
+              {/*Most recent quotes*/}
+              {/*Liked*/}
+            </div>
+          </>
+        ))}
       </div>
     </Layout>
   )

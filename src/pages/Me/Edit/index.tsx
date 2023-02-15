@@ -7,7 +7,6 @@ const UserEdit: FC = () => {
   const location = useLocation()
   return (
     <Layout>
-      <h1 className="mb-4 text-center">Edit user</h1>{/*First name, last name, email*/}
       <CreateUpdateUserForm defaultValues={location.state} />
     </Layout>
   )
