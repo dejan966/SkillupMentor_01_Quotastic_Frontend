@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { VoteType } from '../../models/vote'
 
 export interface CreateVoteFields {
-  value?:boolean
+  value:boolean
 }
 
 export interface UpdateVoteFields {
@@ -17,11 +17,11 @@ interface Props {
 
 export const useCreateUpdateVoteForm = ({ defaultValues }: Props) => {
   const CreateVoteSchema = Yup.object().shape({
-    value: Yup.boolean().notRequired(),
+    value: Yup.boolean().required(),
   })
 
   const UpdateVoteSchema = Yup.object().shape({
-    Vote: Yup.string().notRequired(),
+    value: Yup.boolean().notRequired(),
   })
 
   const {

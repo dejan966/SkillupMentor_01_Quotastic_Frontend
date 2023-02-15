@@ -1,6 +1,6 @@
 export type VoteType ={
     id:number
-    value?:boolean
+    value:boolean
     quote:{
         id:number
         quote:string

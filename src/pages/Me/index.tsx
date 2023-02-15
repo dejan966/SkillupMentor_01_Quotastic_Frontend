@@ -6,9 +6,9 @@ const UserInfo: FC = () => {
     <Layout>
       <h1 className="mb-4 text-center">User Info</h1>
       {/*Display user info*/}
-      {/*Update button*/}
-      {/*Update password*/}
-      {/*Update avatar*/}
+      {/*Edit button - me/edit*/}
+      {/*Update password button*/}
+      {/*Update avatar button*/}
     </Layout>
   )
 }

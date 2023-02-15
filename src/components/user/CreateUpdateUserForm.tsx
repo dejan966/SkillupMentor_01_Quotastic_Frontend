@@ -52,7 +52,6 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      //Upload avatar
       const formData = new FormData()
       formData.append('avatar', file, file.name)
       const fileResponse = await API.uploadAvatar(formData, response.data.id)
@@ -86,7 +85,6 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
         navigate('/users')
         return
       }
-      //Upload avatar
       const formData = new FormData()
       formData.append('avatar', file, file.name)
       const fileResponse = await API.uploadAvatar(formData, response.data.id)

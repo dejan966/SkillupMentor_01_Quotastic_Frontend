@@ -28,8 +28,6 @@ const Navbar: FC = () => {
       authStore.signout()
       navigate(routes.HOME)
     }
-
-    
   }
   if(location.pathname === '/signup'){
     return (
@@ -136,31 +134,31 @@ const Navbar: FC = () => {
               <ul className="navbar-nav mb-2 mb-lg-0">
                 {authStore.user ? (
                   <>
-                  <li className="nav-item pe-4">
-                    <a className="text-decoration-none textColor" href={routes.HOME}>
-                      Home
-                    </a>
-                  </li>
-                  <li className="nav-item pe-4">
-                    <a className="text-decoration-none textColor" onClick={signout}>
-                      Sign out
-                    </a>
-                  </li>
-                  <li className="nav-item pe-4">
-                    <a className="text-decoration-none textColor" href={routes.HOME}>
-                      Setings
-                    </a>
-                  </li>
-                  <li className="nav-item pe-4">
-                    <a className="text-decoration-none textColor">
-                      Profile
-                    </a>
-                  </li>
-                  <li className="nav-item pe-4">
-                    <a className="text-decoration-none textColor" href={routes.ADDNEWQUOTE}>
-                      +
-                    </a>
-                  </li>
+                    <li className="nav-item pe-4">
+                      <a className="text-decoration-none textColor" href={routes.HOME}>
+                        Home
+                      </a>
+                    </li>
+                    <li className="nav-item pe-4">
+                      <a className="text-decoration-none textColor" onClick={signout}>
+                        Sign out
+                      </a>
+                    </li>
+                    <li className="nav-item pe-4">
+                      <a className="text-decoration-none textColor" href={routes.USERINFO}>
+                        Setings
+                      </a>
+                    </li>
+                    <li className="nav-item pe-4">
+                      <a className="text-decoration-none textColor" href={routes.USERQUOTESINFO}>
+                        Profile {/*most liked quotes, most recent, liked quotes*/}
+                      </a>
+                    </li>
+                    <li className="nav-item pe-4">
+                      <a className="text-decoration-none textColor" href={routes.ADDNEWQUOTE}>
+                        +
+                      </a>
+                    </li>
                   </>
                 ) : (
                   <>

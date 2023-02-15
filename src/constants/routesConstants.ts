@@ -3,5 +3,8 @@ export enum routes {
   SIGNUP = '/signup',
   HOME = '/',
   USERINFO = '/me',
-  ADDNEWQUOTE='me/myquote'
+  USEREDIT = 'me/edit',
+  ADDNEWQUOTE='me/myquote',
+  USERQUOTESINFO='me/quotes',
+  EDITQUOTE='me/myquote/id'
 }
