@@ -19,10 +19,12 @@ const Home = lazy(() => import('../pages/Home'))
 
 /* Private routes */
 const UserInfo = lazy(() => import('../pages/Me'))
+const UserEdit = lazy(() => import('../pages/Me/Edit'))
 
 const Quotes = lazy(() => import('../pages/Quotes'))
 const QuotesAdd = lazy(() => import('../pages/Me/Myquote'))
-const QuotesEdit = lazy(() => import('../pages/Quotes/Edit'))
+const UserQuotes = lazy(() => import('../pages/Me/Quotes'))
+const QuotesEdit = lazy(() => import('../pages/Me/Myquote/Edit'))
 
 const Upvote = lazy(()=>import('../pages/Votes/Upvote'))
 const Downvote = lazy(()=>import('../pages/Votes/Downvote'))
@@ -54,6 +56,11 @@ export const AppRoutes: AppRoute[] = [
   },
   {
     type: RouteType.PRIVATE,
+    path: '/me/edit',
+    children: <UserInfo />,
+  },
+  {
+    type: RouteType.PRIVATE,
     path: '/me/update-password',
     children: <UserInfo />,
   },
@@ -74,7 +81,7 @@ export const AppRoutes: AppRoute[] = [
   },
   {
     type: RouteType.PRIVATE,
-    path: `/me/myquote/?id=${1}`,
+    path: '/me/myquote/edit',
     children: <QuotesEdit />,
   },
   {

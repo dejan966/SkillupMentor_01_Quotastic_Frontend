@@ -15,7 +15,7 @@ import { UserType } from '../../models/auth'
 import authStore from '../../stores/auth.store'
 
 const Users: FC = () => {
-  //show user info
+  //show other users info
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
   const { isMobile } = useMediaQuery(768)
@@ -57,6 +57,10 @@ const Users: FC = () => {
 
   return (
     <Layout>
+      <h1 className="mb-4 text-center">{/*First name and last name*/}</h1>
+      {/*Most liked quotes - editing quotes(me/myquote/{id})*/} 
+      {/*Most recent quotes*/}
+      {/*Liked*/}
       <div className="mb-4">
         <h1 className="mb-4">User Info</h1>
       </div>

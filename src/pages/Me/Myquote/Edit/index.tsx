@@ -1,6 +1,6 @@
-import Layout from '../../../components/ui/Layout'
+import Layout from '../../../../components/ui/Layout'
 import { FC } from 'react'
-import CreateUpdateQuoteForm from '../../../components/quote/CreateUpdateQuoteForm'
+import CreateUpdateQuoteForm from '../../../../components/quote/CreateUpdateQuoteForm'
 
 const QuotesEdit: FC = () => {
   return (
