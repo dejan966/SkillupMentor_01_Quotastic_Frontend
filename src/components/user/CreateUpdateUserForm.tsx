@@ -114,8 +114,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
   }
 
   const handleFileError = () => {
-    if (!file) setFileError(true)
-    else setFileError(false)
+    setFileError(false)
   }
 
   const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {

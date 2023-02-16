@@ -8,7 +8,6 @@ import authStore from '../../stores/auth.store'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import { StatusCode } from '../../constants/errorConstants'
 import * as API from '../../api/Api'
-import logo from '../../images/Logo.png'
 
 const Navbar: FC = () => {
   const location = useLocation()
@@ -37,8 +36,8 @@ const Navbar: FC = () => {
             <div className="container-xxl pb-0">
               <Link className="navbar.brand" to={routes.HOME}>
                 <img
-                  src={logo}
-                  alt="SkillUp Mentor img"
+                  src="quotastic_red.png"
+                  alt="Quotastic red logo"
                   width={123}
                 />
               </Link>
@@ -80,8 +79,8 @@ const Navbar: FC = () => {
             <div className="container-xxl pb-0">
               <Link className="navbar.brand" to={routes.HOME}>
                 <img
-                  src={logo}
-                  alt="SkillUp Mentor img"
+                  src="quotastic_red.png"
+                  alt="Quotastic red logo"
                   width={123}
                 />
               </Link>
@@ -122,8 +121,8 @@ const Navbar: FC = () => {
           <div className="container-xxl pb-0">
             <Link className="navbar.brand" to={routes.HOME}>
               <img
-                src={logo}
-                alt="SkillUp Mentor img"
+                src="quotastic_red.png"
+                alt="Quotastic red logo"
                 width={123}
               />
             </Link>

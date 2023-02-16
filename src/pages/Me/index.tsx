@@ -1,4 +1,4 @@
-import Layout from '../.././components/ui/Layout'
+import Layout from '../../components/ui/Layout'
 import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import { StatusCode } from '../../constants/errorConstants'
@@ -20,14 +20,14 @@ const UserInfo: FC = () => {
   const { isMobile } = useMediaQuery(768)
 
   const { data } = useQuery(
-    ['fetchUser', 1],
-    () => API.fetchUser(1),
+    ['currUserInfo'],
+    () => API.currUserInfo(),
     {
       keepPreviousData: true,
       refetchOnWindowFocus: false,
     },
   )
-  
+  console.log(data.request)
   const { mutate } = useMutation((id: number) => API.deleteUser(id), {
     onSuccess: (response) => {
       if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
@@ -53,9 +53,9 @@ const UserInfo: FC = () => {
   return (
     <Layout>
       <div className="form-group forms mb-4">
-        {data?.data.data.map((item: UserType, index: number) => (
+        {data?.map((item: UserType, index: number) => (
           <>
-            {/*read only text fields*/}
+            {/*read only text fields */}
             <div key={index} className="text-center">
               <div className="mb-12">
                 {item.avatar}

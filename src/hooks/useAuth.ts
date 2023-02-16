@@ -29,7 +29,7 @@ const useAuth = () => {
   useEffect(() => {
     if (userStorage.getUser()) {
       (async () => {
-        const response = await API.fetchUser()
+        const response = await API.currUserInfo()
         if (response.data.email) {
           authStore.login(response.data)
           clearInterval(timerRef.current)
@@ -37,7 +37,7 @@ const useAuth = () => {
         } else if (response.data.statusCode === StatusCode.UNAUTHORIZED) {
           userStorage.clearUser()
           authStore.signout()
-          navigate(routes.HOME)
+          navigate('/')
         }
       })()
     }

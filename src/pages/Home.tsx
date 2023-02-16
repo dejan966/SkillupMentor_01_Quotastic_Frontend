@@ -1,6 +1,5 @@
 import Layout from '../components/ui/Layout'
 import { FC } from 'react'
-import example from '../images/Example.png'
 import { Button } from 'react-bootstrap'
 import { routes } from '../constants/routesConstants'
 
@@ -20,7 +19,7 @@ const Home: FC = () => {
             </Button>
           </p>
         </div>
-        <div><img src={example} width={456} alt="quote" /></div>
+        <div><img src="example_quote.png" width={456} alt="example quote" /></div>
       </div>
     </Layout>
   )

@@ -81,8 +81,7 @@ const RegisterForm: FC = () => {
   })
 
   const handleFileError = () => {
-    if (!file) setFileError(true)
-    else setFileError(false)
+    setFileError(false)
   }
 
   const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -114,7 +113,7 @@ const RegisterForm: FC = () => {
       <Form className="forms" onSubmit={onSubmit}>
         <Form.Group className="d-flex flex-column justify-content-center align-items-center">
           <FormLabel htmlFor="avatar" id="avatar-p">
-            <Avatar round src={preview as string} alt="Avatar" />
+            <Avatar round src="default-avatar.png" alt="Avatar" />
           </FormLabel>
           <input
             onChange={handleFileChange}
