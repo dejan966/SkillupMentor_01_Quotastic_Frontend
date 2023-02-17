@@ -23,12 +23,7 @@ const RegisterForm: FC = () => {
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
-  const [file, setFile] = useState<File | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
-  const [fileError, setFileError] = useState(false)
-
   const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
-    if (!file) return
     const response = await API.register(data)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
@@ -50,59 +45,11 @@ const RegisterForm: FC = () => {
         setApiError(loginResponse.data.message)
         setShowError(true)
       } else {
-        const formData = new FormData()
-        formData.append('avatar', file, file.name)
-        const fileResponse = await API.uploadAvatar(
-          formData,
-          loginResponse.data.id,
-        )
-        if (fileResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
-          setApiError(fileResponse.data.message)
-          setShowError(true)
-        } else if (
-          fileResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
-        ) {
-          setApiError(fileResponse.data.message)
-          setShowError(true)
-        } else {
-          const userResponse = await API.fetchUser(response.data?.id)
-          if (
-            userResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
-          ) {
-            setApiError(fileResponse.data.message)
-            setShowError(true)
-          } else {
-            authStore.login(userResponse.data)
-            navigate(routes.HOME)
-          }
-        }
+        authStore.login(response.data)
+        navigate(routes.HOME)
       }
     }
   })
-
-  const handleFileError = () => {
-    setFileError(false)
-  }
-
-  const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    if (target.files) {
-      const myfile = target.files[0]
-      setFile(myfile)
-    }
-  }
-
-  useEffect(() => {
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setPreview(reader.result as string)
-        setFileError(false)
-      }
-      reader.readAsDataURL(file)
-    } else {
-      setPreview(null)
-    }
-  }, [file])
 
   return (
     <>
@@ -116,7 +63,6 @@ const RegisterForm: FC = () => {
             <Avatar round src="default-avatar.png" alt="Avatar" />
           </FormLabel>
           <input
-            onChange={handleFileChange}
             id="avatar"
             name="avatar"
             type="file"
@@ -124,11 +70,6 @@ const RegisterForm: FC = () => {
             aria-describedby="avatar"
             className="d-none"
           />
-          {fileError && (
-            <div className="d-block invalid-feedback text-danger mb-2 text-center">
-              Field avatar is required
-            </div>
-          )}
         </Form.Group>
         <Controller
           control={control}
@@ -258,7 +199,7 @@ const RegisterForm: FC = () => {
             </Form.Group> 
           )}
         />
-        <Button className="w-100 btnRegister" style={{borderColor:'#DE8667'}} type="submit" onMouseUp={handleFileError}>
+        <Button className="w-100 btnRegister" style={{borderColor:'#DE8667'}} type="submit">
           Sign up
         </Button>
         <div className="d-flex justify-content-between align-items-center mb-2">
