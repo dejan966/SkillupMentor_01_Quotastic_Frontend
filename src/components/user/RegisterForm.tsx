@@ -23,12 +23,7 @@ const RegisterForm: FC = () => {
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
-  const [file, setFile] = useState<File | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
-  const [fileError, setFileError] = useState(false)
-
   const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
-    if (!file) return
     const response = await API.register(data)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
@@ -37,7 +32,6 @@ const RegisterForm: FC = () => {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      // Login user before uploading an avatar image
       const loginResponse = await API.login({
         email: data.email,
         password: data.password,
@@ -51,72 +45,24 @@ const RegisterForm: FC = () => {
         setApiError(loginResponse.data.message)
         setShowError(true)
       } else {
-        // Upload avatar
-        const formData = new FormData()
-        formData.append('avatar', file, file.name)
-        const fileResponse = await API.uploadAvatar(
-          formData,
-          loginResponse.data.id,
-        )
-        if (fileResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
-          setApiError(fileResponse.data.message)
-          setShowError(true)
-        } else if (
-          fileResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
-        ) {
-          setApiError(fileResponse.data.message)
-          setShowError(true)
-        } else {
-          // Get user with avatar image
-          const userResponse = await API.fetchUser()
-          if (
-            userResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
-          ) {
-            setApiError(fileResponse.data.message)
-            setShowError(true)
-          } else {
-            authStore.login(userResponse.data)
-            navigate(routes.HOME)
-          }
-        }
+        authStore.login(response.data)
+        navigate(routes.HOME)
       }
     }
   })
 
-  const handleFileError = () => {
-    if (!file) setFileError(true)
-    else setFileError(false)
-  }
-
-  const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    if (target.files) {
-      const myfile = target.files[0]
-      setFile(myfile)
-    }
-  }
-
-  useEffect(() => {
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setPreview(reader.result as string)
-        setFileError(false)
-      }
-      reader.readAsDataURL(file)
-    } else {
-      setPreview(null)
-    }
-  }, [file])
-
   return (
     <>
-      <Form className="register-form" onSubmit={onSubmit}>
+      <div className="text-center text">
+        <h1 className="display-5">What is your <span style={{color:'#DE8667'}}>name?</span></h1>
+        <p className="fs-6">Your name will appear on quotes and your public profile</p>
+      </div>
+      <Form className="forms" onSubmit={onSubmit}>
         <Form.Group className="d-flex flex-column justify-content-center align-items-center">
           <FormLabel htmlFor="avatar" id="avatar-p">
-            <Avatar round src={preview as string} alt="Avatar" />
+            <Avatar round src="default-avatar.png" alt="Avatar" />
           </FormLabel>
           <input
-            onChange={handleFileChange}
             id="avatar"
             name="avatar"
             type="file"
@@ -124,62 +70,11 @@ const RegisterForm: FC = () => {
             aria-describedby="avatar"
             className="d-none"
           />
-          {fileError && (
-            <div className="d-block invalid-feedback text-danger mb-2 text-center">
-              Field avatar is required
-            </div>
-          )}
         </Form.Group>
         <Controller
           control={control}
-          name="first_name"
-          render={({ field }) => (
-            <Form.Group className="mb-3">
-              <FormLabel htmlFor="first_name">First name</FormLabel>
-              <input
-                {...field}
-                type="text"
-                aria-label="First name"
-                aria-describedby="first_name"
-                className={
-                  errors.first_name ? 'form-control is-invalid' : 'form-control'
-                }
-              />
-              {errors.first_name && (
-                <div className="invalid-feedback text-danger">
-                  {errors.first_name.message}
-                </div>
-              )}
-            </Form.Group>
-          )}
-        />
-        <Controller
-          control={control}
-          name="last_name"
-          render={({ field }) => (
-            <Form.Group className="mb-3">
-              <FormLabel htmlFor="last_name">Last name</FormLabel>
-              <input
-                {...field}
-                type="text"
-                aria-label="Last name"
-                aria-describedby="last_name"
-                className={
-                  errors.last_name ? 'form-control is-invalid' : 'form-control'
-                }
-              />
-              {errors.last_name && (
-                <div className="invalid-feedback text-danger">
-                  {errors.last_name.message}
-                </div>
-              )}
-            </Form.Group>
-          )}
-        />
-        <Controller
-          control={control}
           name="email"
-          render={({ field }) => (
+          render={({field})=>(
             <Form.Group className="mb-3">
               <FormLabel htmlFor="email">Email</FormLabel>
               <input
@@ -191,6 +86,7 @@ const RegisterForm: FC = () => {
                 className={
                   errors.email ? 'form-control is-invalid' : 'form-control'
                 }
+                style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
               />
               {errors.email && (
                 <div className="invalid-feedback text-danger">
@@ -200,10 +96,64 @@ const RegisterForm: FC = () => {
             </Form.Group>
           )}
         />
+        <div className="d-flex justify-content-between mb-3">
+          <div className="col-md-5">
+            <Controller
+            control={control}
+            name="first_name"
+            render={({field})=>(
+              <Form.Group className="mb-3">
+                <FormLabel htmlFor="first_name">First name</FormLabel>
+                <input
+                  {...field}
+                  type="text"
+                  aria-label="First name"
+                  aria-describedby="first_name"
+                  className={
+                    errors.first_name ? 'form-control is-invalid' : 'form-control'
+                  }
+                  style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
+                />
+                {errors.first_name && (
+                  <div className="invalid-feedback text-danger">
+                    {errors.first_name.message}
+                  </div>
+                )}
+              </Form.Group>
+            )}
+            />
+          </div>
+          <div className='col-md-5'>
+            <Controller
+            control={control}
+            name="last_name"
+            render={({ field }) => (
+              <Form.Group className="mb-3">
+                <FormLabel htmlFor="last_name">Last name</FormLabel>
+                <input
+                  {...field}
+                  type="text"
+                  aria-label="Last name"
+                  aria-describedby="last_name"
+                  className={
+                    errors.last_name ? 'form-control is-invalid' : 'form-control'
+                  }
+                  style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
+                />
+                {errors.last_name && (
+                  <div className="invalid-feedback text-danger">
+                    {errors.last_name.message}
+                  </div>
+                )}
+              </Form.Group>
+            )}
+            />   
+          </div>
+        </div>
         <Controller
           control={control}
           name="password"
-          render={({ field }) => (
+          render={({ field }) =>(
             <Form.Group className="mb-3">
               <FormLabel htmlFor="password">Password</FormLabel>
               <input
@@ -215,6 +165,7 @@ const RegisterForm: FC = () => {
                 className={
                   errors.password ? 'form-control is-invalid' : 'form-control'
                 }
+                style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
               />
               {errors.password && (
                 <div className="invalid-feedback text-danger">
@@ -231,33 +182,32 @@ const RegisterForm: FC = () => {
             <Form.Group className="mb-3">
               <FormLabel htmlFor="confirm_password">Confirm password</FormLabel>
               <input
-                {...field}
+              {...field}
                 type="password"
                 aria-label="Confirm password"
                 aria-describedby="confirm_password"
                 className={
-                  errors.confirm_password
-                    ? 'form-control is-invalid'
-                    : 'form-control'
+                  errors.confirm_password ? 'form-control is-invalid' : 'form-control'
                 }
+                style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
               />
               {errors.confirm_password && (
                 <div className="invalid-feedback text-danger">
                   {errors.confirm_password.message}
                 </div>
               )}
-            </Form.Group>
+            </Form.Group> 
           )}
         />
+        <Button className="w-100 btnRegister" style={{borderColor:'#DE8667'}} type="submit">
+          Sign up
+        </Button>
         <div className="d-flex justify-content-between align-items-center mb-2">
           <p className="mb-0">Already have an account?</p>
           <Link className="text-decoration-none text-end" to={routes.LOGIN}>
-            Login
+            Sign in
           </Link>
         </div>
-        <Button className="w-100" type="submit" onMouseUp={handleFileError}>
-          Create account
-        </Button>
       </Form>
       {showError && (
         <ToastContainer className="p-3" position="top-end">

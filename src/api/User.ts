@@ -8,14 +8,8 @@ import { RegisterUserFields } from '../hooks/react-hook-form/useRegister'
 import { UserType } from '../models/auth'
 import { apiRequest } from './Api'
 
-export const fetchUser = async () =>
-  apiRequest<undefined, UserType>('post', apiRoutes.FETCH_USER)
-
-export const fetchUsers = async (pageNumber: number) =>
-  apiRequest<number, UserType[]>(
-    'get',
-    `${apiRoutes.FETCH_USERS}/?page=${pageNumber}`,
-  )
+export const fetchUser = async (id:number) =>
+  apiRequest<undefined, UserType>('post', `${apiRoutes.FETCH_USERS}/${id}`)
 
 export const signout = async () =>
   apiRequest<undefined, void>('post', apiRoutes.SIGNOUT)
@@ -29,21 +23,24 @@ export const register = async (data: RegisterUserFields) =>
 export const refreshTokens = async () =>
   apiRequest<undefined, UserType>('get', apiRoutes.REFRESH_TOKENS)
 
-export const uploadAvatar = async (formData: FormData, id: string) =>
+export const uploadAvatar = async (formData: FormData, id: number) =>
   apiRequest<FormData, void>(
     'post',
     `${apiRoutes.UPLOAD_AVATAR_IMAGE}/${id}`,
     formData,
   )
 
+export const currUserInfo = async () =>
+  apiRequest<never, UserType>('get', apiRoutes.ME)
+
 export const createUser = async (data: CreateUserFields) =>
   apiRequest<CreateUserFields, void>('post', apiRoutes.USERS_PREFIX, data)
 
-export const updateUser = async (data: UpdateUserFields, id: string) =>
+export const updateUser = async (data: UpdateUserFields, id: number) =>
   apiRequest<UpdateUserFields, UserType>(
     'patch',
     `${apiRoutes.USERS_PREFIX}/${id}`,
   )
 
-export const deleteUser = async (id: string) =>
+export const deleteUser = async (id: number) =>
   apiRequest<string, UserType>('delete', `${apiRoutes.USERS_PREFIX}/${id}`)

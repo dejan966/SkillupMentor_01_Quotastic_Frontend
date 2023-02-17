@@ -1,16 +1,14 @@
-import React from 'react'
-import logo from './images/Logo.png'
+import { FC } from 'react'
 import Routes from './routes/Routes'
+import { usePageIdentification } from './hooks/usePageIdentification'
+import { observer } from 'mobx-react'
+import useAuth from './hooks/useAuth'
 
-function App() {
-  return (
-    <Routes />
-    /* <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
-    </div> */
-  )
+const App: FC = () => {
+  usePageIdentification()
+  useAuth()
+
+  return <Routes />
 }
 
-export default App
+export default observer(App)

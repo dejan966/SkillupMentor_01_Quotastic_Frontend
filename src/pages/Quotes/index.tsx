@@ -1,9 +1,12 @@
+import Layout from '../../components/ui/Layout'
 import { FC } from 'react'
 
 const Quotes: FC = () => {
-    return(
-        <h1>Most upvoted quotes and the user who posted them</h1>
-    )
+  return (
+    <Layout>
+      {/*Landing page quotes*/}
+    </Layout>
+  )
 }
 
 export default Quotes

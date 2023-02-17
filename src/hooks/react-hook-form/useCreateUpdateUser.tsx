@@ -14,9 +14,10 @@ export interface CreateUserFields {
 export interface UpdateUserFields {
   first_name?: string
   last_name?: string
-  email: string
-  password: string
-  confirm_password: string
+  email?: string
+  password?: string
+  confirm_password?: string
+  avatar?: string
 }
 
 interface Props {
@@ -47,6 +48,7 @@ export const useCreateUpdateUserForm = ({ defaultValues }: Props) => {
     confirm_password: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords do not match')
       .notRequired(),
+    avatar: Yup.string().notRequired(),
   })
 
   const {
@@ -55,6 +57,7 @@ export const useCreateUpdateUserForm = ({ defaultValues }: Props) => {
     control,
   } = useForm({
     defaultValues: {
+      //setting the values from fetchUser query as the default value if you're updating the user
       first_name: '',
       last_name: '',
       email: '',

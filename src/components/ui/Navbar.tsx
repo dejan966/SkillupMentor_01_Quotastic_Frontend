@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button'
 import { routes } from '../../constants/routesConstants'
 import { FC, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import Toast from 'react-bootstrap/Toast'
 import authStore from '../../stores/auth.store'
@@ -10,6 +10,7 @@ import { StatusCode } from '../../constants/errorConstants'
 import * as API from '../../api/Api'
 
 const Navbar: FC = () => {
+  const location = useLocation()
   const navigate = useNavigate()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
@@ -27,55 +28,151 @@ const Navbar: FC = () => {
       navigate(routes.HOME)
     }
   }
+  if(location.pathname === '/signup'){
+    return (
+      <>
+      <header>
+          <nav className="navbar navbar-expand-lg">
+            <div className="container-xxl pb-0">
+              <Link className="navbar.brand" to={routes.HOME}>
+                <img
+                  src="quotastic_red.png"
+                  alt="Quotastic red logo"
+                  width={123}
+                />
+              </Link>
+              <div
+                className="collapse navbar-collapse justify-content-end align-items-center"
+                id="navbarTogglerDemo02"
+              >
+                <ul className="navbar-nav mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <NavLink className="nav-link pe-0" to={routes.LOGIN}>
+                    <Button className='btnLogin'>
+                      Login
+                    </Button>
+                  </NavLink>
+                </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </header>
+        {showError && (
+          <ToastContainer className="p-3" position="top-end">
+            <Toast onClose={() => setShowError(false)} show={showError}>
+              <Toast.Header>
+                <strong className="me-suto text-danger">Error</strong>
+              </Toast.Header>
+              <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
+            </Toast>
+          </ToastContainer>
+        )}
+      </>
+    )
+  }
+  else if(location.pathname === '/login'){
+    return (
+      <>
+      <header>
+          <nav className="navbar navbar-expand-lg">
+            <div className="container-xxl pb-0">
+              <Link className="navbar.brand" to={routes.HOME}>
+                <img
+                  src="quotastic_red.png"
+                  alt="Quotastic red logo"
+                  width={123}
+                />
+              </Link>
+              <div
+                className="collapse navbar-collapse justify-content-end align-items-center"
+                id="navbarTogglerDemo02"
+              >
+                <ul className="navbar-nav mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <NavLink className="nav-link pe-0" to={routes.SIGNUP}>
+                    <Button className='btnRegister'>
+                      Signup
+                    </Button>
+                  </NavLink>
+                </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </header>
+        {showError && (
+          <ToastContainer className="p-3" position="top-end">
+            <Toast onClose={() => setShowError(false)} show={showError}>
+              <Toast.Header>
+                <strong className="me-suto text-danger">Error</strong>
+              </Toast.Header>
+              <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
+            </Toast>
+          </ToastContainer>
+        )}
+      </>
+    )
+  }
   return (
     <>
-      <header>
-        <nav className="navbar navbar-expand-lg bg-light">
-          <div className="container-xxl p-4 pb-0">
+    <header>
+        <nav className="navbar navbar-expand-lg">
+          <div className="container-xxl pb-0">
             <Link className="navbar.brand" to={routes.HOME}>
               <img
-                src="/images/Logo.png"
-                alt="SkillUp Mentor img"
+                src="quotastic_red.png"
+                alt="Quotastic red logo"
                 width={123}
               />
             </Link>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarTogglerDemo02"
-              aria-controls="navbarTogglerDemo02"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
             <div
               className="collapse navbar-collapse justify-content-end align-items-center"
               id="navbarTogglerDemo02"
             >
               <ul className="navbar-nav mb-2 mb-lg-0">
-                <li className="nav-item pe-4">
-                  <NavLink className="nav-link" to={routes.HOME}>
-                    Home
-                  </NavLink>
-                </li>
                 {authStore.user ? (
-                  <li className="nav-item pe-4">
-                    <Button className="btn btn-dark" onClick={signout}>
-                      Signout
-                    </Button>
-                  </li>
+                  <>
+                    <li className="nav-item pe-4">
+                      <a className="text-decoration-none textColor" href={routes.HOME}>
+                        Home
+                      </a>
+                    </li>
+                    <li className="nav-item pe-4">
+                      <a className="text-decoration-none textColor" onClick={signout}>
+                        Sign out
+                      </a>
+                    </li>
+                    <li className="nav-item pe-4">
+                      <a className="text-decoration-none textColor" href={routes.USERINFO}>
+                        Setings
+                      </a>
+                    </li>
+                    <li className="nav-item pe-4">
+                      <a className="text-decoration-none textColor" href={routes.USERQUOTESINFO}>
+                        Profile {/*most liked quotes, most recent, liked quotes*/}
+                      </a>
+                    </li>
+                    <li className="nav-item pe-4">
+                      <a className="text-decoration-none textColor" href={routes.ADDNEWQUOTE}>
+                        +
+                      </a>
+                    </li>
+                  </>
                 ) : (
                   <>
                     <li className="nav-item pe-4">
-                      <NavLink className="nav-link" to={routes.LOGIN}>
-                        Login
-                      </NavLink>
+                      <NavLink className="nav-link" to={routes.SIGNUP}>
+                        <Button className='btnRegister'>
+                          Sign up
+                        </Button>
+                      </NavLink> 
                     </li>
                     <li className="nav-item">
-                      <NavLink className="nav-link pe-0" to={routes.SIGNUP}>
-                        Signup
+                      <NavLink className="nav-link pe-0" to={routes.LOGIN}>
+                        <Button className='btnLogin'>
+                          Login
+                        </Button>
                       </NavLink>
                     </li>
                   </>

@@ -1,14 +1,15 @@
 import Layout from '../../../components/ui/Layout'
 import CreateUpdateUserForm from '../../../components/user/CreateUpdateUserForm'
 import { FC } from 'react'
+import { useLocation } from 'react-router-dom'
 
-const UsersAdd: FC = () => {
+const UserEdit: FC = () => {
+  const location = useLocation()
   return (
     <Layout>
-      <h1 className="mb-4 text-center">Create new user</h1>
-      <CreateUpdateUserForm />
+      <CreateUpdateUserForm defaultValues={location.state} />
     </Layout>
   )
 }
 
-export default UsersAdd
+export default UserEdit

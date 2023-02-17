@@ -10,7 +10,6 @@ import Toast from 'react-bootstrap/Toast'
 import { Form } from 'react-bootstrap'
 import { Controller } from 'react-hook-form'
 import FormLabel from 'react-bootstrap/FormLabel'
-import { routes } from '../../constants/routesConstants'
 import Button from 'react-bootstrap/Button'
 import * as API from '../../api/Api'
 import { StatusCode } from '../../constants/errorConstants'
@@ -18,7 +17,6 @@ import authStore from '../../stores/auth.store'
 import Avatar from 'react-avatar'
 import { observer } from 'mobx-react'
 import { UserType } from '../../models/auth'
-import { useQuery } from 'react-query'
 
 interface Props {
   defaultValues?: UserType & { isActiveUser?: boolean }
@@ -54,7 +52,6 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      //Upload avatar
       const formData = new FormData()
       formData.append('avatar', file, file.name)
       const fileResponse = await API.uploadAvatar(formData, response.data.id)
@@ -67,13 +64,13 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
         setApiError(fileResponse.data.message)
         setShowError(true)
       } else {
-        navigate('/users')
+        navigate('/me')
       }
     }
   }
 
   const handleUpdate = async (data: UpdateUserFields) => {
-    const response = await API.updateUser(data, defaultValues?.id as string)
+    const response = await API.updateUser(data, defaultValues?.id as number)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -85,10 +82,9 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
         if (defaultValues?.isActiveUser) {
           authStore.login(response.data)
         }
-        navigate('/users')
+        navigate('/me')
         return
       }
-      //Upload avatar
       const formData = new FormData()
       formData.append('avatar', file, file.name)
       const fileResponse = await API.uploadAvatar(formData, response.data.id)
@@ -103,7 +99,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
       } else {
         if (defaultValues?.isActiveUser) {
           //Get user with avatar image
-          const userResponse = await API.fetchUser()
+          const userResponse = await API.fetchUser(response.data.id)
           if (
             userResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
           ) {
@@ -113,7 +109,6 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
             authStore.login(userResponse.data)
           }
         }
-        navigate('/users')
       }
     }
   }
@@ -293,6 +288,10 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
             </Form.Group>
           )}
         />
+        {/*Display user info*/}
+        {/*Submit - me/edit*/}
+        {/*Update password button*/}
+        {/*Update avatar button*/}
         <Button className="w-100" type="submit" onMouseUp={handleFileError}>
           {defaultValues ? 'Update user' : 'Create new user'}
         </Button>

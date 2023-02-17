@@ -18,11 +18,13 @@ type AppRoute = RouteProps & {
 const Home = lazy(() => import('../pages/Home'))
 
 /* Private routes */
-const UserEdit = lazy(() => import('../pages/Users/Edit'))
+const UserInfo = lazy(() => import('../pages/Me'))
+const UserEdit = lazy(() => import('../pages/Me/Edit'))
 
 const Quotes = lazy(() => import('../pages/Quotes'))
-const QuotesAdd = lazy(() => import('../pages/Quotes/Add'))
-const QuotesEdit = lazy(() => import('../pages/Quotes/Edit'))
+const QuotesAdd = lazy(() => import('../pages/Me/Myquote'))
+const UserQuotes = lazy(() => import('../pages/Me/Quotes'))
+const QuotesEdit = lazy(() => import('../pages/Me/Myquote/Edit'))
 
 const Upvote = lazy(()=>import('../pages/Votes/Upvote'))
 const Downvote = lazy(()=>import('../pages/Votes/Downvote'))
@@ -50,17 +52,22 @@ export const AppRoutes: AppRoute[] = [
   {
     type: RouteType.PRIVATE,
     path: '/me',
-    children: <UserEdit />,
+    children: <UserInfo />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/me/edit',
+    children: <UserInfo />,
   },
   {
     type: RouteType.PRIVATE,
     path: '/me/update-password',
-    children: <UserEdit />,
+    children: <UserInfo />,
   },
   {
     type: RouteType.PRIVATE,
     path: '/me/update-avatar',
-    children: <UserEdit />,
+    children: <UserInfo />,
   },
   {
     type: RouteType.PRIVATE,
@@ -74,7 +81,7 @@ export const AppRoutes: AppRoute[] = [
   },
   {
     type: RouteType.PRIVATE,
-    path: '/me/myquote/id',
+    path: '/me/myquote/edit',
     children: <QuotesEdit />,
   },
   {
