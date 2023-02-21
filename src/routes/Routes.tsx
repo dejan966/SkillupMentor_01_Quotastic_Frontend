@@ -86,12 +86,12 @@ export const AppRoutes: AppRoute[] = [
   },
   {
     type: RouteType.PRIVATE,
-    path: '/quotes/id/upvote',
+    path: '/quotes/:id/upvote',
     children: <Upvote />,
   },
   {
     type: RouteType.PRIVATE,
-    path: '/quotes/id/downvote',
+    path: '/quotes/:id/downvote',
     children: <Downvote />,
   },
   // Public Routes

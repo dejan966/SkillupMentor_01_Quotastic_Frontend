@@ -2,7 +2,7 @@ import {
   RegisterUserFields,
   useRegisterForm,
 } from '../../hooks/react-hook-form/useRegister'
-import { ChangeEvent, FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import Toast from 'react-bootstrap/Toast'
@@ -62,14 +62,6 @@ const RegisterForm: FC = () => {
           <FormLabel htmlFor="avatar" id="avatar-p">
             <Avatar round src="default-avatar.png" alt="Avatar" />
           </FormLabel>
-          <input
-            id="avatar"
-            name="avatar"
-            type="file"
-            aria-label="Avatar"
-            aria-describedby="avatar"
-            className="d-none"
-          />
         </Form.Group>
         <Controller
           control={control}

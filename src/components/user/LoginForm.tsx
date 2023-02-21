@@ -40,29 +40,29 @@ const LoginForm: FC = () => {
         <p className="fs-6">Thank you for coming back. Hope you have a good day and continue to inspire others</p>
     </div>
       <Form className="forms" onSubmit={onSubmit}>
-      <Controller
+        <Controller
           control={control}
           name="email"
           render={({field})=>(
             <Form.Group className="mb-3">
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <input
-            {...field}
-            type="email"
-            placeholder="example@gmail.com"
-            aria-label="Email"
-            aria-describedby="email"
-            className={
-              errors.email ? 'form-control is-invalid' : 'form-control'
-            }
-            style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
-          />
-          {errors.email && (
-            <div className="invalid-feedback text-danger">
-              {errors.email.message}
-            </div>
-          )}
-        </Form.Group>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <input
+                {...field}
+                type="email"
+                placeholder="example@gmail.com"
+                aria-label="Email"
+                aria-describedby="email"
+                className={
+                  errors.email ? 'form-control is-invalid' : 'form-control'
+                }
+                style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
+              />
+              {errors.email && (
+                <div className="invalid-feedback text-danger">
+                  {errors.email.message}
+                </div>
+              )}
+            </Form.Group>
           )}
         />
         <Controller
@@ -70,24 +70,24 @@ const LoginForm: FC = () => {
           name="password"
           render={({field})=>(
             <Form.Group className="mb-3">
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <input
-            {...field}
-            type="password"
-            placeholder="******"
-            aria-label="Password"
-            aria-describedby="password"
-            className={
-              errors.password ? 'form-control is-invalid' : 'form-control'
-            }
-            style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
-          />
-          {errors.password && (
-            <div className="invalid-feedback text-danger">
-              {errors.password.message}
-            </div>
-          )}
-        </Form.Group>
+              <FormLabel htmlFor="password">Password</FormLabel>
+              <input
+                {...field}
+                type="password"
+                placeholder="******"
+                aria-label="Password"
+                aria-describedby="password"
+                className={
+                  errors.password ? 'form-control is-invalid' : 'form-control'
+                }
+                style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
+              />
+              {errors.password && (
+                <div className="invalid-feedback text-danger">
+                  {errors.password.message}
+                </div>
+              )}
+            </Form.Group>
           )}
         />
         <Button className="w-100 btnLogin" style={{borderColor:'#DE8667'}} type="submit">

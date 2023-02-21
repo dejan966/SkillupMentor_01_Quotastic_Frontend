@@ -10,7 +10,7 @@ export interface LoginUserFields {
 export const useLoginForm = () => {
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email().required('Please enter a valid email'),
-    password: Yup.string(),
+    password: Yup.string().required('Password field cannot be empty')
   })
 
   const {
