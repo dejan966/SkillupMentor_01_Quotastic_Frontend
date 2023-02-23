@@ -26,6 +26,7 @@ const QuotesAdd = lazy(() => import('../pages/Me/Myquote'))
 const UserQuotes = lazy(() => import('../pages/Me/Quotes'))
 const UserPasswordEdit = lazy(() => import('../pages/Me/Update-password'))
 const UserAvatarEdit = lazy(() => import('../pages/Me/Update-avatar'))
+const DisableAcc = lazy(() => import('../pages/Me/Disable-account'))
 const QuotesEdit = lazy(() => import('../pages/Me/Myquote/Edit'))
 
 const Upvote = lazy(()=>import('../pages/Votes/Upvote'))
@@ -75,6 +76,11 @@ export const AppRoutes: AppRoute[] = [
     type: RouteType.PRIVATE,
     path: '/me/update-avatar',
     children: <UserAvatarEdit />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/me/disable-account',
+    children: <DisableAcc />,
   },
   {
     type: RouteType.PRIVATE,

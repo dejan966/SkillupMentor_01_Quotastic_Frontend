@@ -29,7 +29,7 @@ const useAuth = () => {
   useEffect(() => {
     if (userStorage.getUser()) {
       (async () => {
-        const response = await API.currUserInfo()
+        const response = await API.fetchCurrUser()
         if (response.data.email) {
           authStore.login(response.data)
           clearInterval(timerRef.current)

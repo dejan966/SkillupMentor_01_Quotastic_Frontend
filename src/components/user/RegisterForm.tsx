@@ -88,7 +88,7 @@ const RegisterForm: FC = () => {
             </Form.Group>
           )}
         />
-        <div className="d-flex justify-content-between mb-3">
+        <div className="d-flex justify-content-between">
           <div className="col-md-5">
             <Controller
             control={control}

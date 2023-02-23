@@ -30,7 +30,7 @@ export const uploadAvatar = async (formData: FormData, id: number) =>
     formData,
   )
 
-export const currUserInfo = async () =>
+export const fetchCurrUser = async () =>
   apiRequest<never, UserType>('get', apiRoutes.ME)
 
 export const createUser = async (data: CreateUserFields) =>

@@ -13,21 +13,22 @@ import { UpdateUserFields, useCreateUpdateUserForm } from '../../hooks/react-hoo
 import { routes } from '../../constants/routesConstants'
 import authStore from '../../stores/auth.store'
 import { PropTypes } from 'mobx-react'
+import Avatar from 'react-avatar'
 
 const UserInfo: FC = () => {
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
   const { isMobile } = useMediaQuery(768)
-
-  const { data } = useQuery(
-    ['currUserInfo'],
-    () => API.currUserInfo(),
-    {
-      keepPreviousData: true,
-      refetchOnWindowFocus: false,
-    },
+  
+  const { data, isLoading, error } = useQuery(
+    ['user'],
+    () => API.fetchCurrUser(),
+    /* .then((response)=>{
+      const APIResponse = response.data
+      console.log('response: ', APIResponse.data) // This is response data from API
+      setUser(APIResponse.data)
+    } */
   )
-  console.log(data.request)
   const { mutate } = useMutation((id: number) => API.deleteUser(id), {
     onSuccess: (response) => {
       if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
@@ -50,44 +51,71 @@ const UserInfo: FC = () => {
     mutate(id)
   }
 
-  return (
+  return ( 
     <Layout>
-      <div className="form-group forms mb-4">
-        {data?.map((item: UserType, index: number) => (
+        <div className="text-center text">
+            <h1 className="display-5">Your info</h1>
+        </div>
+        { isLoading ? (
+          <div>Loading...</div>
+        ): 
           <>
-            {/*read only text fields */}
-            <div key={index} className="text-center">
-              <div className="mb-12">
-                {item.avatar}
-              </div>
-              <div className="mb-12">
-                {item.email}
-              </div>
-              <div className="d-flex justify-content-between mb-3">
-                <div className="col-md-5">
-                  {item.first_name}
+            {data ? (
+              <div className="forms">
+                <Form.Group className="d-flex flex-column justify-content-center align-items-center">
+                  <FormLabel htmlFor="avatar" id="avatar-p">
+                    <Avatar round src="default-avatar.png" alt="Avatar" />
+                  </FormLabel>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <FormLabel htmlFor="email">Email</FormLabel>
+                  <input
+                    type="email"
+                    value={data.data.email}
+                    aria-label="Email"
+                    aria-describedby="email"
+                    style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
+                    readOnly
+                  />
+                </Form.Group>
+                <div className="d-flex justify-content-between mb-3">
+                  <div className="col-md-5">
+                    <Form.Group className="mb-3">
+                      <FormLabel htmlFor="first_name">First name</FormLabel>
+                      <input
+                        type="text"
+                        value={data.data.first_name}
+                        aria-label="First name"
+                        aria-describedby="first_name"
+                        style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
+                        readOnly
+                      />
+                    </Form.Group>
+                  </div>
+                  <div className='col-md-5'>
+                    <Form.Group className="mb-3">
+                      <FormLabel htmlFor="last_name">Last name</FormLabel>
+                      <input
+                        type="text"
+                        value={data.data.last_name}
+                        aria-label="Last name"
+                        aria-describedby="last_name"
+                        style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
+                        readOnly
+                      />
+                    </Form.Group>
+                  </div>
                 </div>
-                <div className="col-md-5">
-                  {item.last_name}
+                <div className="d-flex justify-content-between mb-3">
+                  <Button href={routes.USEREDIT} className='btnRegister'>Edit</Button>
+                  <Button href={routes.USERDELETE} className='btnLogin'>Disable account</Button>
                 </div>
-              </div>
-              <div>
-              <div className="d-flex justify-content-between mb-3">
-                <div className="col-md-3">
-                  {/*Get current user data and send it to me/edit*/}
-                  <Button href={routes.USEREDIT}>Edit</Button>
-                </div>
-                <div className="col-md-3">
-                  <Button href={routes.USERDELETE}>Disable account</Button>
-                </div>
-              </div>
-              </div>
-            </div>
+              </div> 
+              ) : null
+            }
           </>
-        ))}
-      </div>
+        }
     </Layout>
   )
 }
-
 export default UserInfo

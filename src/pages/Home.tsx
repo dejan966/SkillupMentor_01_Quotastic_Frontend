@@ -13,6 +13,7 @@ const Home: FC = () => {
             Quotastic is a free online tool for you to explore the quips, quotes and proverbs.
             Sign up and express yourself. 
           </p>
+          {/*Quote of the day when you're logged in*/}
           <p className="fs-4">
             <Button className="btnRegister" href={routes.SIGNUP}>
               Sign up
