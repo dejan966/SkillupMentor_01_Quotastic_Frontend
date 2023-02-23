@@ -8,6 +8,7 @@ import authStore from '../../stores/auth.store'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import { StatusCode } from '../../constants/errorConstants'
 import * as API from '../../api/Api'
+import Avatar from 'react-avatar'
 
 const Navbar: FC = () => {
   const location = useLocation()
@@ -150,7 +151,8 @@ const Navbar: FC = () => {
                     </li>
                     <li className="nav-item pe-4">
                       <a className="text-decoration-none textColor" href={routes.USERQUOTESINFO}>
-                        Profile {/*most liked quotes, most recent, liked quotes*/}
+                        {/*most liked quotes, most recent, liked quotes*/}
+                        <Avatar round src={authStore.user.avatar} alt="User avatar" />
                       </a>
                     </li>
                     <li className="nav-item pe-4">
@@ -195,5 +197,4 @@ const Navbar: FC = () => {
     </>
   )
 }
-
 export default Navbar
