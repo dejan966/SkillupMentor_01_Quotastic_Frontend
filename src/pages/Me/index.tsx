@@ -53,68 +53,71 @@ const UserInfo: FC = () => {
 
   return ( 
     <Layout>
-        <div className="text-center text">
-            <h1 className="display-5">Your info</h1>
+      { isLoading ? (
+        <div className='text-center'>
+          Loading data...
         </div>
-        { isLoading ? (
-          <div>Loading...</div>
-        ): 
-          <>
-            {data ? (
-              <div className="forms">
-                <Form.Group className="d-flex flex-column justify-content-center align-items-center">
-                  <FormLabel htmlFor="avatar" id="avatar-p">
-                    <Avatar round src="default-avatar.png" alt="Avatar" />
-                  </FormLabel>
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <FormLabel htmlFor="email">Email</FormLabel>
-                  <input
-                    type="email"
-                    value={data.data.email}
-                    aria-label="Email"
-                    aria-describedby="email"
-                    style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
-                    readOnly
-                  />
-                </Form.Group>
-                <div className="d-flex justify-content-between mb-3">
-                  <div className="col-md-5">
-                    <Form.Group className="mb-3">
-                      <FormLabel htmlFor="first_name">First name</FormLabel>
-                      <input
-                        type="text"
-                        value={data.data.first_name}
-                        aria-label="First name"
-                        aria-describedby="first_name"
-                        style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
-                        readOnly
-                      />
-                    </Form.Group>
-                  </div>
-                  <div className='col-md-5'>
-                    <Form.Group className="mb-3">
-                      <FormLabel htmlFor="last_name">Last name</FormLabel>
-                      <input
-                        type="text"
-                        value={data.data.last_name}
-                        aria-label="Last name"
-                        aria-describedby="last_name"
-                        style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
-                        readOnly
-                      />
-                    </Form.Group>
-                  </div>
+      ): 
+        <>
+          {data ? (
+            <div className="forms">
+              <h1 className='display-5 text-center'>Your info</h1>
+              <Form.Group className="d-flex flex-column justify-content-center align-items-center">
+                <FormLabel htmlFor="avatar" id="avatar-p">
+                  <Avatar round src="default-avatar.png" alt="Avatar" />
+                </FormLabel>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <FormLabel htmlFor="email">Email</FormLabel>
+                <input
+                  type="email"
+                  value={data.data.email}
+                  aria-label="Email"
+                  aria-describedby="email"
+                  className='form-control'
+                  style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
+                  readOnly
+                />
+              </Form.Group>
+              <div className="d-flex justify-content-between mb-3">
+                <div className="col-md-5">
+                  <Form.Group className="mb-3">
+                    <FormLabel htmlFor="first_name">First name</FormLabel>
+                    <input
+                      type="text"
+                      value={data.data.first_name}
+                      aria-label="First name"
+                      aria-describedby="first_name"
+                      className='form-control'
+                      style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
+                      readOnly
+                    />
+                  </Form.Group>
                 </div>
-                <div className="d-flex justify-content-between mb-3">
-                  <Button href={routes.USEREDIT} className='btnRegister'>Edit</Button>
-                  <Button href={routes.USERDELETE} className='btnLogin'>Disable account</Button>
+                <div className='col-md-5'>
+                  <Form.Group className="mb-3">
+                    <FormLabel htmlFor="last_name">Last name</FormLabel>
+                    <input
+                      type="text"
+                      value={data.data.last_name}
+                      aria-label="Last name"
+                      aria-describedby="last_name"
+                      className='form-control'
+                      style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
+                      readOnly
+                    />
+                  </Form.Group>
                 </div>
-              </div> 
-              ) : null
-            }
-          </>
-        }
+              </div>
+              <div className="d-flex justify-content-start mb-3">
+                <Button href={routes.USEREDIT} className='btnRegister'>Edit</Button>
+                <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.USERDELETE}>Cancel</a>
+              </div>
+            </div> 
+            ) : null
+          }
+        </>
+      }
     </Layout>
   )
 }

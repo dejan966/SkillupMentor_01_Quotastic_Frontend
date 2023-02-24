@@ -152,7 +152,7 @@ const Navbar: FC = () => {
                     <li className="nav-item pe-4">
                       <a className="text-decoration-none textColor" href={routes.USERQUOTESINFO}>
                         {/*most liked quotes, most recent, liked quotes*/}
-                        <Avatar round src={authStore.user.avatar} alt="User avatar" />
+                        <img src={authStore.user.avatar} alt="User avatar" width={40}/>
                       </a>
                     </li>
                     <li className="nav-item pe-4">

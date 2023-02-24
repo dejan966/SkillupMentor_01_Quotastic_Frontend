@@ -58,26 +58,24 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
 
   return(
       <>
-        <div className="text-center text">
-          <div className="ml-1">
-            <h1 className="display-6">Are you feeling <span style={{color:'#DE8667'}}>inspired?</span></h1>
-            <div>You can post quotes. You can delete them on your profile</div>
+        <div className="form-group forms" onSubmit={onSubmit}>
+          <div className="text-start text">
+              <h1 className="display-6">Are you feeling <span style={{color:'#DE8667'}}>inspired?</span></h1>
+              <div className='mb-3'>You can post quotes. You can delete them on your profile</div>
           </div>
-          <div className="form-group forms" onSubmit={onSubmit}>
-            <Controller
-              control={control}
-              name="quote"
-              render={({ field }) =>(
-                <Form.Group className="mb-3">
-                    <textarea {...field} className="textfield" id="newQuote"></textarea>
-                </Form.Group>
-            )}/>
-            <div className="d-flex justify-content-start">
-                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} type="submit">
-                    Submit
-                </Button>
-                <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.HOME}>Cancel</a>
-            </div>
+          <Controller
+            control={control}
+            name="quote"
+            render={({ field }) =>(
+              <Form.Group className="mb-3">
+                  <textarea {...field} className="textfield" id="newQuote"></textarea>
+              </Form.Group>
+          )}/>
+          <div className="d-flex justify-content-start">
+              <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} type="submit">
+                  Submit
+              </Button>
+              <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.HOME}>Cancel</a>
           </div>
         </div>
         {showError && (
