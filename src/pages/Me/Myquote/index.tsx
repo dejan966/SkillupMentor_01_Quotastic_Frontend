@@ -5,7 +5,7 @@ import CreateUpdateQuoteForm from '../../../components/quote/CreateUpdateQuoteFo
 const QuotesAdd: FC = () => {
   return (
     <Layout>
-      <CreateUpdateQuoteForm />
+      <CreateUpdateQuoteForm/>
     </Layout>
   )
 }

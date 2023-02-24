@@ -4,10 +4,13 @@ import { QuoteType } from '../models/quote'
 import { apiRequest } from './Api'
 
 export const fetchQuotes = async () =>
-  apiRequest<undefined, QuoteType>('post', apiRoutes.FETCH_QUOTES)
+  apiRequest<undefined, QuoteType>('get', apiRoutes.FETCH_QUOTES)
 
 export const fetchQuote = async (id:number) =>
-  apiRequest<undefined, QuoteType>('post', `${apiRoutes.FETCH_QUOTES}/${id}`)
+  apiRequest<undefined, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/${id}`)
+
+export const fetchRandomQuote = async () =>
+  apiRequest<undefined, QuoteType>('get', apiRoutes.FETCH_RANDOM_QUOTE)
 
 export const createQuote = async (data: CreateQuoteFields) =>
 apiRequest<CreateQuoteFields, void>('post', apiRoutes.USERS_PREFIX, data)

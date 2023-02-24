@@ -10,4 +10,5 @@ export enum apiRoutes {
   GET_AVATAR_IMAGE = '/users/get/image',
   QUOTES_PREFIX = '/quotes',
   FETCH_QUOTES = '/quotes',
+  FETCH_RANDOM_QUOTE = '/quotes/random',
 } 

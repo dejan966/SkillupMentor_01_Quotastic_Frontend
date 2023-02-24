@@ -59,7 +59,7 @@ const UserInfo: FC = () => {
               <h1 className='display-5 text-center'>Your info</h1>
               <Form.Group className="d-flex flex-column justify-content-center align-items-center">
                 <FormLabel htmlFor="avatar" id="avatar-p">
-                  <Avatar round src="default-avatar.png" alt="Avatar" />
+                  <Avatar round src={data.data.avatar} alt="Avatar" />
                 </FormLabel>
               </Form.Group>
               <Form.Group className="mb-3">
@@ -104,9 +104,9 @@ const UserInfo: FC = () => {
                   </Form.Group>
                 </div>
               </div>
-              <div className="d-flex justify-content-start mb-3">
+              <div className="d-flex justify-content-between mb-3">
                 <Button href={routes.USEREDIT} className='btnRegister'>Edit</Button>
-                <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.USERDELETE}>Cancel</a>
+                <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.USERDELETE}>Disable account</a>
               </div>
             </div> 
             ) : null

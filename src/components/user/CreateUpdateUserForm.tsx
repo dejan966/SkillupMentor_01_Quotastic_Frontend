@@ -54,10 +54,10 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
   return (
     <>
       <Form className="form-group forms" onSubmit={onSubmit}>
-        {/* <div className="text-start text">
+        <div className="text-start text">
           <h1>Profile <span style={{color:'#DE8667'}}>settings</span></h1>
-          <div className='mb-3'>Change your profile setting</div>
-        </div> */}
+          <div className='mb-3'>Change your profile settings</div>
+        </div>
         <Controller
           control={control}
           name="email"
@@ -149,7 +149,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
           <Button className="btnRegister col-md-3" type="submit">
             Submit
           </Button>
-          <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.HOME}>Cancel</a>
+          <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.USERINFO}>Cancel</a>
         </div>
       </Form>
       {showError && (
