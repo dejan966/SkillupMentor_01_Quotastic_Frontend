@@ -32,43 +32,11 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
-  const [file, setFile] = useState<File | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
-  const [fileError, setFileError] = useState(false)
-
   const onSubmit = handleSubmit(
-    async (data: CreateUserFields | UpdateUserFields) => {
-      if (!defaultValues) await handleAdd(data as CreateUserFields)
-      else await handleUpdate(data as UpdateUserFields)
+    async (data:UpdateUserFields) => {
+      handleUpdate(data as UpdateUserFields)
     },
   )
-
-  const handleAdd = async (data: CreateUserFields) => {
-    if (!file) return
-    const response = await API.createUser(data)
-    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else {
-      const formData = new FormData()
-      formData.append('avatar', file, file.name)
-      const fileResponse = await API.uploadAvatar(formData, response.data.id)
-      if (fileResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
-        setApiError(fileResponse.data.message)
-        setShowError(true)
-      } else if (
-        fileResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
-      ) {
-        setApiError(fileResponse.data.message)
-        setShowError(true)
-      } else {
-        navigate('/me')
-      }
-    }
-  }
 
   const handleUpdate = async (data: UpdateUserFields) => {
     const response = await API.updateUser(data, defaultValues?.id as number)
@@ -79,73 +47,17 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      if (!file) {
-        if (defaultValues?.isActiveUser) {
-          authStore.login(response.data)
-        }
-        navigate('/me')
-        return
-      }
-      const formData = new FormData()
-      formData.append('avatar', file, file.name)
-      const fileResponse = await API.uploadAvatar(formData, response.data.id)
-      if (fileResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
-        setApiError(fileResponse.data.message)
-        setShowError(true)
-      } else if (
-        fileResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
-      ) {
-        setApiError(fileResponse.data.message)
-        setShowError(true)
-      } else {
-        if (defaultValues?.isActiveUser) {
-          const userResponse = await API.fetchUser(response.data.id)
-          if (
-            userResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
-          ) {
-            setApiError(fileResponse.data.message)
-            setShowError(true)
-          } else {
-            authStore.login(userResponse.data)
-          }
-        }
-      }
+      //navigate success page then redirect to /me after a few seconds
     }
   }
-
-  const handleFileError = () => {
-    if (!file) setFileError(true)
-    else setFileError(false)
-  }
-
-  const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    if (target.files) {
-      const myfile = target.files[0]
-      setFile(myfile)
-    }
-  }
-
-  useEffect(() => {
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setPreview(reader.result as string)
-        setFileError(false)
-      }
-      reader.readAsDataURL(file)
-    } else {
-      setPreview(null)
-    }
-  }, [file])
 
   return (
     <>
-    
       <Form className="form-group forms" onSubmit={onSubmit}>
-        <div className="text-start text">
+        {/* <div className="text-start text">
           <h1>Profile <span style={{color:'#DE8667'}}>settings</span></h1>
           <div className='mb-3'>Change your profile setting</div>
-        </div>
+        </div> */}
         <Controller
           control={control}
           name="email"
@@ -227,14 +139,14 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
         </div>
         <div className="d-flex justify-content-between mb-3">
           <div className="md-5">
-            <Button className='btnOrange'>Change password</Button>
+            <Button className='btnOrange' href={routes.USERPASSWORDEDIT}>Change password</Button>
           </div>
           <div className="col-md-5">
-            <Button className='btnChangeProfilePic'>Change profile picture</Button>
+            <Button className='btnChangeProfilePic' href={routes.USERAVATAREDIT}>Change profile picture</Button>
           </div>
         </div>
         <div className="d-flex justify-content-start">
-          <Button className="btnRegister col-md-3" type="submit" onMouseUp={handleFileError}>
+          <Button className="btnRegister col-md-3" type="submit">
             Submit
           </Button>
           <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.HOME}>Cancel</a>

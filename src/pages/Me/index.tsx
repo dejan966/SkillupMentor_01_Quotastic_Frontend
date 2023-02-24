@@ -23,11 +23,6 @@ const UserInfo: FC = () => {
   const { data, isLoading, error } = useQuery(
     ['user'],
     () => API.fetchCurrUser(),
-    /* .then((response)=>{
-      const APIResponse = response.data
-      console.log('response: ', APIResponse.data) // This is response data from API
-      setUser(APIResponse.data)
-    } */
   )
   const { mutate } = useMutation((id: number) => API.deleteUser(id), {
     onSuccess: (response) => {

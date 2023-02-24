@@ -1,14 +1,17 @@
 import Layout from '../../../components/ui/Layout'
-import CreateUpdateUserForm from '../../../components/user/CreateUpdateUserForm'
 import { FC } from 'react'
 import { useLocation } from 'react-router-dom'
+import UpdateAvatarForm from '../../../components/user/UpdateAvatarForm'
 
 const UserAvatarEdit: FC = () => {
   const location = useLocation()
   return (
     <Layout>
-      <h1 className="mb-4 text-center">Update user avatar</h1>
-      <CreateUpdateUserForm defaultValues={location.state} />
+      <div className="profileSettings">
+        <h1>Profile <span style={{color:'#DE8667'}}>settings</span></h1>
+        <div>Change your profile setting</div>
+      </div>
+      <UpdateAvatarForm defaultValues={location.state}/>
     </Layout>
   )
 }

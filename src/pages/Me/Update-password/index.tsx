@@ -1,5 +1,5 @@
 import Layout from '../../../components/ui/Layout'
-import CreateUpdateUserForm from '../../../components/user/CreateUpdateUserForm'
+import UpdatePasswordForm from '../../../components/user/UpdatePasswordForm'
 import { FC } from 'react'
 import { useLocation } from 'react-router-dom'
 
@@ -7,8 +7,11 @@ const UserPasswordEdit: FC = () => {
   const location = useLocation()
   return (
     <Layout>
-      <h1 className="mb-4 text-center">Update user password</h1>
-      <CreateUpdateUserForm defaultValues={location.state} />
+      <div className="profileSettings">
+        <h1>Profile <span style={{color:'#DE8667'}}>settings</span></h1>
+        <div>Change your profile setting</div>
+      </div>
+      <UpdatePasswordForm defaultValues={location.state} />
     </Layout>
   )
 }

@@ -1,14 +1,8 @@
 .layout-container {
     height: calc(100vh - 200px);
 }
-/* .div{
-    display: flex;
-    //min-height: 100vh;
-    flex-direction: column;
-} */
 
 .forms {
-    //width: 100%;
     width: min(100%, 420px);
     margin: 0 auto;
     padding: 25px 0;
@@ -78,6 +72,13 @@
 
 .text{
     font-family: 'Raleway';
+}
+
+.profileSettings{
+    width: min(100%, 420px);
+    font-family: 'Raleway';
+    margin: 0 auto;
+    padding: 25px 0;
 }
 
 .textColor{
