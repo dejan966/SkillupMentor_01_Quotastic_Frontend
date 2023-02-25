@@ -22,24 +22,26 @@ const Home: FC = () => {
       {authStore.user ? (
         <>
           {data ? (
-            <div className='text-center'>
-              <h2 className='red'>Quote of the day</h2>
-              <p className='text'>Quote of the day is a randomly chosen quote</p>
-              <div className="justify-content-between quoteBorder" style={{width: 500}}>
-                <div className='col-md-1'>
-                  <img src="upvote.png" alt="Upvote" />
+            <>
+              <div className='text-center'>
+                <h2 className='red'>Quote of the day</h2>
+                <p className='text'>Quote of the day is a randomly chosen quote</p>
+              </div>
+              <div className="quoteBorder quoteGrid mx-auto" style={{width:400}}>
+                <div className='m-4'>
+                  <img className='voting' src="upvote.png" alt="Upvote" />
                   <div>{data.data.karma}</div>
-                  <img src="downvote.png" alt="Downvote" />
+                  <img className='voting' src="downvote.png" alt="Downvote" />
                 </div>
-                <div className='col-md-12'>
+                <div>
                   <div>{data.data.quote}</div>
-                  <div className='quoteGrid'>
-                    <img src={data.data.user.avatar} alt="User avatar" width={40}/>
+                  <div className='authorGrid'>
+                    <img src={data.data.user.avatar} alt="User avatar" width={35}/>
                     <div>{data.data.user.first_name + ' ' + data.data.user.last_name}</div>
                   </div>
                 </div>
               </div>
-            </div>
+            </>
           ):null
           }
         </>

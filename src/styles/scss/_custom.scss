@@ -104,17 +104,27 @@
 
 .grid{
     display:grid;
-    grid-template-columns: repeat(2, 2fr);
+    grid-template-columns: repeat(2, 1fr);
     justify-content: center;
     align-items: center;
 }
 
 .quoteGrid{
     display:grid;
-    grid-template-columns: repeat(2,2fr);
+    grid-template-columns: 0.1fr 1fr;
     justify-content: center;
     align-items: center;
-    width: 500px;
+}
+
+.authorGrid{
+    display:grid;
+    grid-template-columns: 0.1fr 1fr;
+    justify-content: center;
+    align-items: center;
+}
+
+.voting :hover{
+    background-color:#DE8667;
 }
 
 .display{
