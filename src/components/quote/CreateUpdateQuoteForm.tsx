@@ -58,7 +58,7 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
 
   return(
       <>
-        <div className="form-group forms" onSubmit={onSubmit}>
+        <Form className="form-group forms" onSubmit={onSubmit}>
           <div className="text-start text">
               <h1 className="display-6">Are you feeling <span style={{color:'#DE8667'}}>inspired?</span></h1>
               <div className='mb-3'>You can post quotes. You can delete them on your profile</div>
@@ -77,7 +77,7 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
               </Button>
               <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.HOME}>Cancel</a>
           </div>
-        </div>
+        </Form>
         {showError && (
         <ToastContainer className="p-3" position="top-end">
           <Toast onClose={() => setShowError(false)} show={showError}>

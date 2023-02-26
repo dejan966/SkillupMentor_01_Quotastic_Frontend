@@ -4,6 +4,7 @@ export type VoteType ={
     quote:{
         id:number
         quote:string
+        karma:number
     }
     user:{
         id:number

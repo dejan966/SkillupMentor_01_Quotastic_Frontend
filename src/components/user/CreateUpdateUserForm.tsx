@@ -1,9 +1,8 @@
 import {
-  CreateUserFields,
   UpdateUserFields,
   useCreateUpdateUserForm,
 } from '../../hooks/react-hook-form/useCreateUpdateUser'
-import { ChangeEvent, FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import Toast from 'react-bootstrap/Toast'
@@ -13,11 +12,10 @@ import FormLabel from 'react-bootstrap/FormLabel'
 import Button from 'react-bootstrap/Button'
 import * as API from '../../api/Api'
 import { StatusCode } from '../../constants/errorConstants'
-import authStore from '../../stores/auth.store'
-import Avatar from 'react-avatar'
 import { observer } from 'mobx-react'
 import { UserType } from '../../models/auth'
 import { routes } from '../../constants/routesConstants'
+import authStore from '../../stores/auth.store'
 
 interface Props {
   defaultValues?: UserType & { isActiveUser?: boolean }
@@ -39,7 +37,8 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
   )
 
   const handleUpdate = async (data: UpdateUserFields) => {
-    const response = await API.updateUser(data, defaultValues?.id as number)
+    const response = await API.updateUser(data, authStore.user?.id as number)
+    console.log(defaultValues?.id)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -48,6 +47,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
       setShowError(true)
     } else {
       //navigate success page then redirect to /me after a few seconds
+      navigate('/')
     }
   }
 

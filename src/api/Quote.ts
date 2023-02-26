@@ -13,7 +13,7 @@ export const fetchRandomQuote = async () =>
   apiRequest<undefined, QuoteType>('get', apiRoutes.FETCH_RANDOM_QUOTE)
 
 export const createQuote = async (data: CreateQuoteFields) =>
-apiRequest<CreateQuoteFields, void>('post', apiRoutes.USERS_PREFIX, data)
+apiRequest<CreateQuoteFields, void>('post', apiRoutes.QUOTES_PREFIX, data)
 
 export const updateQuote = async (data: UpdateQuoteFields, id: number) =>
   apiRequest<UpdateQuoteFields, QuoteType>(

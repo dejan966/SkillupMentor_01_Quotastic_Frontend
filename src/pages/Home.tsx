@@ -1,11 +1,12 @@
 import Layout from '../components/ui/Layout'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { routes } from '../constants/routesConstants'
 import authStore from '../stores/auth.store'
 import { useQuery } from 'react-query'
 import * as API from '../api/Api'
 import { QuoteType } from '../models/quote'
+import { Link } from 'react-router-dom'
 
 const Home: FC = () => {
   /* const { data, isLoading, error } = useQuery(
@@ -25,6 +26,16 @@ const Home: FC = () => {
       refetchOnWindowFocus: false,
     },
   )
+  
+/*   const [numbers, setNumbers] = useState([])
+  useEffect(() => {
+    const arr = []
+    for (let i = 0; i < data.data.length; i++) {
+      arr.push(i)
+    }
+    // setNumbers(arr)
+  }, []) */
+
 
   return (
     <>
@@ -39,7 +50,7 @@ const Home: FC = () => {
                   <p className='quoteText'>Quote of the day is a randomly chosen quote</p>
                 </div>
                 <div className="quoteBorder quoteGrid mx-auto mb-5" style={{width:400}}>
-                  <div className='m-4'>
+                  {/* <div className='m-4'>
                     <img className='voting' src="upvote.png" alt="Upvote" />
                     <div style={{fontSize:18, fontFamily:'raleway'}}>{data.data.karma}</div>
                     <img className='voting' src="downvote.png" alt="Downvote" />
@@ -50,31 +61,88 @@ const Home: FC = () => {
                       <img className='voting' src={data.data.user.avatar} alt="User avatar" width={35}/>
                       <div style={{fontSize:15, fontFamily:'raleway'}}>{data.data.user.first_name + ' ' + data.data.user.last_name}</div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className='mb-5'>
                   <div className='text-center mx-auto' style={{width:420}}>
                     <h2 className='red'>Most upvoted quotes</h2>
                     <p className='quoteText'>Most upvoted quotes on the platform. Give a like to the ones you like to keep them saved in your profile.</p>
                   </div>
-                  <div className='mb-5'>
-                    {/*Quotes - 9 najvec, prever ce je prijavljen user upvotu alpa downvotu quote pa prikaz to*/}
+                  <div className='mb-5 parentDiv quoteRow'>
+                  {data.data.map((item:QuoteType, index:number) => (
+                    authStore.user?.id == item.votes.user?.id ? //item.votes
+                    (
+                      item.votes.value == true ? (
+                        <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                          <div className='m-4'>
+                            <img className='voting' src="upvoted.png" alt="Upvote" />
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                            <img className='voting' src="downvote.png" alt="Downvote" />
+                          </div>
+                        <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                          <div className='authorGrid'>
+                            <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                            <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                          </div>
+                        </div>
+                        {/*Icons for editing and delete the quote*/}
+                        </div>
+                      ):(
+                        <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                          <div className='m-4'>
+                            <img className='voting' src="upvote.png" alt="Upvote" />
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                            <img className='voting' src="downvoted.png" alt="Downvote" />
+                          </div>
+                        <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                          <div className='authorGrid'>
+                            <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                            <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                          </div>
+                          </div>
+                        </div>
+                      )
+                    )
+                    : (
+                      <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                      <div className='m-4'>
+                        <img className='voting' src="upvote.png" alt="Upvote" />
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                        <img className='voting' src="downvote.png" alt="Downvote" />
+                      </div>
+                      <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                        <div className='authorGrid'>
+                          <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                          <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                        </div>
+                      </div>
+                    </div>
+                    )
+                  ))}
                   </div>
                   <div className='mb-5 text-center mx-auto'>
                     <Button className='btnLogin'>Load more</Button>
                   </div>
                 </div>
-                <div className='text-center mx-auto' style={{width:420}}>
+                <div className="mb-5">
+                  <div className='text-center mx-auto' style={{width:420}}>
                     <h2 className='red'>Most recent quotes</h2>
                     <p className='quoteText'>Recent quotes updates as soon user adds new quote. Go ahed show them that you seen the new quote and like the ones you like.</p>
                   </div>
+                  <div className='mb-5 text-center mx-auto'>
+                    <Button className='btnLogin'>Load more</Button>
+                  </div>
+                </div>
               </>
             ):null
             }
           </>
         ):(
-                <>
-                <div className="py-4 grid mb-5 mx-auto">
+          <>
+            <div className="py-4 grid mb-5 mx-auto">
               <div className="text">
                 <h1 className="display-1">Welcome to <span style={{color:'#DE8667'}}>Quotastic</span></h1>
                 <p className="col-md-8 fs-4">
@@ -101,9 +169,13 @@ const Home: FC = () => {
               {data.data.map((item:QuoteType, index:number) => (
                 <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
                   <div className='m-4'>
-                    <img className='voting' src="upvote.png" alt="Upvote" />
+                    <Link to={routes.LOGIN}>
+                      <img className='voting' src="upvote.png" alt="Upvote" />
+                    </Link>
                     <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                    <img className='voting' src="downvote.png" alt="Downvote" />
+                    <Link to={routes.LOGIN}>
+                      <img className='voting' src="downvote.png" alt="Downvote" />
+                    </Link>
                   </div>
                   <div>
                     <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
@@ -119,11 +191,8 @@ const Home: FC = () => {
                 <Button className='btnLogin' href={routes.LOGIN}>Sign up to see more</Button>
               </div>
             </div>
-            </>
-          
+          </>
         )}
-        
-      
       </Layout>
     </>
    

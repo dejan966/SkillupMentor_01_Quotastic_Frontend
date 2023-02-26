@@ -4,22 +4,16 @@ import { useMutation, useQuery } from 'react-query'
 import { StatusCode } from '../../constants/errorConstants'
 import * as API from '../../api/Api'
 import useMediaQuery from '../../hooks/useMediaQuery'
-import { UserType } from '../../models/auth'
 import { Button, FormLabel } from 'react-bootstrap'
-import { Controller } from 'react-hook-form'
 import { Form } from 'react-bootstrap'
-import { Link, useNavigate } from 'react-router-dom'
-import { UpdateUserFields, useCreateUpdateUserForm } from '../../hooks/react-hook-form/useCreateUpdateUser'
 import { routes } from '../../constants/routesConstants'
-import authStore from '../../stores/auth.store'
-import { PropTypes } from 'mobx-react'
 import Avatar from 'react-avatar'
 
 const UserInfo: FC = () => {
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
   const { isMobile } = useMediaQuery(768)
-  
+
   const { data, isLoading, error } = useQuery(
     ['user'],
     () => API.fetchCurrUser(),
