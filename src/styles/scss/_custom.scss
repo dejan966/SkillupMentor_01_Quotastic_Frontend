@@ -121,8 +121,13 @@
 }
 
 .quoteRow{
-    display:grid;
     grid-template-columns: repeat(3, 1fr);
+}
+
+.parentDiv{
+    display: flex;
+    flex-direction:row;
+    gap:20px;
 }
 
 .authorGrid{

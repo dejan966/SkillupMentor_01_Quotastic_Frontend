@@ -97,23 +97,23 @@ const Home: FC = () => {
                 <h2 className='red'>Most upvoted quotes</h2>
                 <p className='quoteText'>Most upvoted quotes on the platform. Sign up or login to like the quotes and keep them saved in your profile.</p>
               </div>
-              <div className='mb-5'>  
+              <div className='mb-5 parentDiv quoteRow'>  
               {data.data.map((item:QuoteType, index:number) => (
-                  <div key={index} className="quoteBorder quoteGrid mx-auto mb-5" style={{width:400}}>
-                    <div className='m-4'>
-                      <img className='voting' src="upvote.png" alt="Upvote" />
-                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                      <img className='voting' src="downvote.png" alt="Downvote" />
-                    </div>
-                    <div>
-                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                      <div className='authorGrid'>
-                        <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
-                        <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                      </div>
+                <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                  <div className='m-4'>
+                    <img className='voting' src="upvote.png" alt="Upvote" />
+                    <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                    <img className='voting' src="downvote.png" alt="Downvote" />
+                  </div>
+                  <div>
+                    <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                    <div className='authorGrid'>
+                      <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                      <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
               </div>
               <div className='mb-5 text-center mx-auto text'>
                 <Button className='btnLogin' href={routes.LOGIN}>Sign up to see more</Button>
