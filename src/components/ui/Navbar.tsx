@@ -32,7 +32,7 @@ const Navbar: FC = () => {
   if(location.pathname === '/signup'){
     return (
       <>
-      <header>
+        <header>
           <nav className="navbar navbar-expand-lg">
             <div className="container-xxl pb-0">
               <Link className="navbar.brand" to={routes.HOME}>
@@ -75,7 +75,7 @@ const Navbar: FC = () => {
   else if(location.pathname === '/login'){
     return (
       <>
-      <header>
+        <header>
           <nav className="navbar navbar-expand-lg">
             <div className="container-xxl pb-0">
               <Link className="navbar.brand" to={routes.HOME}>
@@ -117,9 +117,9 @@ const Navbar: FC = () => {
   }
   return (
     <>
-    <header>
+      <header>
         <nav className="navbar navbar-expand-lg">
-          <div className="container-xxl pb-0">
+          <div className="container-xxl">
             <Link className="navbar.brand" to={routes.HOME}>
               <img
                 src="quotastic_red.png"

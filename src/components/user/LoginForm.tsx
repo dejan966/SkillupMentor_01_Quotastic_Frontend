@@ -35,10 +35,10 @@ const LoginForm: FC = () => {
 
   return (
     <>
-    <div className="text-center text">
-      <h1 className="display-5">Welcome <span style={{color:'#DE8667'}}>back</span></h1>
-        <p className="fs-6">Thank you for coming back. Hope you have a good day and continue to inspire others</p>
-    </div>
+      <div className="text-center text">
+        <h1 className="display-5">Welcome <span style={{color:'#DE8667'}}>back</span></h1>
+          <p className="fs-6">Thank you for coming back. Hope you have a good day and continue to inspire others</p>
+      </div>
       <Form className="forms" onSubmit={onSubmit}>
         <Controller
           control={control}

@@ -19,6 +19,7 @@ export const updateQuote = async (data: UpdateQuoteFields, id: number) =>
   apiRequest<UpdateQuoteFields, QuoteType>(
     'patch',
     `${apiRoutes.QUOTES_PREFIX}/${id}`,
+    data
   )
 
 export const deleteQuote = async (id: number) =>

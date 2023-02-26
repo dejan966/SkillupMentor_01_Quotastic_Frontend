@@ -74,6 +74,11 @@
     font-family: 'Raleway';
 }
 
+.quoteText{
+    font-family: 'Raleway';
+    font-size: 18px;
+}
+
 .red{
     color: #DE8667;
     font-family: 'Raleway';
@@ -82,7 +87,6 @@
 .quoteBorder{
     border-radius: 7px;
     border:2px solid rgb(245,245,245);
-    //box-sizing: border-box;
 }
 
 .profileSettings{
@@ -104,7 +108,7 @@
 
 .grid{
     display:grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 2fr);
     justify-content: center;
     align-items: center;
 }
@@ -116,6 +120,11 @@
     align-items: center;
 }
 
+.quoteRow{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
 .authorGrid{
     display:grid;
     grid-template-columns: 0.1fr 1fr;
@@ -123,8 +132,11 @@
     align-items: center;
 }
 
-.voting :hover{
-    background-color:#DE8667;
+.voting{
+    &:hover{
+        background-color:#DE8667;
+        cursor: pointer;
+    }
 }
 
 .display{
@@ -132,6 +144,7 @@
     flex-direction: column;
     min-height: 100vh;
 }
+
 .content{
     flex-grow:1;
 }

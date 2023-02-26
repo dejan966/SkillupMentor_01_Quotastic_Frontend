@@ -1,9 +1,19 @@
 export type QuoteType = {
   id:number
+  karma:number
   quote:string
   posted_when:string
   user:{
     id:number
-    email:string
+    first_name:string
+    last_name:string
+    avatar:string
+  }
+  votes:{
+    id:number
+    value:boolean
+    user:{
+      id:number
+    }
   }
 }
