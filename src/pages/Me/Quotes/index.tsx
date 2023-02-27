@@ -9,7 +9,7 @@ import { UserType } from '../../../models/auth'
 const UserQuotesInfo: FC = () => {
   const { data, isLoading, error } = useQuery(
     ['user'],
-    () => API.fetchUser(authStore.user?.id as number),
+    () => API.fetchCurrUser(),
   )
   return (
     <Layout>
@@ -17,11 +17,11 @@ const UserQuotesInfo: FC = () => {
         <h2 className="text-center display-6">{/*Avatar, First name, last name*/}</h2>
       </div>
       {/* <div>
-        <div className='mb-5'>
+        <div className='mb-5 parentDiv'>
           <div className='text-center mx-auto' style={{width:420}}>
             <h2 className='red'>Most liked quotes</h2>
           </div>
-          <div className='mb-5 parentDiv quoteRow'>
+          <div className='mb-5 quoteRow'>
           {data.data.map((item:UserType, index:number) => (
             <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
               <div className='m-4'>

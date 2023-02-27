@@ -47,7 +47,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
       setShowError(true)
     } else {
       //navigate success page then redirect to /me after a few seconds
-      navigate('/')
+      navigate('/me')
     }
   }
 

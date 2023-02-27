@@ -81,6 +81,7 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) =>{
             setShowError(true)
           } else {
             authStore.login(userResponse.data)
+            navigate('/me')
           }
         }
       }
