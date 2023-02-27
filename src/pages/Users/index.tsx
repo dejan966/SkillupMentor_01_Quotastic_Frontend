@@ -23,10 +23,29 @@ const Users: FC = () => {
   return (
     <Layout>
       <div>
-      <h2 className="text-center display-6">{/*Avatar, First name, last name*/}</h2>
+        <h2 className="text-center display-6">{/*Avatar, First name, last name*/}</h2>
       </div>
-      <div>
-        {/* <div className='mb-5'>
+      <div className='quoteRow mb-5' style={{width:420}}>
+          <div className='text-center mx-auto' style={{width:420}}>
+            <h2 className='red'>Most liked quotes</h2>
+            <div className='mb-5'>
+              <div>Bla</div>
+            </div>
+            <div className='text-center mx-auto' style={{width:420}}>
+              <h2 className='test'>Most recent</h2>
+              <div className='mb-5'>
+                <div>Bla</div>
+              </div>
+            </div>
+            <div className='text-center mx-auto' style={{width:420}}>
+              <h2 className='test'>Liked</h2>
+              <div className='mb-5'>
+                <div>Bla</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <div className='mb-5 parentGrid'>
           <div className='text-center mx-auto' style={{width:420}}>
             <h2 className='red'>Most liked quotes</h2>
           </div>
@@ -213,7 +232,6 @@ const Users: FC = () => {
           </div>
         </div>
       */}
-      </div> 
     </Layout>
   )
 }

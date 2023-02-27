@@ -16,6 +16,26 @@ const UserQuotesInfo: FC = () => {
       <div>
         <h2 className="text-center display-6">{/*Avatar, First name, last name*/}</h2>
       </div>
+      <div className='quoteRow mb-5'>
+        <div>
+          <h2 className='red'>Most liked quotes</h2>
+          <div className='mb-5'>
+            <div>Bla</div>
+          </div>
+        </div>
+        <div>
+          <h2 className='text'>Most recent</h2>
+          <div className='mb-5'>
+            <div>Bla</div>
+          </div>
+        </div>
+        <div>
+          <h2 className='text'>Liked</h2>
+          <div className='mb-5'>
+            <div>Bla</div>
+          </div>
+        </div>
+      </div>
       {/* <div>
         <div className='mb-5 parentDiv'>
           <div className='text-center mx-auto' style={{width:420}}>

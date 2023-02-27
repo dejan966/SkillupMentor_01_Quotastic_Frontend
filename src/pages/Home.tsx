@@ -68,7 +68,7 @@ const Home: FC = () => {
                     <h2 className='red'>Most upvoted quotes</h2>
                     <p className='quoteText'>Most upvoted quotes on the platform. Give a like to the ones you like to keep them saved in your profile.</p>
                   </div>
-                  <div className='mb-5 parentGrid'>
+                  <div className='mb-5 quoteRow'>
                     {data.data.map((item:QuoteType, index:number) => (
                       authStore.user?.id == item.votes.user?.id ? //item.votes
                       (
@@ -105,19 +105,17 @@ const Home: FC = () => {
                           </div>
                         )
                       ):(
-                        <div key={index} className="quoteRow">
-                          <div className="quoteBorder quoteGrid mb-5" style={{width:400}}>
-                            <div className='m-4'>
-                              <img className='voting' src="upvote.png" alt="Upvote" />
-                              <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                              <img className='voting' src="downvote.png" alt="Downvote" />
-                            </div>
-                            <div>
-                              <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                              <div className='authorGrid'>
-                                <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
-                                <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                              </div>
+                        <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                          <div className='m-4'>
+                            <img className='voting' src="upvote.png" alt="Upvote" />
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                            <img className='voting' src="downvote.png" alt="Downvote" />
+                          </div>
+                          <div>
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                            <div className='authorGrid'>
+                              <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                              <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
                           </div>
                         </div>
@@ -166,7 +164,7 @@ const Home: FC = () => {
                 <h2 className='red'>Most upvoted quotes</h2>
                 <p className='quoteText'>Most upvoted quotes on the platform. Sign up or login to like the quotes and keep them saved in your profile.</p>
               </div>
-              <div className='mb-5 parentDiv quoteRow'>  
+              <div className='mb-5 quoteRow'>  
               {data.data.map((item:QuoteType, index:number) => (
                 <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
                   <div className='m-4'>
@@ -175,7 +173,7 @@ const Home: FC = () => {
                     </Link>
                     <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
                     <Link to={routes.LOGIN}>
-                      <img className='voting' src="downvote.png" alt="Downvote" />
+                        <img className='voting' src="downvote.png" alt="Downvote" />
                     </Link>
                   </div>
                   <div>
