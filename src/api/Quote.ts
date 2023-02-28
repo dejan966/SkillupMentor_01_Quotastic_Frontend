@@ -6,14 +6,20 @@ import { apiRequest } from './Api'
 export const fetchQuotes = async () =>
   apiRequest<undefined, QuoteType>('get', apiRoutes.FETCH_QUOTES)
 
-export const fetchRecentQuotes = async () =>
-  apiRequest<undefined, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/recent`)
-
 export const fetchQuote = async (id:number) =>
   apiRequest<undefined, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/${id}`)
 
 export const fetchRandomQuote = async () =>
   apiRequest<undefined, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/random`)
+
+export const fetchCurrUserMostRecentQuotes = async () =>
+  apiRequest<never, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/me`)
+
+export const fetchUserMostRecentQuotes = async (userId:number) =>
+  apiRequest<never, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/user/${userId}`)
+
+export const usersMostRecentQuotes = async () => 
+  apiRequest<never, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/recent`)
 
 export const createQuote = async (data: CreateQuoteFields) =>
 apiRequest<CreateQuoteFields, void>('post', apiRoutes.QUOTES_PREFIX, data)

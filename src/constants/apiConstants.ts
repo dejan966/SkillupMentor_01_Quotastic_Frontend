@@ -10,6 +10,10 @@ export enum apiRoutes {
   GET_AVATAR_IMAGE = '/users/get/image',
   QUOTES_PREFIX = '/quotes',
   FETCH_QUOTES = '/quotes',
+  ME_QUOTES = '/quotes/me',
+  VOTES_PREFIX = '/votes',
+  FETCH_VOTES = '/votes',
+  ME_VOTES = '/votes/me',
   FETCH_RECENT_QUOTES = '/quotes/recent',
   FETCH_RANDOM_QUOTE = '/quotes/random',
 } 

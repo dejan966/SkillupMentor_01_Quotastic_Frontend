@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import { ChangeEvent, FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { StatusCode } from '../../constants/errorConstants'
 import * as API from '../../api/Api'
@@ -30,8 +30,7 @@ const onSubmit = handleSubmit(
 )
 
 const handleUpdate = async (data: UpdateUserFields) => {
-  const response = await API.updateUser(data, authStore.user?.id as number)
-  console.log(apiError)
+  const response = await API.updateUserPass(data, authStore.user?.id as number)
   if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
     setApiError(response.data.message)
     setShowError(true)

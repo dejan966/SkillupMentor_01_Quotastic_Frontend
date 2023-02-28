@@ -5,9 +5,6 @@ import { RegisterUserFields } from '../hooks/react-hook-form/useRegister'
 import { UserType } from '../models/auth'
 import { apiRequest } from './Api'
 
-export const fetchUser = async (id:number) =>
-  apiRequest<undefined, UserType>('post', `${apiRoutes.FETCH_USERS}/${id}`)
-
 export const signout = async () =>
   apiRequest<undefined, void>('post', apiRoutes.SIGNOUT)
 
@@ -29,6 +26,9 @@ export const uploadAvatar = async (formData: FormData, id: number) =>
 
 export const fetchCurrUser = async () =>
   apiRequest<never, UserType>('get', apiRoutes.ME)
+
+export const fetchUser = async (id:number) =>
+  apiRequest<undefined, UserType>('get', `${apiRoutes.FETCH_USERS}/${id}`)
 
 export const updateUser = async (data: UpdateUserFields, id: number) =>
   apiRequest<UpdateUserFields, UserType>(

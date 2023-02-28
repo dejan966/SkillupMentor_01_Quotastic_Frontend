@@ -1,39 +1,132 @@
 import Layout from '../../../components/ui/Layout'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import * as API from '../../../api/Api'
-import authStore from '../../../stores/auth.store'
 import { Button } from 'react-bootstrap'
 import { UserType } from '../../../models/auth'
+import { QuoteType } from '../../../models/quote'
+import { VoteType } from '../../../models/vote'
 
 const UserQuotesInfo: FC = () => {
-  const { data, isLoading, error } = useQuery(
-    ['user'],
-    () => API.fetchCurrUser(),
-  )
+  const [mostLiked, setMostLiked] = useState([])
+  const [mostRecent, setMostRecent] = useState([])
+  const [likes, setLikes] = useState([])
+  const [loading, isLoading] = useState(true)
+  const [error, setError] = useState(true)
+  
+  useEffect(() => {
+    API.fetchCurrUser().then(data=>{
+      setMostLiked(Object.values(data))
+      isLoading(false)
+      console.log(data)
+    }).catch(error=>{
+      setError(error)
+    })
+  },[])
+  
+  useEffect(() => {
+    API.fetchCurrUserMostRecentQuotes().then(data=>{
+      setMostRecent(Object.values(data))
+      isLoading(false)
+      console.log(data)
+    }).catch(error=>{
+      setError(error)
+    })
+  },[])
+
+  useEffect(() => {
+    API.fetchCurrUserVotes().then(data=>{
+      setLikes(Object.values(data))
+      isLoading(false)
+      console.log(data)
+    }).catch(error=>{
+      setError(error)
+    })
+  },[])
+
   return (
     <Layout>
-      <div>
-        <h2 className="text-center display-6">{/*Avatar, First name, last name*/}</h2>
-      </div>
       <div>
         <div className='quoteRow mb-5'>
           <div>
             <h2 className='red'>Most liked quotes</h2>
             <div className='mb-5'>
-              <div>Bla</div>
+              {mostLiked ? (
+                <div>
+                  {mostLiked.map((item: QuoteType, index:number)=>(
+                    <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
+                      <div className='m-4'>
+                        <img className='voting' src="/upvote.png" alt="Upvote" />
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                        <img className='voting' src="/downvote.png" alt="Downvote" />
+                      </div>
+                      <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                        <div className='authorGrid'>
+                          <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                          <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ):(
+                <h2>No quotes available</h2>
+              )}
             </div>
           </div>
           <div>
             <h2 className='text'>Most recent</h2>
             <div className='mb-5'>
-              <div>Bla</div>
+              {mostRecent ? (
+                <div>
+                  {mostRecent.map((item: QuoteType, index:number)=>(
+                    <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
+                      <div className='m-4'>
+                        <img className='voting' src="/upvote.png" alt="Upvote" />
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                        <img className='voting' src="/downvote.png" alt="Downvote" />
+                      </div>
+                      <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                        <div className='authorGrid'>
+                          <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                          <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                        </div>
+                      </div> 
+                    </div>
+                  ))}
+                </div>
+              ):(
+                <h2>No quotes available</h2>
+              )}
             </div>
           </div>
           <div>
             <h2 className='text'>Liked</h2>
             <div className='mb-5'>
-              <div>Bla</div>
+              {likes ? (
+                <div>
+                  {likes.map((item: VoteType, index:number)=>(
+                    <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
+                      <div className='m-4'>
+                        <img className='voting' src="/upvoted.png" alt="Upvoted" />
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote.karma}</div>
+                        <img className='voting' src="downvote.png" alt="Downvote" />
+                      </div>
+                      <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote.quote}</div>
+                        <div className='authorGrid'>
+                          <img className='voting' src={item.quote.user.avatar} alt="User avatar" width={35}/>
+                          <div style={{fontSize:15, fontFamily:'raleway'}}>{item.quote.user.first_name + ' ' + item.quote.user.last_name}</div>
+                        </div>
+                      </div> 
+                    </div>
+                  ))}
+                </div>
+              ):(
+                <h2>No quotes available</h2>
+              )}
             </div>
           </div>
         </div>
@@ -41,122 +134,6 @@ const UserQuotesInfo: FC = () => {
           <Button className="btnLogin">Load more</Button>
         </div>
       </div>
-      {/* <div>
-        <div className='mb-5 parentDiv'>
-          <div className='text-center mx-auto' style={{width:420}}>
-            <h2 className='red'>Most liked quotes</h2>
-          </div>
-          <div className='mb-5 quoteRow'>
-          {data.data.map((item:UserType, index:number) => (
-            <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
-              <div className='m-4'>
-                <img className='voting' src="upvote.png" alt="Upvote" />
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                <img className='voting' src="downvoted.png" alt="Downvote" />
-              </div>
-              <div>
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                  <div className='authorGrid'>
-                    <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
-                    <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                  </div>
-                </div>
-              </div>
-          ))}
-          </div>
-          <div className='mb-5 text-center mx-auto'>
-            <Button className='btnLogin'>Load more</Button>
-          </div>
-        </div>
-        <div className='mb-5'>
-          <div className='text-center mx-auto' style={{width:420}}>
-            <h2 className='text'>Most recent quotes</h2>
-          </div>
-          <div className='mb-5 parentDiv quoteRow'>
-          {data.data.map((item:UserType, index:number) => (
-           <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
-           <div className='m-4'>
-             <img className='voting' src="upvote.png" alt="Upvote" />
-             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-             <img className='voting' src="downvoted.png" alt="Downvote" />
-           </div>
-           <div>
-             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-               <div className='authorGrid'>
-                 <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
-                 <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-               </div>
-             </div>
-           </div>
-          ))}
-          </div>
-          <div className='mb-5 text-center mx-auto'>
-            <Button className='btnLogin'>Load more</Button>
-          </div>
-        </div>
-        <div className='mb-5'>
-          <div className='text-center mx-auto' style={{width:420}}>
-            <h2 className='text'>Liked</h2>
-          </div>
-          <div className='mb-5 parentDiv quoteRow'>
-          {data.data.map((item:UserType, index:number) => (
-            authStore.user?.id == item.votes.user?.id ? 
-            (
-              item.votes.value == true ? (
-                <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
-                  <div className='m-4'>
-                    <img className='voting' src="upvoted.png" alt="Upvote" />
-                    <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                    <img className='voting' src="downvote.png" alt="Downvote" />
-                  </div>
-                <div>
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                  <div className='authorGrid'>
-                    <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
-                    <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                  </div>
-                </div>
-                </div>
-              ):(
-                <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
-                  <div className='m-4'>
-                    <img className='voting' src="upvote.png" alt="Upvote" />
-                    <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                    <img className='voting' src="downvoted.png" alt="Downvote" />
-                  </div>
-                <div>
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                  <div className='authorGrid'>
-                    <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
-                    <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                  </div>
-                  </div>
-                </div>
-              )
-            )
-            : (
-              <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
-              <div className='m-4'>
-                <img className='voting' src="upvote.png" alt="Upvote" />
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                <img className='voting' src="downvote.png" alt="Downvote" />
-              </div>
-              <div>
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                <div className='authorGrid'>
-                  <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
-                  <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                </div>
-              </div>
-            </div>
-            )
-          ))}
-          </div>
-          <div className='mb-5 text-center mx-auto'>
-            <Button className='btnLogin'>Load more</Button>
-          </div>
-        </div>
-      </div> */}
     </Layout>
   )
 }
