@@ -3,7 +3,9 @@ export type UserType = {
   first_name: string
   last_name: string
   email: string
+  current_password:string
   password:string
+  confirm_password:string
   avatar: string
   quotes:{
     id:number

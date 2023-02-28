@@ -21,7 +21,6 @@ const Navbar: FC = () => {
   useQuery(
     ['user'],
     () => API.fetchCurrUser().then(data=>{
-      console.log(data)
       setUser(Object.values(data))
     }),
   )

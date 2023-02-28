@@ -29,13 +29,13 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) =>{
   const [fileError, setFileError] = useState(false)
 
   const { data, isLoading, error } = useQuery(
-    ['user'],
+    ['userAvatar'],
     () => API.fetchCurrUser(),
-/*     {
+    {
       onSuccess:(response)=>{
-        setPreview(response.data.data.avatar)
+        setPreview(response.data.avatar)
       }
-    } */
+    }
   )
 
   const onSubmit = handleSubmit(
@@ -130,7 +130,7 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) =>{
               <h1>Profile <span style={{color:'#DE8667'}}>settings</span></h1>
               <div className='mb-3'>Change your profile photo</div>
             </div>
-            <Form.Group className="d-flex flex-column justify-content-center align-items-center">
+            <Form.Group className="d-flex flex-column justify-content-center align-items-center mb-3">
               <FormLabel htmlFor="avatar" id="avatar-p">
                 <Avatar round src={preview as string} alt="Avatar" />
               </FormLabel>

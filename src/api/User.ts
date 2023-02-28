@@ -37,11 +37,11 @@ export const updateUser = async (data: UpdateUserFields, id: number) =>
     data
   )
 
-export const updateUserPass = async (data: UpdateUserFields, id: number) =>
+export const updateUserPass = async ({current_password, password, confirm_password}: UpdateUserFields, id: number) =>
   apiRequest<UpdateUserFields, UserType>(
     'patch',
-    `${apiRoutes.USERS_PREFIX}/${id}`,
-    data
+    'users/me/password',
+    {current_password, password, confirm_password}
   )
 
 export const updateUserAvatar = async (data: UpdateUserFields, id: number) =>

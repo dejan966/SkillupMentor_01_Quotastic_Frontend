@@ -11,10 +11,10 @@ const UserQuotesInfo: FC = () => {
   const [mostLiked, setMostLiked] = useState([])
   const [mostRecent, setMostRecent] = useState([])
   const [likes, setLikes] = useState([])
-  const [loading, isLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(true)
   
-  useEffect(() => {
+/*   useEffect(() => {
     API.fetchCurrUser().then(data=>{
       setMostLiked(Object.values(data))
       isLoading(false)
@@ -22,19 +22,34 @@ const UserQuotesInfo: FC = () => {
     }).catch(error=>{
       setError(error)
     })
-  },[])
-  
+  },[]) */
+
   useEffect(() => {
+    API.fetchCurrUser().then(data=>{
+      setMostLiked(Object.values(data))
+      setLoading(false)
+    }).catch(error=>{
+      setError(error)
+    })
     API.fetchCurrUserMostRecentQuotes().then(data=>{
       setMostRecent(Object.values(data))
-      isLoading(false)
-      console.log(data)
+      setLoading(false)
+    }).catch(error=>{
+      setError(error)
+    })
+    API.fetchCurrUserVotes().then(data=>{
+      setLikes(Object.values(data))
+      setLoading(false)
     }).catch(error=>{
       setError(error)
     })
   },[])
 
-  useEffect(() => {
+  useEffect(()=>{
+    console.log(mostLiked)
+  }, [mostLiked])
+
+/*   useEffect(() => {
     API.fetchCurrUserVotes().then(data=>{
       setLikes(Object.values(data))
       isLoading(false)
@@ -42,7 +57,7 @@ const UserQuotesInfo: FC = () => {
     }).catch(error=>{
       setError(error)
     })
-  },[])
+  },[]) */
 
   return (
     <Layout>
@@ -107,7 +122,7 @@ const UserQuotesInfo: FC = () => {
             <div className='mb-5'>
               {likes ? (
                 <div>
-                  {likes.map((item: VoteType, index:number)=>(
+                  {/* {likes.map((item: VoteType, index:number)=>(
                     <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
                       <div className='m-4'>
                         <img className='voting' src="/upvoted.png" alt="Upvoted" />
@@ -122,7 +137,7 @@ const UserQuotesInfo: FC = () => {
                         </div>
                       </div> 
                     </div>
-                  ))}
+                  ))} */}
                 </div>
               ):(
                 <h2>No quotes available</h2>

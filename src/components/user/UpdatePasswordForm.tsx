@@ -49,9 +49,14 @@ return(
         <h1>Profile <span style={{color:'#DE8667'}}>settings</span></h1>
         <div className='mb-3'>Change your password</div>
       </div>
-      <Form.Group className="mb-3">
+      <Controller
+        control={control}
+        name="current_password"
+        render={({ field }) =>(
+<Form.Group className="mb-3">
         <FormLabel htmlFor="oldPassword">Current password</FormLabel>
         <input
+          {...field}
           type="password"
           placeholder="******"
           aria-label="old_password"
@@ -67,6 +72,9 @@ return(
           </div>
         )}
       </Form.Group>
+        )}
+        />
+      
       <Controller
         control={control}
         name="password"
