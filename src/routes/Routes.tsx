@@ -21,10 +21,12 @@ const Home = lazy(() => import('../pages/Home'))
 const UserInfo = lazy(() => import('../pages/Me'))
 const UserEdit = lazy(() => import('../pages/Me/Edit'))
 
-const Quotes = lazy(() => import('../pages/Quotes'))
 const QuotesAdd = lazy(() => import('../pages/Me/Myquote'))
-const UserQuotes = lazy(() => import('../pages/Me/Quotes'))
 const QuotesEdit = lazy(() => import('../pages/Me/Myquote/Edit'))
+const UserQuotes = lazy(() => import('../pages/Me/Quotes'))
+const UserPasswordEdit = lazy(() => import('../pages/Me/Update-password'))
+const UserAvatarEdit = lazy(() => import('../pages/Me/Update-avatar'))
+const DisableAcc = lazy(() => import('../pages/Me/Disable-account'))
 
 const Upvote = lazy(()=>import('../pages/Votes/Upvote'))
 const Downvote = lazy(()=>import('../pages/Votes/Downvote'))
@@ -56,23 +58,28 @@ export const AppRoutes: AppRoute[] = [
   },
   {
     type: RouteType.PRIVATE,
+    path: '/me/quotes',
+    children: <UserQuotes />,
+  },
+  {
+    type: RouteType.PRIVATE,
     path: '/me/edit',
-    children: <UserInfo />,
+    children: <UserEdit />,
   },
   {
     type: RouteType.PRIVATE,
     path: '/me/update-password',
-    children: <UserInfo />,
+    children: <UserPasswordEdit />,
   },
   {
     type: RouteType.PRIVATE,
     path: '/me/update-avatar',
-    children: <UserInfo />,
+    children: <UserAvatarEdit />,
   },
   {
     type: RouteType.PRIVATE,
-    path: '/quotes',
-    children: <Quotes />,
+    path: '/me/disable-account',
+    children: <DisableAcc />,
   },
   {
     type: RouteType.PRIVATE,
@@ -81,17 +88,17 @@ export const AppRoutes: AppRoute[] = [
   },
   {
     type: RouteType.PRIVATE,
-    path: '/me/myquote/edit',
+    path: '/me/myquote/edit/:id',
     children: <QuotesEdit />,
   },
   {
     type: RouteType.PRIVATE,
-    path: '/quotes/id/upvote',
+    path: '/quotes/:id/upvote',
     children: <Upvote />,
   },
   {
     type: RouteType.PRIVATE,
-    path: '/quotes/id/downvote',
+    path: '/quotes/:id/downvote',
     children: <Downvote />,
   },
   // Public Routes

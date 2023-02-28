@@ -9,6 +9,7 @@ export interface CreateQuoteFields {
 
 export interface UpdateQuoteFields {
   quote?:string
+  karma?:number
 }
 
 interface Props {
@@ -22,6 +23,7 @@ export const useCreateUpdateQuoteForm = ({ defaultValues }: Props) => {
 
   const UpdateQuoteSchema = Yup.object().shape({
     quote: Yup.string().notRequired(),
+    karma: Yup.number().notRequired(),
   })
 
   const {

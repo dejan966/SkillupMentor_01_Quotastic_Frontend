@@ -4,9 +4,13 @@ export type VoteType ={
     quote:{
         id:number
         quote:string
-    }
-    user:{
-        id:number
-        email:string
+        karma:number
+        user:{
+            id:number
+            avatar:string
+            first_name:string
+            last_name:string
+            email:string
+        }
     }
 }

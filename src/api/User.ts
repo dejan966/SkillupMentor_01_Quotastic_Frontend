@@ -1,15 +1,9 @@
 import { apiRoutes } from '../constants/apiConstants'
-import {
-  CreateUserFields,
-  UpdateUserFields,
-} from '../hooks/react-hook-form/useCreateUpdateUser'
+import { UpdateUserFields } from '../hooks/react-hook-form/useCreateUpdateUser'
 import { LoginUserFields } from '../hooks/react-hook-form/useLogin'
 import { RegisterUserFields } from '../hooks/react-hook-form/useRegister'
 import { UserType } from '../models/auth'
 import { apiRequest } from './Api'
-
-export const fetchUser = async (id:number) =>
-  apiRequest<undefined, UserType>('post', `${apiRoutes.FETCH_USERS}/${id}`)
 
 export const signout = async () =>
   apiRequest<undefined, void>('post', apiRoutes.SIGNOUT)
@@ -30,17 +24,34 @@ export const uploadAvatar = async (formData: FormData, id: number) =>
     formData,
   )
 
-export const currUserInfo = async () =>
+export const fetchCurrUser = async () =>
   apiRequest<never, UserType>('get', apiRoutes.ME)
 
-export const createUser = async (data: CreateUserFields) =>
-  apiRequest<CreateUserFields, void>('post', apiRoutes.USERS_PREFIX, data)
+export const fetchUser = async (id:number) =>
+  apiRequest<undefined, UserType>('get', `${apiRoutes.FETCH_USERS}/${id}`)
 
 export const updateUser = async (data: UpdateUserFields, id: number) =>
   apiRequest<UpdateUserFields, UserType>(
     'patch',
     `${apiRoutes.USERS_PREFIX}/${id}`,
+    data
   )
+
+export const updateUserPass = async ({current_password, password, confirm_password}: UpdateUserFields, id: number) =>
+  apiRequest<UpdateUserFields, UserType>(
+    'patch',
+    'users/me/password',
+    {current_password, password, confirm_password}
+  )
+
+export const updateUserAvatar = async (data: UpdateUserFields, id: number) =>
+  apiRequest<UpdateUserFields, UserType>(
+    'patch',
+    `${apiRoutes.USERS_PREFIX}/${id}`,
+    data
+  )
+
+
 
 export const deleteUser = async (id: number) =>
   apiRequest<string, UserType>('delete', `${apiRoutes.USERS_PREFIX}/${id}`)
