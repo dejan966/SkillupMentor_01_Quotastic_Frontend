@@ -7,33 +7,11 @@ import { useQuery } from 'react-query'
 import * as API from '../api/Api'
 import { QuoteType } from '../models/quote'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
 
 const Home: FC = () => {
-const [mostLiked, setMostLiked] = useState([])
-const [randomQuote, setRandomQuote] = useState([])
-const [recentQuotes, setRecentQuotes] = useState([])
+  const [randomQuote, setRandomQuote] = useState([])
 
-const endpoints = [
-  'http://localhost:8080/quotes',
-  'http://localhost:8080/quotes/random',
-  'http://localhost:8080/quotes/recent',
-]
-
-axios.all(endpoints.map((endpoint) => axios.get(endpoint))).then(
-  axios.spread(({data: mostLiked}, {data:randomQuote}, {data:recentQuotes}) => {
-    setMostLiked(mostLiked)
-    setRandomQuote(randomQuote)
-    setRecentQuotes(recentQuotes)
-  })
-)
-
-/* axios
-  .get('http://localhost:8080/quotes')
-  .then(({data}) => {
-    console.log(data)
-},) */
-/*    const mostLiked = useQuery(
+  const mostLiked = useQuery(
     ['quote'],
     () => API.fetchQuotes(),
     {
@@ -42,11 +20,12 @@ axios.all(endpoints.map((endpoint) => axios.get(endpoint))).then(
     },
   )
   
-  const randomQuote = useQuery(
+  useQuery(
     ['randomQuote'],
-    () => API.fetchRandomQuote(),
+    () => API.fetchRandomQuote().then(data=>{
+      setRandomQuote(data)
+    }),
     {
-      keepPreviousData: true,
       refetchOnWindowFocus: false,
     },
   ) 
@@ -57,27 +36,46 @@ axios.all(endpoints.map((endpoint) => axios.get(endpoint))).then(
     {
       keepPreviousData: true,
       refetchOnWindowFocus: false,
-    }
-  )  */
+    },
+  )
 
   return (
     <>
       <Layout>
-      {authStore.user ? (
+        {authStore.user ? (
           <>
             <div className='text-center'>
               <h2 className='red'>Quote of the day</h2>
               <p className='quoteText'>Quote of the day is a randomly chosen quote</p>
             </div>
-            
+            {randomQuote ? (
+              <div>
+                {Object.values(randomQuote).map((item:QuoteType, index:number)=>(
+                  <div key={index} className="quoteBorder quoteGrid mx-auto mb-5" style={{width:400}}>
+                    <div className='m-4'>
+                      <img className='voting' src="upvoted.png" alt="Upvote" />
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                      <img className='voting' src="downvote.png" alt="Downvote" />
+                    </div>
+{/*                     <div>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                      <div className='authorGrid'>
+                        <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                        <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                      </div>
+                    </div> */}
+                  </div>
+                ))}
+              </div>
+            ):null}
             <div className='mb-5'>
               <div className='text-center mx-auto' style={{width:420}}>
                 <h2 className='red'>Most upvoted quotes</h2>
                 <p className='quoteText'>Most upvoted quotes on the platform. Give a like to the ones you like to keep them saved in your profile.</p>
               </div>
-              {mostLiked ? (
+              {mostLiked.data ? (
                 <div className='quoteRow'>
-                  {mostLiked.map((item:QuoteType, index:number) => (
+                  {mostLiked.data.data.map((item:QuoteType, index:number) => (
                     authStore.user?.id === item.votes.user?.id ? //item.votes null
                     (
                       item.votes.value === true ? (
@@ -142,9 +140,9 @@ axios.all(endpoints.map((endpoint) => axios.get(endpoint))).then(
                 <h2 className='red'>Most recent quotes</h2>
                 <p className='quoteText'>Recent quotes update as soon user adds new quote. Go ahed show them that you seen the new quote and like the ones you like.</p>
               </div>
-              {recentQuotes ? (
+              {recentQuotes.data ? (
                 <div className="mb-5 quoteRow">
-                  {recentQuotes.map((item:QuoteType, index:number) =>(
+                  {recentQuotes.data.data.map((item:QuoteType, index:number) =>(
                     <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
                       <div className='m-4'>
                         <img className='voting' src="upvote.png" alt="Upvote" />
@@ -162,7 +160,7 @@ axios.all(endpoints.map((endpoint) => axios.get(endpoint))).then(
                   ))}
                 </div>
               ):(
-                <div className='text-center text'>There are no quotes available</div>
+                <h1 className='text-center'>There are no quotes available</h1>
               )}
               <div className='mb-5 text-center mx-auto'>
                 <Button className='btnLogin'>Load more</Button>
@@ -196,7 +194,7 @@ axios.all(endpoints.map((endpoint) => axios.get(endpoint))).then(
               </div>
               {mostLiked ? (
                 <div className='mb-5 quoteRow'>  
-                  {mostLiked.map((item:QuoteType, index:number) => (
+                  {mostLiked.data.data.map((item:QuoteType, index:number) => (
                     <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
                       <div className='m-4'>
                         <Link to={routes.LOGIN}>
@@ -218,7 +216,7 @@ axios.all(endpoints.map((endpoint) => axios.get(endpoint))).then(
                   ))}
                 </div>
               ):(
-                <div className='text-center text'>There are no quotes available</div>
+                <h1 className='text-center'>There are no quotes available</h1>
               )}
               <div className='mb-5 text-center mx-auto text'>
                 <Button className='btnLogin' href={routes.LOGIN}>Sign up to see more</Button>
