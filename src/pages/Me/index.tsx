@@ -21,55 +21,18 @@ const UserInfo: FC = () => {
     withCredentials: true,
   })
 
-/* const header = {
-  headers: {'authorization': `Bearer ${authStore.user?.refresh_token}`}
-} */
-
-  
-/*   axios.get('http://localhost:8080/auth/me',header).then(({data}) => {
-    setUser(data)
-  },) */
-
-/*   useEffect(() => {
+  useEffect(() => {
     const getUser = async () => {
-      const res = await userRequest.get('/auth/me/')
+      const res = await userRequest.get('/users/me/',{
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ',
+        },
+      })
       console.log(res.data)
-      setUser(res.data)}
+      setUser(res.data)} //the reason it calls multiple times
       getUser()
-}, []) */
-
-
-useEffect(() => {
-  const getCurrUser = async() => {
-    const resp = await userRequest.get('/auth/me', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsIm5hbWUiOiJhZG9sZi5oaXRsZXJAZ21haWwuY29tIiwidHlwZSI6IlJFRlJFU0hfVE9LRU4iLCJpYXQiOjE2Nzc2MjYyMzQsImV4cCI6MTY3Nzc0ODYzNH0.SBqWH9_tH88-fIS3QNRvnZKf8NQuqU139aa_b_iPA4w',
-      },
-    })
-    setUser(user)
-    console.log(resp.data)
-    getCurrUser()
-  }
-}, [])
-/*   const user = useEffect(() => {
-    API.fetchCurrUser().then(data=>{
-      //setUser(Object.values(data))
-      //isLoading(false)
-      console.log(data)
-    }).catch(error=>{
-      setError(error)
-    })
-  },[]) */
-
-/*   const user = useQuery(
-    ['currUserMe'],
-    () => API.fetchCurrUser(),
-    {
-      keepPreviousData: true,
-      refetchOnWindowFocus: false,
-    }
-  ) */
+  }, [])
 
   return ( 
     <Layout>

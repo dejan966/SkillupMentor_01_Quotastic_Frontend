@@ -6,7 +6,6 @@ export type UserType = {
   current_password:string
   password:string
   confirm_password:string
-  refresh_token:string
   avatar: string
   quotes:{
     id:number

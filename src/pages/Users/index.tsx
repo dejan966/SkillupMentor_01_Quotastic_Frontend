@@ -11,7 +11,6 @@ const UserQuotesInfo: FC = () => {
   const [mostLiked, setMostLiked] = useState([])
   const [mostRecent, setMostRecent] = useState([])
   const [likes, setLikes] = useState([])
-  const [loading, isLoading] = useState(true)
   const [error, setError] = useState(true)
   
 /*   useEffect(() => {

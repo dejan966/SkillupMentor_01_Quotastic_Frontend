@@ -22,7 +22,6 @@ const endpoints = [
 
 axios.all(endpoints.map((endpoint) => axios.get(endpoint))).then(
   axios.spread(({data: mostLiked}, {data:randomQuote}, {data:recentQuotes}) => {
-    //console.log({ mostLiked, recentQuotes })
     setMostLiked(mostLiked)
     setRandomQuote(randomQuote)
     setRecentQuotes(recentQuotes)
