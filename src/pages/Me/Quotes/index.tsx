@@ -24,21 +24,9 @@ const UserQuotesInfo: FC = () => {
     })
   },[]) */
 
-  useEffect(() => {
+/*   useEffect(() => {
     API.fetchCurrUser().then(data=>{
       setMostLiked(Object.values(data))
-      setLoading(false)
-    }).catch(error=>{
-      setError(error)
-    })
-    API.fetchCurrUserMostRecentQuotes().then(data=>{
-      setMostRecent(Object.values(data))
-      setLoading(false)
-    }).catch(error=>{
-      setError(error)
-    })
-    API.fetchCurrUserVotes().then(data=>{
-      setLikes(Object.values(data))
       setLoading(false)
     }).catch(error=>{
       setError(error)
@@ -47,7 +35,7 @@ const UserQuotesInfo: FC = () => {
 
   useEffect(()=>{
     console.log(mostLiked)
-  }, [mostLiked])
+  }, [])*/
 
 /*   useEffect(() => {
     API.fetchCurrUserVotes().then(data=>{

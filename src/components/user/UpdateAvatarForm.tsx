@@ -31,11 +31,11 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) =>{
   const { data, isLoading, error } = useQuery(
     ['userAvatar'],
     () => API.fetchCurrUser(),
-    {
+/*     {
       onSuccess:(response)=>{
         setPreview(response.data.avatar)
       }
-    }
+    } */
   )
 
   const onSubmit = handleSubmit(
@@ -45,7 +45,7 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) =>{
   )
     
   const handleUpdate = async (data: UpdateUserFields) => {
-    const response = await API.updateUserAvatar(data, authStore.user?.id as number)
+    const response = await API.updateUserAvatar(data)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)

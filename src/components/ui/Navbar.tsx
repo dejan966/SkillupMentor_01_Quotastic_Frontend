@@ -10,6 +10,7 @@ import { StatusCode } from '../../constants/errorConstants'
 import * as API from '../../api/Api'
 import { useQuery } from 'react-query'
 import { UserType } from '../../models/auth'
+import axios from 'axios'
 
 const Navbar: FC = () => {
   const location = useLocation()
@@ -18,12 +19,15 @@ const Navbar: FC = () => {
   const [showError, setShowError] = useState(false)
   const [user, setUser] = useState([])
 
-  useQuery(
+/*   axios.get('http://localhost:8080/users/me').then(({data}) => {
+    setUser(data) //unathorized
+  },) */
+/*   useQuery(
     ['user'],
     () => API.fetchCurrUser().then(data=>{
       setUser(Object.values(data))
     }),
-  )
+  ) */
 
   const signout = async () => {
     const response = await API.signout()
@@ -180,7 +184,9 @@ const Navbar: FC = () => {
                 </div>
               ))}
             </div>
-          ):null}
+          ):(
+            <div>No user info available</div>
+          )}
         </header>
         {showError && (
           <ToastContainer className="p-3" position="top-end">

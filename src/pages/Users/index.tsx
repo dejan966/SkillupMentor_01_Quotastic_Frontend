@@ -14,7 +14,7 @@ const UserQuotesInfo: FC = () => {
   const [loading, isLoading] = useState(true)
   const [error, setError] = useState(true)
   
-  useEffect(() => {
+/*   useEffect(() => {
     API.fetchUser(1).then(data=>{
       setMostLiked(Object.values(data))
       isLoading(false)
@@ -42,7 +42,7 @@ const UserQuotesInfo: FC = () => {
     }).catch(error=>{
       setError(error)
     })
-  },[])
+  },[]) */
 
   return (
     <Layout>

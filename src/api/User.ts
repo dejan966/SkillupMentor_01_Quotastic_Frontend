@@ -37,21 +37,19 @@ export const updateUser = async (data: UpdateUserFields, id: number) =>
     data
   )
 
-export const updateUserPass = async ({current_password, password, confirm_password}: UpdateUserFields, id: number) =>
+export const updateUserPass = async ({current_password, password, confirm_password}: UpdateUserFields) =>
   apiRequest<UpdateUserFields, UserType>(
     'patch',
-    'users/me/password',
+    `${apiRoutes.ME}/update-password`,
     {current_password, password, confirm_password}
   )
 
-export const updateUserAvatar = async (data: UpdateUserFields, id: number) =>
+export const updateUserAvatar = async ({avatar}: UpdateUserFields) =>
   apiRequest<UpdateUserFields, UserType>(
     'patch',
-    `${apiRoutes.USERS_PREFIX}/${id}`,
-    data
+    `${apiRoutes.ME}/update-avatar`,
+    {avatar}
   )
-
-
 
 export const deleteUser = async (id: number) =>
   apiRequest<string, UserType>('delete', `${apiRoutes.USERS_PREFIX}/${id}`)

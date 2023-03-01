@@ -9,48 +9,71 @@ import { Form } from 'react-bootstrap'
 import { routes } from '../../constants/routesConstants'
 import Avatar from 'react-avatar'
 import { UserType } from '../../models/auth'
+import axios from 'axios'
+import authStore from '../../stores/auth.store'
 
 const UserInfo: FC = () => {
   const [user, setUser] = useState([])
-  const [loading, isLoading] = useState(true)
   const [error, setError] = useState(true)
 
-  useEffect(() => {
+  const userRequest = axios.create({
+    baseURL: 'http://localhost:8080',
+    withCredentials: true,
+  })
+
+/* const header = {
+  headers: {'authorization': `Bearer ${authStore.user?.refresh_token}`}
+} */
+
+  
+/*   axios.get('http://localhost:8080/auth/me',header).then(({data}) => {
+    setUser(data)
+  },) */
+
+/*   useEffect(() => {
+    const getUser = async () => {
+      const res = await userRequest.get('/auth/me/')
+      console.log(res.data)
+      setUser(res.data)}
+      getUser()
+}, []) */
+
+
+useEffect(() => {
+  const getCurrUser = async() => {
+    const resp = await userRequest.get('/auth/me', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsIm5hbWUiOiJhZG9sZi5oaXRsZXJAZ21haWwuY29tIiwidHlwZSI6IlJFRlJFU0hfVE9LRU4iLCJpYXQiOjE2Nzc2MjYyMzQsImV4cCI6MTY3Nzc0ODYzNH0.SBqWH9_tH88-fIS3QNRvnZKf8NQuqU139aa_b_iPA4w',
+      },
+    })
+    setUser(user)
+    console.log(resp.data)
+    getCurrUser()
+  }
+}, [])
+/*   const user = useEffect(() => {
     API.fetchCurrUser().then(data=>{
-      setUser(Object.values(data))
-      isLoading(false)
+      //setUser(Object.values(data))
+      //isLoading(false)
       console.log(data)
     }).catch(error=>{
       setError(error)
-    })/*  ,
-    ({
-      onSuccess:(data:any)=>{
-        console.log(data)
-      }
-    }) */
-  },[user])
+    })
+  },[]) */
 
-/*   useQuery(
+/*   const user = useQuery(
     ['currUserMe'],
-    () => API.fetchCurrUser().then(data=>{
-      isLoading(false)
-      setUser(Object.values(data))
-      console.log(data)
-    }),
+    () => API.fetchCurrUser(),
     {
-      onSuccess: (data)=>(setUser(Object.values(data)), isLoading(false)),
-      //onError:(error) => setError(error)
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
     }
   ) */
 
   return ( 
     <Layout>
-      { loading ? (
-        <div className='text-center'>
-          Loading data...
-        </div>
-      ): 
-        <>
+      <>
           {user ? (
             <div className="forms">
               <h1 className='display-5 text-center'>Your info</h1>
@@ -113,7 +136,6 @@ const UserInfo: FC = () => {
             ) : null
           }
         </>
-      }
     </Layout>
   )
 }

@@ -30,7 +30,7 @@ const onSubmit = handleSubmit(
 )
 
 const handleUpdate = async (data: UpdateUserFields) => {
-  const response = await API.updateUserPass(data, authStore.user?.id as number)
+  const response = await API.updateUserPass(data)
   if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
     setApiError(response.data.message)
     setShowError(true)
