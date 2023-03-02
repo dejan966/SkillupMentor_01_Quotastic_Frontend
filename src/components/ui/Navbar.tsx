@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button'
 import { routes } from '../../constants/routesConstants'
 import { FC, useState } from 'react'
-import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import Toast from 'react-bootstrap/Toast'
 import authStore from '../../stores/auth.store'
@@ -18,9 +18,20 @@ const Navbar: FC = () => {
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
-  const user = useQuery(
-    ['currUserQuote'],
+  const {id} = useParams()
+  const userId:number = parseInt(id!)
+
+  const currUser = useQuery(
+    ['currUserInfo'],
     () => API.fetchCurrUser(),
+    {
+      refetchOnWindowFocus:false
+    }
+  )
+
+  const user = useQuery(
+    ['userInfo'],
+    () => API.fetchUser(userId),
     {
       refetchOnWindowFocus:false
     }
@@ -172,6 +183,77 @@ const Navbar: FC = () => {
               </div>
             </div>
           </nav>
+          {currUser.data ? (
+            <div className='redBackground reverseTextColor'>
+              <div className='text-center'>
+                <img src={'/' + currUser.data.data.avatar} alt="User avatar" width={40}/>
+                <h2 className="display-6">{currUser.data.data.first_name + ' ' + currUser.data.data.last_name}</h2>
+              </div>
+            </div>
+          ):(
+            <div>No user info available</div>
+          )}
+        </header>
+        {showError && (
+          <ToastContainer className="p-3" position="top-end">
+            <Toast onClose={() => setShowError(false)} show={showError}>
+              <Toast.Header>
+                <strong className="me-suto text-danger">Error</strong>
+              </Toast.Header>
+              <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
+            </Toast>
+          </ToastContainer>
+        )}
+      </>
+    )
+  }
+  else if(location.pathname === `/users/${id}/quotes`){
+    return(
+      <>
+        <header className='redBackground'>
+          <nav className="navbar navbar-expand-lg">
+            <div className="container-xxl">
+              <Link className="navbar.brand" to={routes.HOME}>
+                <img
+                  src="/quotastic_white.png"
+                  alt="Quotastic white logo"
+                  width={123}
+                />
+              </Link>
+              <div
+                className="collapse navbar-collapse justify-content-end align-items-center"
+                id="navbarTogglerDemo02"
+              >
+                <ul className="navbar-nav mb-2 mb-lg-0">
+                  <li className="nav-item pe-4">
+                    <a className="text-decoration-none reverseTextColor" href={routes.HOME}>
+                      Home
+                    </a>
+                  </li>
+                  <li className="nav-item pe-4">
+                    <a className="text-decoration-none reverseTextColor" onClick={signout}>
+                      Sign out
+                    </a>
+                  </li>
+                  <li className="nav-item pe-4">
+                    <a className="text-decoration-none reverseTextColor" href={routes.USERINFO}>
+                      Setings
+                    </a>
+                  </li>
+                  <li className="nav-item pe-4">
+                    <Link to={routes.USERQUOTESINFO}>
+                      <img src={'/' + authStore.user?.avatar} alt="User avatar" width={40}/>
+                    </Link>
+                  </li>
+                  <li className="nav-item pe-4">
+                    <Link to={routes.ADDNEWQUOTE}>
+                    <img src='/plus.png' alt="User avatar" width={40}/>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
           {user.data ? (
             <div className='redBackground reverseTextColor'>
               <div className='text-center'>
@@ -196,7 +278,6 @@ const Navbar: FC = () => {
       </>
     )
   }
-  //else if users/quotes
   return (
     <>
       <header>

@@ -19,7 +19,7 @@ export const fetchCurrUserVotes = async () =>
   apiRequest<never, VoteType>('get', apiRoutes.ME_VOTES)
 
 export const fetchUserVotes = async (userId:number) =>
-  apiRequest<never, VoteType>('get', `${apiRoutes.ME_VOTES}/user/${userId}`)
+  apiRequest<never, VoteType>('get', `${apiRoutes.VOTES_PREFIX}/users/${userId}`)
 
 export const deleteVote = async (id: number) =>
   apiRequest<string, VoteType>('delete', `${apiRoutes.VOTES_PREFIX}/${id}`)

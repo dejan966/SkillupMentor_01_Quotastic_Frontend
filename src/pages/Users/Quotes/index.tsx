@@ -6,11 +6,35 @@ import { Button } from 'react-bootstrap'
 import { UserType } from '../../../models/auth'
 import { QuoteType } from '../../../models/quote'
 import { VoteType } from '../../../models/vote'
+import { useLocation, useParams } from 'react-router-dom'
 
 const UserQuotesInfo: FC = () => {
-  const [mostLiked, setMostLiked] = useState([])
-  const [mostRecent, setMostRecent] = useState([])
-  const [likes, setLikes] = useState([])
+  const { id } = useParams()
+  const userId:number = parseInt(id!)
+
+  const otherUserMostLiked = useQuery(
+    ['otherUserMostLikedQuotes'],
+    () => API.fetchUserMostLikedQuotes(userId),
+    {
+      refetchOnWindowFocus: false,
+    },
+  )
+  
+  const otherUserMostRecent = useQuery(
+    ['otherUserMostRecentQuotes'],
+    () => API.fetchUserMostRecentQuotes(userId),
+    {
+      refetchOnWindowFocus: false,
+    },
+  ) 
+
+  const otherUserLiked = useQuery(
+    ['otherUserLikes'],
+    () => API.fetchUserVotes(userId),
+    {
+      refetchOnWindowFocus: false,
+    },
+  )
 
   return (
     <Layout>
@@ -19,9 +43,9 @@ const UserQuotesInfo: FC = () => {
           <div>
             <h2 className='red'>Most liked quotes</h2>
             <div className='mb-5'>
-              {mostLiked ? (
+              {otherUserMostLiked.data ? (
                 <div>
-                  {mostLiked.map((item: QuoteType, index:number)=>(
+                  {otherUserMostLiked.data.data.map((item: QuoteType, index:number)=>(
                     <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
                       <div className='m-4'>
                         <img className='voting' src="/upvote.png" alt="Upvote" />
@@ -31,7 +55,7 @@ const UserQuotesInfo: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                          <img className='voting' src={'/' + item.user.avatar} alt="User avatar" width={35}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                         </div>
                       </div>
@@ -46,9 +70,9 @@ const UserQuotesInfo: FC = () => {
           <div>
             <h2 className='text'>Most recent</h2>
             <div className='mb-5'>
-              {mostRecent ? (
+              {otherUserMostRecent.data ? (
                 <div>
-                  {mostRecent.map((item: QuoteType, index:number)=>(
+                  {otherUserMostRecent.data.data.map((item: QuoteType, index:number)=>(
                     <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
                       <div className='m-4'>
                         <img className='voting' src="/upvote.png" alt="Upvote" />
@@ -58,7 +82,7 @@ const UserQuotesInfo: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                          <img className='voting' src={'/' + item.user.avatar} alt="User avatar" width={35}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                         </div>
                       </div> 
@@ -73,19 +97,19 @@ const UserQuotesInfo: FC = () => {
           <div>
             <h2 className='text'>Liked</h2>
             <div className='mb-5'>
-              {likes ? (
+              {otherUserLiked.data ? (
                 <div>
-                  {likes.map((item: VoteType, index:number)=>(
+                  {otherUserLiked.data.data.map((item: VoteType, index:number)=>(
                     <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
                       <div className='m-4'>
                         <img className='voting' src="/upvoted.png" alt="Upvoted" />
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote.karma}</div>
-                        <img className='voting' src="downvote.png" alt="Downvote" />
+                        <img className='voting' src="/downvote.png" alt="Downvote" />
                       </div>
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting' src={item.quote.user.avatar} alt="User avatar" width={35}/>
+                          <img className='voting' src={'/' + item.quote.user.avatar} alt="User avatar" width={35}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.quote.user.first_name + ' ' + item.quote.user.last_name}</div>
                         </div>
                       </div> 

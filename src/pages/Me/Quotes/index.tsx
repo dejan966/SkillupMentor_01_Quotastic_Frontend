@@ -10,8 +10,9 @@ import authStore from '../../../stores/auth.store'
 
 const UserQuotesInfo: FC = () => {
   const userId = (authStore.user?.id) as number
+
   const mostLiked = useQuery(
-    ['mostLikedQuotes'],
+    ['currUserMostLikedQuotes'],
     () => API.fetchUserMostLikedQuotes(userId),
     {
       refetchOnWindowFocus: false,
@@ -19,7 +20,7 @@ const UserQuotesInfo: FC = () => {
   )
   
   const mostRecent = useQuery(
-    ['mostRecentQuotes'],
+    ['currUserMostRecentQuotes'],
     () => API.fetchCurrUserMostRecentQuotes(),
     {
       refetchOnWindowFocus: false,
@@ -27,7 +28,7 @@ const UserQuotesInfo: FC = () => {
   ) 
 
   const liked = useQuery(
-    ['userLikes'],
+    ['currUserLikes'],
     () => API.fetchCurrUserVotes(),
     {
       keepPreviousData: true,

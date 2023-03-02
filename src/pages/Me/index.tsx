@@ -14,6 +14,7 @@ import authStore from '../../stores/auth.store'
 
 const UserInfo: FC = () => {
   const [loading,setLoading]=useState(true)
+  
   const user = useQuery(
     ['currUser'],
     () => API.fetchCurrUser(),

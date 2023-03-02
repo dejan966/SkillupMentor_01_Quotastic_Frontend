@@ -6,10 +6,10 @@ import authStore from '../stores/auth.store'
 import { useQuery } from 'react-query'
 import * as API from '../api/Api'
 import { QuoteType } from '../models/quote'
-import { generatePath, Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Home: FC = () => {
-  const [id, setId] = useState('1')
+  const [id, setId] = useState(8)
   const navigate = useNavigate()
 
   const mostLiked = useQuery(
@@ -27,11 +27,7 @@ const Home: FC = () => {
     {
       refetchOnWindowFocus: false,
     },
-  ) 
-  const handleProceed = () => {
-    navigate(`users/${id}/quotes`)
-    console.log(id)
-  }
+  )
 
   const recentQuotes = useQuery(
     ['recentQuotes'],
@@ -41,6 +37,10 @@ const Home: FC = () => {
       refetchOnWindowFocus: false,
     },
   )
+
+  const handleProceed = () => {
+    navigate(`users/${id}/quotes`)
+  }
 
   return (
     <>
@@ -91,16 +91,19 @@ const Home: FC = () => {
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                             <div className='authorGrid'>
-                              <img className='voting' src={item.user.avatar} onClick={(e) => {
-              setId((item.user.id).toString())
-            }} alt="User avatar" width={35}/>
+                              <img className='voting' src={item.user.avatar} onClick={handleProceed}
+                              alt="User avatar" width={35}/>
                               <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
                           </div>
-                        {/*Icons for editing and delete the quote*/}
+                          <div className='m-4'>
+                            <img src="/settings.png" alt="Settings" />
+                            <div></div>
+                            <img src="/delete.png" alt="Delete" />
+                          </div>
                         </div>
                       ):(
-                        <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                        <div key={index} className="quoteBorder quoteGrid quoteRow mb-5" style={{width:400}}>
                           <div className='m-4'>
                             <img className='voting' src="/upvote.png" alt="Upvote" />
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
@@ -109,9 +112,14 @@ const Home: FC = () => {
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                               <div className='authorGrid'>
-                              <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                              <img className='voting' src={item.user.avatar} alt="User avatar" onClick={handleProceed} width={35}/>
                               <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
+                          </div>
+                          <div className='m-4'>
+                            <img src="/settings.png" alt="Settings" />
+                            <div></div>
+                            <img src="/delete.png" alt="Delete" />
                           </div>
                         </div>
                       )
