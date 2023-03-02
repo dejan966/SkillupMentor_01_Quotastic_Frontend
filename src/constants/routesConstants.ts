@@ -9,6 +9,5 @@ export enum routes {
   USERAVATAREDIT = '../me/update-avatar',
   ADDNEWQUOTE='../me/myquote',
   USERQUOTESINFO='../me/quotes',
-  EDITQUOTE='me/myquote/edit/:id',
-  USERSINFO = 'users/:id/qoutes'
+  EDITQUOTE='me/myquote/edit',
 }

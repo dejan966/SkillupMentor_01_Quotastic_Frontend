@@ -1,5 +1,5 @@
 import Layout from '../components/ui/Layout'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { routes } from '../constants/routesConstants'
 import authStore from '../stores/auth.store'
@@ -9,7 +9,8 @@ import { QuoteType } from '../models/quote'
 import { Link, useNavigate } from 'react-router-dom'
 
 const Home: FC = () => {
-  const [id, setId] = useState(8)
+  const [userId, setUserId] = useState(1)
+  const [quoteId, setQuoteId] = useState(8)//new_quote
   const navigate = useNavigate()
 
   const mostLiked = useQuery(
@@ -38,8 +39,12 @@ const Home: FC = () => {
     },
   )
 
-  const handleProceed = () => {
-    navigate(`users/${id}/quotes`)
+  const handleProceedUser = () => {
+    if(userId === authStore.user?.id){
+      navigate('me/quotes')
+      return
+    }
+    navigate(`users/${userId}/quotes`)
   }
 
   return (
@@ -53,7 +58,43 @@ const Home: FC = () => {
                 <p className='quoteText'>Quote of the day is a randomly chosen quote</p>
               </div>
               {randomQuote.data ? (
-                <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}}>
+                authStore.user?.id === randomQuote.data.data.votes.user?.id ?(
+                  (randomQuote.data.data.votes.value === true ? (
+                    <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}}>
+                      <div className='m-4'>
+                        <img className='voting' src="/upvoted.png" alt="Upvoted" />
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
+                        <img className='voting' src="/downvote.png" alt="Downvote" />
+                      </div>
+                      <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
+                        <div className='authorGrid'>
+                          <img className='voting' src={randomQuote.data.data.user.avatar} alt="User avatar" width={35} 
+                          onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
+                          <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ):(
+                    <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}}>
+                      <div className='m-4'>
+                        <img className='voting' src="/upvote.png" alt="Upvote" />
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
+                        <img className='voting' src="/downvoted.png" alt="Downvoted" />
+                      </div>
+                      <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
+                        <div className='authorGrid'>
+                          <img className='voting' src={randomQuote.data.data.user.avatar} alt="User avatar" width={35} 
+                          onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
+                          <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )
+                ):(
+                  <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}}>
                   <div className='m-4'>
                       <img className='voting' src="/upvote.png" alt="Upvote" />
                       <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
@@ -62,11 +103,13 @@ const Home: FC = () => {
                     <div>
                       <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
                       <div className='authorGrid'>
-                        <img className='voting' src={randomQuote.data.data.user.avatar} alt="User avatar" width={35}/>
+                        <img className='voting' src={randomQuote.data.data.user.avatar} alt="User avatar" width={35} 
+                        onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
                         <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
                       </div>
                     </div>
                   </div>
+                )
               ):(
                 <div className='text-center text'>No quote of the day available</div>
               )}
@@ -91,8 +134,8 @@ const Home: FC = () => {
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                             <div className='authorGrid'>
-                              <img className='voting' src={item.user.avatar} onClick={handleProceed}
-                              alt="User avatar" width={35}/>
+                              <img className='voting' src={item.user.avatar} alt="User avatar" width={35} 
+                              onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                               <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
                           </div>
@@ -112,7 +155,7 @@ const Home: FC = () => {
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                               <div className='authorGrid'>
-                              <img className='voting' src={item.user.avatar} alt="User avatar" onClick={handleProceed} width={35}/>
+                              <img className='voting' src={item.user.avatar} alt="User avatar" width={35} onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                               <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
                           </div>
@@ -133,10 +176,17 @@ const Home: FC = () => {
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                           <div className='authorGrid'>
-                            <img className='voting' src={item.user.avatar} onClick={handleProceed} 
-                            alt="User avatar" width={35}/>
+                            <img className='voting' src={item.user.avatar} alt="User avatar" width={35} 
+                            onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                             <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                           </div>
+                        </div>
+                        <div className='m-4'>
+                          <Link to={`${routes.EDITQUOTE}/${quoteId}`} >
+                            <img src="/settings.png" alt="Settings" />
+                          </Link>
+                          <div></div>
+                          <img src="/delete.png" alt="Delete" />
                         </div>
                       </div>
                     )
@@ -157,20 +207,68 @@ const Home: FC = () => {
               {recentQuotes.data ? (
                 <div className="quoteRow">
                   {recentQuotes.data.data.map((item:QuoteType, index:number) =>(
-                    <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
-                      <div className='m-4'>
-                        <img className='voting' src="upvote.png" alt="Upvote" />
-                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                        <img className='voting' src="downvote.png" alt="Downvote" />
-                      </div>
-                      <div>
-                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                        <div className='authorGrid'>
-                           <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
-                          <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                    authStore.user?.id === item.votes.user?.id ?
+                    (
+                      item.votes.value === true ? (
+                        <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                          <div className='m-4'>
+                            <img className='voting' src="/upvoted.png" alt="Upvoted" />
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                            <img className='voting' src="/downvote.png" alt="Downvote" />
+                          </div>
+                          <div>
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                            <div className='authorGrid'>
+                              <img className='voting' src={item.user.avatar} alt="User avatar" width={35} 
+                              onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
+                              <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                            </div>
+                          </div>
+                          <div className='m-4'>
+                            <img src="/settings.png" alt="Settings" />
+                            <div></div>
+                            <img src="/delete.png" alt="Delete" />
+                          </div>
+                        </div>
+                      ):(
+                        <div key={index} className="quoteBorder quoteGrid quoteRow mb-5" style={{width:400}}>
+                          <div className='m-4'>
+                            <img className='voting' src="/upvote.png" alt="Upvote" />
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                            <img className='voting' src="/downvoted.png" alt="Downvoted" />
+                          </div>
+                          <div>
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                              <div className='authorGrid'>
+                              <img className='voting' src={item.user.avatar} alt="User avatar" width={35} 
+                              onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
+                              <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                            </div>
+                          </div>
+{/*                           <div className='m-4'>
+                            <img src="/settings.png" alt="Settings" />
+                            <div></div>
+                            <img src="/delete.png" alt="Delete" />
+                          </div> */}
+                        </div>
+                      )
+                    ):(
+                      <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                        <div className='m-4'>
+                          <img className='voting' src="upvote.png" alt="Upvote" />
+                          <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                          <img className='voting' src="downvote.png" alt="Downvote" />
+                        </div>
+                        <div>
+                          <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                          <div className='authorGrid'>
+                            <img className='voting' src={item.user.avatar} alt="User avatar" width={35} 
+                            onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser} />
+                            <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )
                   ))}
                 </div>
               ):(
@@ -222,7 +320,8 @@ const Home: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                          <img className='voting' src={item.user.avatar} alt="User avatar" width={35} 
+                          onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                         </div>
                       </div>
