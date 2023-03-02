@@ -1,7 +1,7 @@
 import { FC } from 'react'
 
 const Downvote: any = () => {
-    //if upvote karma++
+    //pass id of post here
     const value = 'downvote'
     return value
 }

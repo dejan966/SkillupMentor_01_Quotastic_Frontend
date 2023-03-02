@@ -6,10 +6,11 @@ import authStore from '../stores/auth.store'
 import { useQuery } from 'react-query'
 import * as API from '../api/Api'
 import { QuoteType } from '../models/quote'
-import { Link } from 'react-router-dom'
+import { generatePath, Link, useNavigate } from 'react-router-dom'
 
 const Home: FC = () => {
-  const [randomQuote, setRandomQuote] = useState([])
+  const [id, setId] = useState('1')
+  const navigate = useNavigate()
 
   const mostLiked = useQuery(
     ['quote'],
@@ -20,15 +21,17 @@ const Home: FC = () => {
     },
   )
   
-  useQuery(
+  const randomQuote = useQuery(
     ['randomQuote'],
-    () => API.fetchRandomQuote().then(data=>{
-      setRandomQuote(data)
-    }),
+    () => API.fetchRandomQuote(),
     {
       refetchOnWindowFocus: false,
     },
   ) 
+  const handleProceed = () => {
+    navigate(`users/${id}/quotes`)
+    console.log(id)
+  }
 
   const recentQuotes = useQuery(
     ['recentQuotes'],
@@ -44,30 +47,30 @@ const Home: FC = () => {
       <Layout>
         {authStore.user ? (
           <>
-            <div className='text-center'>
-              <h2 className='red'>Quote of the day</h2>
-              <p className='quoteText'>Quote of the day is a randomly chosen quote</p>
-            </div>
-            {randomQuote ? (
-              <div>
-                {Object.values(randomQuote).map((item:QuoteType, index:number)=>(
-                  <div key={index} className="quoteBorder quoteGrid mx-auto mb-5" style={{width:400}}>
-                    <div className='m-4'>
-                      <img className='voting' src="upvoted.png" alt="Upvote" />
-                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                      <img className='voting' src="downvote.png" alt="Downvote" />
-                    </div>
-{/*                     <div>
-                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                      <div className='authorGrid'>
-                        <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
-                        <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                      </div>
-                    </div> */}
-                  </div>
-                ))}
+            <div className='mb-5'>
+              <div className='text-center'>
+                <h2 className='red'>Quote of the day</h2>
+                <p className='quoteText'>Quote of the day is a randomly chosen quote</p>
               </div>
-            ):null}
+              {randomQuote.data ? (
+                <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}}>
+                  <div className='m-4'>
+                      <img className='voting' src="/upvote.png" alt="Upvote" />
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
+                      <img className='voting' src="/downvote.png" alt="Downvote" />
+                    </div>
+                    <div>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
+                      <div className='authorGrid'>
+                        <img className='voting' src={randomQuote.data.data.user.avatar} alt="User avatar" width={35}/>
+                        <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
+                      </div>
+                    </div>
+                  </div>
+              ):(
+                <div className='text-center text'>No quote of the day available</div>
+              )}
+            </div>
             <div className='mb-5'>
               <div className='text-center mx-auto' style={{width:420}}>
                 <h2 className='red'>Most upvoted quotes</h2>
@@ -76,7 +79,7 @@ const Home: FC = () => {
               {mostLiked.data ? (
                 <div className='quoteRow'>
                   {mostLiked.data.data.map((item:QuoteType, index:number) => (
-                    authStore.user?.id === item.votes.user?.id ? //item.votes null
+                    authStore.user?.id === item.votes.user?.id ?
                     (
                       item.votes.value === true ? (
                         <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
@@ -88,7 +91,9 @@ const Home: FC = () => {
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                             <div className='authorGrid'>
-                              <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                              <img className='voting' src={item.user.avatar} onClick={(e) => {
+              setId((item.user.id).toString())
+            }} alt="User avatar" width={35}/>
                               <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
                           </div>
@@ -101,12 +106,12 @@ const Home: FC = () => {
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
                             <img className='voting' src="/downvoted.png" alt="Downvoted" />
                           </div>
-                        <div>
-                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                          <div className='authorGrid'>
-                            <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
-                            <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                          </div>
+                          <div>
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                              <div className='authorGrid'>
+                              <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                              <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                            </div>
                           </div>
                         </div>
                       )
@@ -120,7 +125,8 @@ const Home: FC = () => {
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                           <div className='authorGrid'>
-                            <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                            <img className='voting' src={item.user.avatar} onClick={handleProceed} 
+                            alt="User avatar" width={35}/>
                             <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                           </div>
                         </div>
@@ -141,7 +147,7 @@ const Home: FC = () => {
                 <p className='quoteText'>Recent quotes update as soon user adds new quote. Go ahed show them that you seen the new quote and like the ones you like.</p>
               </div>
               {recentQuotes.data ? (
-                <div className="mb-5 quoteRow">
+                <div className="quoteRow">
                   {recentQuotes.data.data.map((item:QuoteType, index:number) =>(
                     <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
                       <div className='m-4'>
@@ -152,7 +158,7 @@ const Home: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
+                           <img className='voting' src={item.user.avatar} alt="User avatar" width={35}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                         </div>
                       </div>
@@ -192,7 +198,7 @@ const Home: FC = () => {
                 <h2 className='red'>Most upvoted quotes</h2>
                 <p className='quoteText'>Most upvoted quotes on the platform. Sign up or login to like the quotes and keep them saved in your profile.</p>
               </div>
-              {mostLiked ? (
+              {mostLiked.data ? (
                 <div className='mb-5 quoteRow'>  
                   {mostLiked.data.data.map((item:QuoteType, index:number) => (
                     <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
@@ -216,7 +222,11 @@ const Home: FC = () => {
                   ))}
                 </div>
               ):(
-                <h1 className='text-center'>There are no quotes available</h1>
+                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                  <div className='m-4'>
+                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                  </div>
+                </div>
               )}
               <div className='mb-5 text-center mx-auto text'>
                 <Button className='btnLogin' href={routes.LOGIN}>Sign up to see more</Button>

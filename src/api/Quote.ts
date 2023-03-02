@@ -13,7 +13,10 @@ export const fetchRandomQuote = async () =>
   apiRequest<undefined, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/random`)
 
 export const fetchCurrUserMostRecentQuotes = async () =>
-  apiRequest<never, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/me`)
+  apiRequest<never, QuoteType>('get', `${apiRoutes.ME_QUOTES}`)
+
+export const fetchUserMostLikedQuotes = async (id:number)=>
+  apiRequest<never, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/users/${id}`)
 
 export const fetchUserMostRecentQuotes = async (userId:number) =>
   apiRequest<never, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/user/${userId}`)

@@ -1,13 +1,12 @@
 import { FC } from 'react'
 import Layout from '../../../components/ui/Layout'
 
-const UserDisable: FC = () =>{
+const UserDelete: FC = () =>{
     return (
         <Layout>
-            <h1>Disable account</h1>
-            {/*isActive:false*/}
+            <h1>Delete account</h1>
         </Layout>
     )
 }
 
-export default UserDisable
+export default UserDelete

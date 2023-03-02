@@ -17,17 +17,14 @@ const Navbar: FC = () => {
   const navigate = useNavigate()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
-  const [user, setUser] = useState([])
 
-/*   axios.get('http://localhost:8080/users/me').then(({data}) => {
-    setUser(data) //unathorized
-  },) */
-/*   useQuery(
-    ['user'],
-    () => API.fetchCurrUser().then(data=>{
-      setUser(Object.values(data))
-    }),
-  ) */
+  const user = useQuery(
+    ['currUserQuote'],
+    () => API.fetchCurrUser(),
+    {
+      refetchOnWindowFocus:false
+    }
+  )
 
   const signout = async () => {
     const response = await API.signout()
@@ -175,14 +172,12 @@ const Navbar: FC = () => {
               </div>
             </div>
           </nav>
-          {user ? (
+          {user.data ? (
             <div className='redBackground reverseTextColor'>
-              {user.map((item:UserType, index:number)=>(
-                <div key={index} className='text-center'>
-                  <img src={process.env.PUBLIC_URL + '/' + item.avatar} alt="User avatar" width={40}/>
-                  <h2 className="display-6">{item.first_name + ' ' + item.last_name}</h2>
-                </div>
-              ))}
+              <div className='text-center'>
+                <img src={'/' + user.data.data.avatar} alt="User avatar" width={40}/>
+                <h2 className="display-6">{user.data.data.first_name + ' ' + user.data.data.last_name}</h2>
+              </div>
             </div>
           ):(
             <div>No user info available</div>
@@ -201,7 +196,7 @@ const Navbar: FC = () => {
       </>
     )
   }
-  //else if users?id={id}
+  //else if users/quotes
   return (
     <>
       <header>

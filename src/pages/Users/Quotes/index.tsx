@@ -1,47 +1,16 @@
-import Layout from '../../components/ui/Layout'
+import Layout from '../../../components/ui/Layout'
 import { FC, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import * as API from '../../api/Api'
+import * as API from '../../../api/Api'
 import { Button } from 'react-bootstrap'
-import { UserType } from '../../models/auth'
-import { QuoteType } from '../../models/quote'
-import { VoteType } from '../../models/vote'
+import { UserType } from '../../../models/auth'
+import { QuoteType } from '../../../models/quote'
+import { VoteType } from '../../../models/vote'
 
 const UserQuotesInfo: FC = () => {
   const [mostLiked, setMostLiked] = useState([])
   const [mostRecent, setMostRecent] = useState([])
   const [likes, setLikes] = useState([])
-  const [error, setError] = useState(true)
-  
-/*   useEffect(() => {
-    API.fetchUser(1).then(data=>{
-      setMostLiked(Object.values(data))
-      isLoading(false)
-      console.log(data)
-    }).catch(error=>{
-      setError(error)
-    })
-  },[])
-  
-  useEffect(() => {
-    API.fetchUserMostRecentQuotes(1).then(data=>{
-      setMostRecent(Object.values(data))
-      isLoading(false)
-      console.log(data)
-    }).catch(error=>{
-      setError(error)
-    })
-  },[])
-
-  useEffect(() => {
-    API.fetchUserVotes(1).then(data=>{
-      setLikes(Object.values(data))
-      isLoading(false)
-      console.log(data)
-    }).catch(error=>{
-      setError(error)
-    })
-  },[]) */
 
   return (
     <Layout>
