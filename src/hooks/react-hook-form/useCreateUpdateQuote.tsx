@@ -32,7 +32,7 @@ export const useCreateUpdateQuoteForm = ({ defaultValues }: Props) => {
     control,
   } = useForm({
     defaultValues: {
-      quote: '',
+      quote: defaultValues?.quote,
       ...defaultValues
     },
     mode: 'onSubmit',

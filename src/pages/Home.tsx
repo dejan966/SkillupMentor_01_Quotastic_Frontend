@@ -9,15 +9,21 @@ import { QuoteType } from '../models/quote'
 import { Link, useNavigate } from 'react-router-dom'
 
 const Home: FC = () => {
+  const [likes, setLikes] = useState(false)
+  const [dislikes, setDisikes] = useState(false)
+  const[likedQuotes, setLikedQuotes] = useState('')
+  const[dislikedQuotes, setDislikedQuotes] = useState('') 
+
   const [userId, setUserId] = useState(1)
-  const [quoteId, setQuoteId] = useState(8)//new_quote
+  //const [quoteId, setQuoteId] = useState(8)//new_quote
+  const [quoteData, setQuoteData] = useState({ id: 1, quote:''}) 
   const navigate = useNavigate()
+  
 
   const mostLiked = useQuery(
     ['quote'],
     () => API.fetchQuotes(),
     {
-      keepPreviousData: true,
       refetchOnWindowFocus: false,
     },
   )
@@ -45,6 +51,20 @@ const Home: FC = () => {
       return
     }
     navigate(`users/${userId}/quotes`)
+  }
+
+  const voting = () =>{
+    if(likes === true){
+      setLikedQuotes('upvoted.png')
+    } else {
+      setLikedQuotes('upvote.png')
+    }
+
+    if(dislikes === true){
+      setDislikedQuotes('downvoted.png')
+    } else{
+      setDislikedQuotes('downvote.png')
+    }
   }
 
   return (
@@ -125,11 +145,11 @@ const Home: FC = () => {
                     authStore.user?.id === item.votes.user?.id ?
                     (
                       item.votes.value === true ? (
-                        <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                        <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} onPointerMove={e=>{setLikes(true)}}>
                           <div className='m-4'>
-                            <img className='voting' src="/upvoted.png" alt="Upvoted" />
+                            <img className='voting' src={'/upvoted.png'} alt="Upvoted" onClick={voting}/>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                            <img className='voting' src="/downvote.png" alt="Downvote" />
+                            <img className='voting' src={'/downvote.png'} alt="Downvote" onClick={voting}/>
                           </div>
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
@@ -146,7 +166,7 @@ const Home: FC = () => {
                           </div>
                         </div>
                       ):(
-                        <div key={index} className="quoteBorder quoteGrid quoteRow mb-5" style={{width:400}}>
+                        <div key={index} className="quoteBorder quoteGrid quoteRow mb-5" style={{width:400}} onPointerMove={e=>{setLikes(false)}}>
                           <div className='m-4'>
                             <img className='voting' src="/upvote.png" alt="Upvote" />
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
@@ -167,7 +187,7 @@ const Home: FC = () => {
                         </div>
                       )
                     ):(
-                      <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                      <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
                         <div className='m-4'>
                           <img className='voting' src="upvote.png" alt="Upvote" />
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
@@ -182,7 +202,7 @@ const Home: FC = () => {
                           </div>
                         </div>
                         <div className='m-4'>
-                          <Link to={`${routes.EDITQUOTE}/${quoteId}`} >
+                          <Link to={`${routes.EDITQUOTE}/${item.id}`} state={{ data: quoteData }} >
                             <img src="/settings.png" alt="Settings" />
                           </Link>
                           <div></div>

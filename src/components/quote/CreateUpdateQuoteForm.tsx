@@ -14,6 +14,8 @@ interface Props {
 }
 
 const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
+  console.log(defaultValues?.id)
+  
   const navigate = useNavigate()
   
   const { handleSubmit, control } = useCreateUpdateQuoteForm({
