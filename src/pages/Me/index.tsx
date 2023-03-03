@@ -11,9 +11,11 @@ import Avatar from 'react-avatar'
 import { UserType } from '../../models/auth'
 import axios from 'axios'
 import authStore from '../../stores/auth.store'
+import { Link } from 'react-router-dom'
 
 const UserInfo: FC = () => {
   const [loading,setLoading]=useState(true)
+  const [userData,setUserData]=useState({id:1, first_name:'', last_name:'', email:'', avatar:''})
   
   const user = useQuery(
     ['currUser'],
@@ -37,7 +39,7 @@ const UserInfo: FC = () => {
               <h1 className='display-5 text-center'>Your info</h1>
               <Form.Group className="d-flex flex-column justify-content-center align-items-center">
                 <FormLabel htmlFor="avatar" id="avatar-p">
-                  <Avatar round src={user.data.data.avatar} alt="Avatar" />
+                  <Avatar round src={`${process.env.REACT_APP_API_URL}/uploads/${user.data.data.avatar}`} alt="Avatar" />
                 </FormLabel>
               </Form.Group>
               <Form.Group className="mb-3">
@@ -82,8 +84,8 @@ const UserInfo: FC = () => {
                   </Form.Group>
                 </div>
               </div>
-              <div className="d-flex justify-content-between mb-3">
-                <Button href={routes.USEREDIT} className='btnRegister'>Edit</Button>
+              <div className="d-flex justify-content-between mb-3" onPointerMove={e=>{userData.id = user.data.data.id; userData.first_name = user.data.data.first_name; userData.last_name = user.data.data.last_name; userData.email = user.data.data.email; userData.avatar = user.data.data.avatar}} >
+                <Link to={routes.USEREDIT} state={{ data: userData }}><Button className='btnRegister'>Edit</Button></Link>
                 <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.USERDELETE}>Delete account</a>
               </div>
             </div> 

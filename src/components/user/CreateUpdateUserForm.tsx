@@ -3,7 +3,7 @@ import {
   useCreateUpdateUserForm,
 } from '../../hooks/react-hook-form/useCreateUpdateUser'
 import { FC, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import Toast from 'react-bootstrap/Toast'
 import { Form } from 'react-bootstrap'
@@ -27,6 +27,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
     defaultValues,
   })
 
+  const [userAvatar, setUserAvatar] = useState({id:1, avatar:'default-avatar.png'})
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
@@ -37,7 +38,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
   )
 
   const handleUpdate = async (data: UpdateUserFields) => {
-    const response = await API.updateUser(data, authStore.user?.id as number)
+    const response = await API.updateUser(data, defaultValues?.id as number)
     console.log(defaultValues?.id)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
@@ -141,8 +142,8 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
           <div className="md-5">
             <Button className='btnOrange' href={routes.USERPASSWORDEDIT}>Change password</Button>
           </div>
-          <div className="col-md-5">
-            <Button className='btnChangeProfilePic' href={routes.USERAVATAREDIT}>Change profile picture</Button>
+          <div className="col-md-5" onPointerMove={e=>{userAvatar.id = defaultValues?.id!; userAvatar.avatar = defaultValues?.avatar!}}>
+            <Link to={routes.USERAVATAREDIT} state={{ data: userAvatar }}><Button className='btnChangeProfilePic'>Change profile picture</Button></Link>
           </div>
         </div>
         <div className="d-flex justify-content-start">

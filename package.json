@@ -55,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@types/multer": "^1.4.7",
     "husky": "^8.0.3"
   }
 }

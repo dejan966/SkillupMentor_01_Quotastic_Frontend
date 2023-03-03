@@ -31,38 +31,19 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) =>{
   const { data, isLoading, error } = useQuery(
     ['userAvatar'],
     () => API.fetchCurrUser(),
-/*     {
-      onSuccess:(response)=>{
-        setPreview(response.data.avatar)
-      }
-    } */
   )
 
   const onSubmit = handleSubmit(
-    async (data: UpdateUserFields) => {
-      handleUpdate(data as UpdateUserFields)
+    async () => {
+      handleUpdate()
     },
   )
     
-  const handleUpdate = async (data: UpdateUserFields) => {
-    const response = await API.updateUserAvatar(data)
-    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else {
-      if (!file) {
-        if (defaultValues?.isActiveUser) {
-          authStore.login(response.data)
-        }
-        navigate('/me')
-        return
-      }
-      const formData = new FormData()
-      formData.append('avatar', file, file.name)
-      const fileResponse = await API.uploadAvatar(formData, response.data.id)
+  const handleUpdate = async () => {
+    console.log(defaultValues?.id)
+    const formData = new FormData()
+      formData.append('avatar', file!, file?.name!)
+      const fileResponse = await API.uploadAvatar(formData, defaultValues?.id!)
       if (fileResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
         setApiError(fileResponse.data.message)
         setShowError(true)
@@ -72,20 +53,18 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) =>{
         setApiError(fileResponse.data.message)
         setShowError(true)
       } else {
-        if (defaultValues?.isActiveUser) {
-          const userResponse = await API.fetchUser(response.data.id)
+/*         if (defaultValues?.isActiveUser) {
+          // Get user with avatar image
+          const userResponse = await API.fetchCurrUser()
           if (
             userResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
           ) {
-            setApiError(fileResponse.data.message)
+            setApiError(userResponse.data.message)
             setShowError(true)
-          } else {
-            authStore.login(userResponse.data)
-            navigate('/me')
           }
-        }
+        } */
+        navigate(routes.USERINFO)
       }
-    }
   }
 
   const uploadFile = () =>{
@@ -116,6 +95,7 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) =>{
       setPreview(null)
     }
   }, [file])
+
   return(
     <>
       { isLoading ? (
@@ -132,7 +112,7 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) =>{
             </div>
             <Form.Group className="d-flex flex-column justify-content-center align-items-center mb-3">
               <FormLabel htmlFor="avatar" id="avatar-p">
-                <Avatar round src={preview as string} alt="Avatar" />
+                <Avatar round src={preview ? preview as string : `${process.env.REACT_APP_API_URL}/uploads/${defaultValues?.avatar}`} alt="Avatar" />
               </FormLabel>
             </Form.Group>
             <div className="d-flex justify-content-center mb-3">
@@ -147,7 +127,8 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) =>{
                   type="file"
                   aria-label="Avatar"
                   aria-describedby="avatar"
-                  className="d-none" />
+                  className="d-none"
+                  accept="image/png, 'image/jpg', image/jpeg" />
               </Form.Group>
             </div>
             <div className="d-flex justify-content-start">

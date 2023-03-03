@@ -7,7 +7,7 @@ const UserPasswordEdit: FC = () => {
   const location = useLocation()
   return (
     <Layout>
-      <UpdatePasswordForm defaultValues={location.state} />
+      <UpdatePasswordForm defaultValues={location.state.data} />
     </Layout>
   )
 }

@@ -7,7 +7,7 @@ const UserAvatarEdit: FC = () => {
   const location = useLocation()
   return (
     <Layout>
-      <UpdateAvatarForm defaultValues={location.state}/>
+      <UpdateAvatarForm defaultValues={location.state.data}/>
     </Layout>
   )
 }

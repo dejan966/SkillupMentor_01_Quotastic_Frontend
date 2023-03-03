@@ -7,7 +7,7 @@ const UserEdit: FC = () => {
   const location = useLocation()
   return (
     <Layout>
-      <CreateUpdateUserForm defaultValues={location.state} />
+      <CreateUpdateUserForm defaultValues={location.state.data} />
     </Layout>
   )
 }
