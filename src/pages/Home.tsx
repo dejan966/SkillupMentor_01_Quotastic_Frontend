@@ -89,7 +89,7 @@ const Home: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting' src={randomQuote.data.data.user.avatar} alt="User avatar" width={35} 
+                          <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
                           onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
                         </div>
@@ -123,7 +123,7 @@ const Home: FC = () => {
                     <div>
                       <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
                       <div className='authorGrid'>
-                        <img className='voting' src={randomQuote.data.data.user.avatar} alt="User avatar" width={35} 
+                        <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
                         onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
                         <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
                       </div>
@@ -175,7 +175,7 @@ const Home: FC = () => {
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                               <div className='authorGrid'>
-                              <img className='voting' src={item.user.avatar} alt="User avatar" width={35} onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
+                              <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`}alt="User avatar" width={35} onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                               <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
                           </div>
@@ -196,7 +196,7 @@ const Home: FC = () => {
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                           <div className='authorGrid'>
-                            <img className='voting' src={item.user.avatar} alt="User avatar" width={35} 
+                            <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
                             onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                             <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                           </div>
@@ -239,7 +239,7 @@ const Home: FC = () => {
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                             <div className='authorGrid'>
-                              <img className='voting' src={item.user.avatar} alt="User avatar" width={35} 
+                              <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
                               onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                               <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
@@ -260,7 +260,7 @@ const Home: FC = () => {
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                               <div className='authorGrid'>
-                              <img className='voting' src={item.user.avatar} alt="User avatar" width={35} 
+                              <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
                               onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                               <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
@@ -282,7 +282,7 @@ const Home: FC = () => {
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                           <div className='authorGrid'>
-                            <img className='voting' src={item.user.avatar} alt="User avatar" width={35} 
+                            <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
                             onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser} />
                             <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                           </div>
@@ -340,7 +340,7 @@ const Home: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting' src={item.user.avatar} alt="User avatar" width={35} 
+                          <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`}alt="User avatar" width={35} 
                           onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                         </div>
