@@ -11,11 +11,11 @@ import { Link, useNavigate } from 'react-router-dom'
 const Home: FC = () => {
   const [likes, setLikes] = useState(false)
   const [dislikes, setDisikes] = useState(false)
+
   const[likedQuotes, setLikedQuotes] = useState('')
   const[dislikedQuotes, setDislikedQuotes] = useState('') 
 
   const [userId, setUserId] = useState(1)
-  //const [quoteId, setQuoteId] = useState(8)//new_quote
   const [quoteData, setQuoteData] = useState({ id: 1, quote:''}) 
   const navigate = useNavigate()
   
@@ -53,19 +53,78 @@ const Home: FC = () => {
     navigate(`users/${userId}/quotes`)
   }
 
-  const voting = () =>{
-    if(likes === true){
-      setLikedQuotes('upvoted.png')
-    } else {
-      setLikedQuotes('upvote.png')
-    }
+  const upvote = () =>{
+    console.log('Pre like state:')
+    console.log('Likes: ' + likes)
+    console.log('Dislikes:' + dislikes)
 
-    if(dislikes === true){
-      setDislikedQuotes('downvoted.png')
-    } else{
+    if(likes === true && dislikes === false){
+      setLikes(false)
+      setLikedQuotes('upvote.png')
       setDislikedQuotes('downvote.png')
     }
+    else if(likes === false){
+      setLikes(true)
+      setLikedQuotes('upvoted.png')
+      if(dislikes === true){
+        setDisikes(false)
+        setDislikedQuotes('downvote.png')
+      }
+    }
+
+    console.log('Post like state:')
+    console.log('Likes: ' + likes)
+    console.log('Dislikes:' + dislikes)
+
+/*     if(likes === true){
+      
+      setLikedQuotes('upvoted.png')
+      setDislikedQuotes('downvote.png')
+    } else if(likes === true && dislikes === false){
+      setLikedQuotes('upvoted.png')
+    } 
+    else {
+      setLikedQuotes('upvote.png')
+    } */
   }
+
+  const downvote = () =>{
+    console.log('Pre dislike state:')
+    console.log('Likes: ' + likes)
+    console.log('Dislikes:' + dislikes)
+    
+    if(dislikes===true && likes===false){
+      setDisikes(false)
+      setDislikedQuotes('downvote.png')
+      setLikedQuotes('upvote.png')
+    }
+    else if(dislikes === false){
+      setDisikes(true)
+      setDislikedQuotes('downvoted.png')
+      if(likes === true){
+        setLikes(false)
+        setLikedQuotes('upvote.png')
+      }
+    }
+    console.log('Post dislike state:')
+    console.log('Likes: ' + likes)
+    console.log('Dislikes:' + dislikes)
+
+    /* if(dislikes === true && likes === true){
+      setLikes(false)
+      setDislikedQuotes('downvoted.png')
+      setLikedQuotes('upvote.png')
+    }
+    else if(dislikes == true && likes == false){
+      setDislikedQuotes('downvoted.png')
+    }
+    else{
+      setDislikedQuotes('downvote.png')
+    } */
+  }
+
+/*   upvote()
+  downvote() */
 
   return (
     <>
@@ -80,11 +139,11 @@ const Home: FC = () => {
               {randomQuote.data ? (
                 authStore.user?.id === randomQuote.data.data.votes.user?.id ?(
                   (randomQuote.data.data.votes.value === true ? (
-                    <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}}>
+                    <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}} /* onPointerMove={e=>{setLikes(true); setDisikes(false)}} */>
                       <div className='m-4'>
-                        <img className='voting' src="/upvoted.png" alt="Upvoted" />
+                        <img className='voting' src={`/${likedQuotes}`} alt="Upvoted" onClick={upvote}/>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
-                        <img className='voting' src="/downvote.png" alt="Downvote" />
+                        <img className='voting' src={`/${dislikedQuotes}`}  alt="Downvote" onClick={downvote} />
                       </div>
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
@@ -96,11 +155,11 @@ const Home: FC = () => {
                       </div>
                     </div>
                   ):(
-                    <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}}>
+                    <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}} /* onPointerMove={e=>{setLikes(false)}} */>
                       <div className='m-4'>
-                        <img className='voting' src="/upvote.png" alt="Upvote" />
+                        <img className='voting' src={`/${likedQuotes}`} alt="Upvote" onClick={upvote} />
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
-                        <img className='voting' src="/downvoted.png" alt="Downvoted" />
+                        <img className='voting' src={`/${dislikedQuotes}`}  alt="Downvoted" onClick={downvote} />
                       </div>
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
@@ -115,10 +174,10 @@ const Home: FC = () => {
                 )
                 ):(
                   <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}}>
-                  <div className='m-4'>
-                      <img className='voting' src="/upvote.png" alt="Upvote" />
+                    <div className='m-4'>
+                      <img className='voting' src={`/${likedQuotes}`} alt="Upvote" onClick={upvote}/>
                       <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
-                      <img className='voting' src="/downvote.png" alt="Downvote" />
+                      <img className='voting' src={`/${dislikedQuotes}`} alt="Downvote" onClick={downvote}/>
                     </div>
                     <div>
                       <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
@@ -145,11 +204,11 @@ const Home: FC = () => {
                     authStore.user?.id === item.votes.user?.id ?
                     (
                       item.votes.value === true ? (
-                        <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} onPointerMove={e=>{setLikes(true)}}>
+                        <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} /* onPointerMove={e=>{setLikes(true)}} */>
                           <div className='m-4'>
-                            <img className='voting' src={'/upvoted.png'} alt="Upvoted" onClick={voting}/>
+                            <img className='voting' src={`/${likedQuotes}`}  alt="Upvoted" onClick={upvote}/>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                            <img className='voting' src={'/downvote.png'} alt="Downvote" onClick={voting}/>
+                            <img className='voting' src={`/${dislikedQuotes}`}  alt="Downvote" onClick={downvote}/>
                           </div>
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
@@ -166,11 +225,11 @@ const Home: FC = () => {
                           </div>
                         </div>
                       ):(
-                        <div key={index} className="quoteBorder quoteGrid quoteRow mb-5" style={{width:400}} onPointerMove={e=>{setLikes(false)}}>
+                        <div key={index} className="quoteBorder quoteGrid quoteRow mb-5" style={{width:400}} /* onPointerMove={e=>{setLikes(false)}} */>
                           <div className='m-4'>
-                            <img className='voting' src="/upvote.png" alt="Upvote" />
+                            <img className='voting' src={`/${likedQuotes}`} alt="Upvote" onClick={upvote}/>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                            <img className='voting' src="/downvoted.png" alt="Downvoted" />
+                            <img className='voting' src={`/${dislikedQuotes}`} alt="Downvoted" onClick={downvote}/>
                           </div>
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
@@ -189,9 +248,9 @@ const Home: FC = () => {
                     ):(
                       <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
                         <div className='m-4'>
-                          <img className='voting' src="upvote.png" alt="Upvote" />
+                          <img className='voting' src={`/${likedQuotes}`}  alt="Upvote" onClick={upvote}/>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                          <img className='voting' src="downvote.png" alt="Downvote" />
+                          <img className='voting' src={`/${dislikedQuotes}`}  alt="Downvote" onClick={downvote}/>
                         </div>
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
@@ -232,9 +291,9 @@ const Home: FC = () => {
                       item.votes.value === true ? (
                         <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
                           <div className='m-4'>
-                            <img className='voting' src="/upvoted.png" alt="Upvoted" />
+                            <img className='voting' src={`/${likedQuotes}`} alt="Upvoted" onClick={upvote}/>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                            <img className='voting' src="/downvote.png" alt="Downvote" />
+                            <img className='voting' src={`/${dislikedQuotes}`} alt="Downvote" onClick={downvote}/>
                           </div>
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
@@ -253,9 +312,9 @@ const Home: FC = () => {
                       ):(
                         <div key={index} className="quoteBorder quoteGrid quoteRow mb-5" style={{width:400}}>
                           <div className='m-4'>
-                            <img className='voting' src="/upvote.png" alt="Upvote" />
+                            <img className='voting' src={`/${likedQuotes}`} alt="Upvoted" onClick={upvote}/>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                            <img className='voting' src="/downvoted.png" alt="Downvoted" />
+                            <img className='voting' src={`/${dislikedQuotes}`} alt="Downvoted" onClick={downvote}/>
                           </div>
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
@@ -275,9 +334,9 @@ const Home: FC = () => {
                     ):(
                       <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
                         <div className='m-4'>
-                          <img className='voting' src="upvote.png" alt="Upvote" />
-                          <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                          <img className='voting' src="downvote.png" alt="Downvote" />
+                          <img className='voting' src={`/${likedQuotes}`} alt="Upvote" onClick={upvote}/>
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                            <img className='voting' src={`/${dislikedQuotes}`} alt="Downvot" onClick={downvote}/>
                         </div>
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>

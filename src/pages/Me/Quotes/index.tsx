@@ -45,23 +45,23 @@ const UserQuotesInfo: FC = () => {
             <div className='mb-5'>
               {mostLiked.data ? (
                 <div className="quoteBorder quoteGrid mb-5" style={{width:400}}>
-{mostLiked.data.data.map((item:QuoteType, index:number)=>{
-  <>
-  <div key={index} className='m-4'>
-    <img className='voting' src="/upvote.png" alt="Upvote" />
-    <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-    <img className='voting' src="/downvote.png" alt="Downvote" />
-  </div>
-  <div>
-    <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-    <div className='authorGrid'>
-      <img className='voting' src={'/' + item.user.avatar} alt="User avatar" width={35}/>
-      <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-    </div>
-  </div>
-  </>
-})}
-</div>
+                  {mostLiked.data.data.map((item:QuoteType, index:number)=>{
+                    <>
+                    <div key={index} className='m-4'>
+                      <img className='voting' src="/upvote.png" alt="Upvote" />
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                      <img className='voting' src="/downvote.png" alt="Downvote" />
+                    </div>
+                    <div>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                      <div className='authorGrid'>
+                        <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35}/>
+                        <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                      </div>
+                    </div>
+                    </>
+                  })}
+                </div>
               ):(
                 <h2>No quotes available</h2>
               )}
@@ -82,7 +82,7 @@ const UserQuotesInfo: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting' src={'/' + item.user.avatar} alt="User avatar" width={35}/>
+                          <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                         </div>
                       </div> 
@@ -109,7 +109,7 @@ const UserQuotesInfo: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting' src={'/' + item.quote.user.avatar} alt="User avatar" width={35}/>
+                          <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.quote.user.avatar}`} alt="User avatar" width={35}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.quote.user.first_name + ' ' + item.quote.user.last_name}</div>
                         </div>
                       </div> 

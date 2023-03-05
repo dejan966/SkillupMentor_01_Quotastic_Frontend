@@ -247,7 +247,7 @@ const Navbar: FC = () => {
                   </li>
                   <li className="nav-item pe-4">
                     <Link to={routes.ADDNEWQUOTE}>
-                    <img src='/plus.png' alt="User avatar" width={40}/>
+                    <img src='/plus.png' alt="Add quote" width={40}/>
                     </Link>
                   </li>
                 </ul>
@@ -257,7 +257,7 @@ const Navbar: FC = () => {
           {user.data ? (
             <div className='redBackground reverseTextColor'>
               <div className='text-center'>
-                <img src={'/' + user.data.data.avatar} alt="User avatar" width={40}/>
+                <img src={`${process.env.REACT_APP_API_URL}/uploads/${user.data.data.avatar}`} alt="User avatar" width={40}/>
                 <h2 className="display-6">{user.data.data.first_name + ' ' + user.data.data.last_name}</h2>
               </div>
             </div>
@@ -319,7 +319,7 @@ const Navbar: FC = () => {
                     </li>
                     <li className="nav-item pe-4">
                       <Link to={routes.ADDNEWQUOTE}>
-                      <img src='/plus.png' alt="User avatar" width={40}/>
+                      <img src='/plus.png' alt="Add quote" width={40}/>
                       </Link>
                     </li>
                   </>
