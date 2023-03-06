@@ -32,6 +32,15 @@ const Home: FC = () => {
     ['randomQuote'],
     () => API.fetchRandomQuote(),
     {
+      onSuccess:(data)=>{
+        if(data.data.votes[0].value === true){
+          setLikedQuotes('upvoted.png')
+          setDislikedQuotes('downvote.png')
+        } else if(data.data.votes[0].value === false){
+          setDislikedQuotes('downvoted.png')
+          setLikedQuotes('upvote.png')
+        }
+      },
       refetchOnWindowFocus: false,
     },
   )
@@ -102,7 +111,7 @@ const Home: FC = () => {
               {randomQuote.data ? (
                 authStore.user?.id === randomQuote.data.data.votes.user?.id ? (
                   (randomQuote.data.data.votes.value === true ? (
-                    <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}} /* onPointerMove={e=>{setLikes(true); setDisikes(false)}} */>
+                    <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}} /* onPointerMove={e=>{setLikes(true)}} */>
                       <div className='m-4'>
                         <img className='voting' src={`/${likedQuotes}`} alt="Upvoted" onClick={upvote}/>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
@@ -118,7 +127,7 @@ const Home: FC = () => {
                       </div>
                     </div>
                   ):(
-                    <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}} /* onPointerMove={e=>{setLikes(false)}} */>
+                    <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}} /* onPointerMove={e=>{setDislikes(true)}} */>
                       <div className='m-4'>
                         <img className='voting' src={`/${likedQuotes}`} alt="Upvote" onClick={upvote} />
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
