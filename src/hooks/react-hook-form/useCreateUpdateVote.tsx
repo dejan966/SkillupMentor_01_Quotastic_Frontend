@@ -5,6 +5,9 @@ import { VoteType } from '../../models/vote'
 
 export interface CreateVoteFields {
   value:boolean
+  quote:{
+    id:number
+  }
 }
 
 export interface UpdateVoteFields {

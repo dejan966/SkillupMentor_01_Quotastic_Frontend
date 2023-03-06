@@ -54,16 +54,14 @@ const Home: FC = () => {
   }
 
   const upvote = () =>{
-    console.log('Pre like state:')
-    console.log('Likes: ' + likes)
-    console.log('Dislikes:' + dislikes)
-
     if(likes === true && dislikes === false){
+      //normal upvote
       setLikes(false)
       setLikedQuotes('upvote.png')
       setDislikedQuotes('downvote.png')
     }
     else if(likes === false){
+      //downvote->upvote
       setLikes(true)
       setLikedQuotes('upvoted.png')
       if(dislikes === true){
@@ -71,34 +69,17 @@ const Home: FC = () => {
         setDislikedQuotes('downvote.png')
       }
     }
-
-    console.log('Post like state:')
-    console.log('Likes: ' + likes)
-    console.log('Dislikes:' + dislikes)
-
-/*     if(likes === true){
-      
-      setLikedQuotes('upvoted.png')
-      setDislikedQuotes('downvote.png')
-    } else if(likes === true && dislikes === false){
-      setLikedQuotes('upvoted.png')
-    } 
-    else {
-      setLikedQuotes('upvote.png')
-    } */
   }
 
   const downvote = () =>{
-    console.log('Pre dislike state:')
-    console.log('Likes: ' + likes)
-    console.log('Dislikes:' + dislikes)
-    
     if(dislikes===true && likes===false){
+      //normal downvote
       setDisikes(false)
       setDislikedQuotes('downvote.png')
       setLikedQuotes('upvote.png')
     }
     else if(dislikes === false){
+      //upvote->downvote
       setDisikes(true)
       setDislikedQuotes('downvoted.png')
       if(likes === true){
@@ -106,25 +87,7 @@ const Home: FC = () => {
         setLikedQuotes('upvote.png')
       }
     }
-    console.log('Post dislike state:')
-    console.log('Likes: ' + likes)
-    console.log('Dislikes:' + dislikes)
-
-    /* if(dislikes === true && likes === true){
-      setLikes(false)
-      setDislikedQuotes('downvoted.png')
-      setLikedQuotes('upvote.png')
-    }
-    else if(dislikes == true && likes == false){
-      setDislikedQuotes('downvoted.png')
-    }
-    else{
-      setDislikedQuotes('downvote.png')
-    } */
   }
-
-/*   upvote()
-  downvote() */
 
   return (
     <>
@@ -137,7 +100,7 @@ const Home: FC = () => {
                 <p className='quoteText'>Quote of the day is a randomly chosen quote</p>
               </div>
               {randomQuote.data ? (
-                authStore.user?.id === randomQuote.data.data.votes.user?.id ?(
+                authStore.user?.id === randomQuote.data.data.votes.user?.id ? (
                   (randomQuote.data.data.votes.value === true ? (
                     <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}} /* onPointerMove={e=>{setLikes(true); setDisikes(false)}} */>
                       <div className='m-4'>
@@ -148,7 +111,7 @@ const Home: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
+                          <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
                           onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
                         </div>
@@ -182,7 +145,7 @@ const Home: FC = () => {
                     <div>
                       <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
                       <div className='authorGrid'>
-                        <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
+                        <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
                         onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
                         <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
                       </div>
@@ -190,7 +153,11 @@ const Home: FC = () => {
                   </div>
                 )
               ):(
-                <div className='text-center text'>No quote of the day available</div>
+                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                  <div className='m-4'>
+                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                  </div>
+                </div>
               )}
             </div>
             <div className='mb-5'>
@@ -234,7 +201,7 @@ const Home: FC = () => {
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                               <div className='authorGrid'>
-                              <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`}alt="User avatar" width={35} onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
+                              <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`}alt="User avatar" width={35} onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                               <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
                           </div>
@@ -255,7 +222,7 @@ const Home: FC = () => {
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                           <div className='authorGrid'>
-                            <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
+                            <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
                             onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                             <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                           </div>
@@ -272,7 +239,11 @@ const Home: FC = () => {
                   ))}      
                 </div>
               ):(
-                <h1 className='text-center'>There are no quotes available</h1>
+                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                  <div className='m-4'>
+                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                  </div>
+                </div>
               )}
               <div className='text-center mx-auto'>
                 <Button className='btnLogin'>Load more</Button>
@@ -286,6 +257,7 @@ const Home: FC = () => {
               {recentQuotes.data ? (
                 <div className="quoteRow">
                   {recentQuotes.data.data.map((item:QuoteType, index:number) =>(
+                    //item.votes.user undefined for some reason
                     authStore.user?.id === item.votes.user?.id ?
                     (
                       item.votes.value === true ? (
@@ -298,7 +270,7 @@ const Home: FC = () => {
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                             <div className='authorGrid'>
-                              <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
+                              <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
                               onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                               <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
@@ -319,7 +291,7 @@ const Home: FC = () => {
                           <div>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                               <div className='authorGrid'>
-                              <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
+                              <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
                               onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                               <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                             </div>
@@ -341,7 +313,7 @@ const Home: FC = () => {
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                           <div className='authorGrid'>
-                            <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
+                            <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
                             onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser} />
                             <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                           </div>
@@ -351,7 +323,11 @@ const Home: FC = () => {
                   ))}
                 </div>
               ):(
-                <h1 className='text-center'>There are no quotes available</h1>
+                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                  <div className='m-4'>
+                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                  </div>
+                </div>
               )}
               <div className='mb-5 text-center mx-auto'>
                 <Button className='btnLogin'>Load more</Button>
@@ -399,7 +375,7 @@ const Home: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`}alt="User avatar" width={35} 
+                          <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`}alt="User avatar" width={35} 
                           onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                         </div>
