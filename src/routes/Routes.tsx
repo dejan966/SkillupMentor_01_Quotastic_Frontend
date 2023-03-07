@@ -21,13 +21,14 @@ const Home = lazy(() => import('../pages/Home'))
 const UserInfo = lazy(() => import('../pages/Me'))
 const UserEdit = lazy(() => import('../pages/Me/Edit'))
 const UsersQuotes = lazy(() => import('../pages/Users/Quotes'))
-
-const QuotesAdd = lazy(() => import('../pages/Me/Myquote'))
-const QuotesEdit = lazy(() => import('../pages/Me/Myquote/Edit'))
 const UserQuotes = lazy(() => import('../pages/Me/Quotes'))
 const UserPasswordEdit = lazy(() => import('../pages/Me/Update-password'))
 const UserAvatarEdit = lazy(() => import('../pages/Me/Update-avatar'))
 const DeleteAcc = lazy(() => import('../pages/Me/Delete-account'))
+
+const QuotesAdd = lazy(() => import('../pages/Me/Myquote'))
+const QuotesEdit = lazy(() => import('../pages/Me/Myquote/Edit'))
+const QuotesDelete = lazy(() => import('../pages/Me/Myquote/Delete'))
 
 const Upvote = lazy(()=>import('../pages/Quotes/Upvote'))
 const Downvote = lazy(()=>import('../pages/Quotes/Downvote'))
@@ -96,6 +97,11 @@ export const AppRoutes: AppRoute[] = [
     type: RouteType.PRIVATE,
     path: '/me/myquote/edit/:id',
     children: <QuotesEdit />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/me/myquote/delete/:id',
+    children: <QuotesDelete />,
   },
   {
     type: RouteType.PRIVATE,

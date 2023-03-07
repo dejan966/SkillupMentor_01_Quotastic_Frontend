@@ -7,12 +7,16 @@ import { useQuery } from 'react-query'
 import * as API from '../api/Api'
 import { QuoteType } from '../models/quote'
 import { Link, useNavigate } from 'react-router-dom'
+import { StatusCode } from '../constants/errorConstants'
+import QuotesDelete from './Me/Myquote/Delete'
 
 const Home: FC = () => {
+  const [apiError, setApiError] = useState('')
+  const [showError, setShowError] = useState(false)
+  
   const [likes, setLikes] = useState(false)
   const [dislikes, setDislikes] = useState(false)
   
-
   //most liked quotes
 /*   let likedQuotesM = new Array(1)
   let dislikedQuotesM = new Array(1)
@@ -35,25 +39,43 @@ const Home: FC = () => {
   const [recentLikesQuotes, setRecentLikesQuotes] = useState<boolean[]>([])
   const [recentDislikesQuotes, setRecentDislikesQuotes] = useState<boolean[]>([])
 
-  const[randomLikedQuote, setRandomLikedQuote] = useState('')
-  const[randomDislikedQuote, setRandomDislikedQuote] = useState('') 
+  const[randomLikedQuote, setRandomLikedQuote] = useState('upvote.png')
+  const[randomDislikedQuote, setRandomDislikedQuote] = useState('downvote.png') 
 
   const [userId, setUserId] = useState(1)
   const [quoteData, setQuoteData] = useState({ id: 1, quote:''}) 
   const navigate = useNavigate()
   
+  const randomQuote = useQuery(
+    ['randomQuote'],
+    () => API.fetchRandomQuote(),
+    {
+      onSuccess(data){
+        if(authStore.user?.id === data.data.votes[0].user.id){
+          if(data.data.votes[0].value === true){
+            setLikes(true)
+            setRandomLikedQuote('upvoted.png')
+            setRandomDislikedQuote('downvote.png')
+          } else if(data.data.votes[0].value === false){
+            setDislikes(true)
+            setRandomDislikedQuote('downvoted.png')
+            setRandomLikedQuote('upvote.png')
+          }
+          else{
+            setRandomLikedQuote('upvote.png')
+            setRandomDislikedQuote('downvote.png')
+          }
+        }
+      },
+      refetchOnWindowFocus: false,
+    },
+  )
 
   const mostLiked = useQuery(
     ['quote'],
     () => API.fetchQuotes(),
     {
       onSuccess(data){
-/*         const length = data.data.length
-        likedQuotesM = new Array(8)
-        dislikedQuotesM = new Array(length)
-        likesM = new Array(length)
-        dislikesM = new Array(length) */
-
         for(let i = 0; i<data.data.length; i++){
           if(authStore.user?.id === data.data[i].votes[0]?.user.id){
             if(data.data[i].votes[0]?.value === true){
@@ -94,44 +116,12 @@ const Home: FC = () => {
       refetchOnWindowFocus: false,
     },
   )
-  
-  const randomQuote = useQuery(
-    ['randomQuote'],
-    () => API.fetchRandomQuote(),
-    {
-      onSuccess(data){
-        if(authStore.user?.id === data.data.votes[0].user.id){
-          if(data.data.votes[0].value === true){
-            setRandomLikedQuote('upvoted.png')
-            setRandomDislikedQuote('downvote.png')
-          } else if(data.data.votes[0].value === false){
-            setRandomDislikedQuote('downvoted.png')
-            setRandomLikedQuote('upvote.png')
-          }
-          else{
-            setRandomLikedQuote('upvote.png')
-            setRandomDislikedQuote('downvote.png')
-          }
-        }
-        else{
-          setRandomLikedQuote('upvote.png')
-          setRandomDislikedQuote('downvote.png')
-        }
-      },
-      refetchOnWindowFocus: false,
-    },
-  )
 
   const recentQuotes = useQuery(
     ['recentQuotes'],
     () => API.usersMostRecentQuotes(),
     {
       onSuccess(data){
-/*         likedQuotesR = new Array(data.data.length)
-        dislikedQuotesR = new Array(data.data.length)
-        likesR = new Array(data.data.length)
-        dislikesR = new Array(data.data.length) */
-
         for(let i = 0; i<data.data.length; i++){
           if(authStore.user?.id === data.data[i].votes[0]?.user.id){
             if(data.data[i].votes[0]?.value === true){
@@ -172,6 +162,7 @@ const Home: FC = () => {
 /*   console.log(mostDislikedQuotes)
   console.log(likesQuotes)
   console.log(dislikesQuotes) */
+  console.log(likesQuotes[0])
 
   const handleProceedUser = () => {
     if(userId === authStore.user?.id){
@@ -181,7 +172,33 @@ const Home: FC = () => {
     navigate(`users/${userId}/quotes`)
   }
 
-  const upvote = () =>{
+  const handleUpvote = async (quoteId:number) => {
+    const response = await API.createUpvote(quoteId)
+    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else {
+      navigate('/')
+    }
+  }
+  
+  const handleDownvote = async (quoteId:number) => {
+    const response = await API.createDownvote(quoteId)
+    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else {
+      navigate('/')
+    }
+  }
+
+  const upvote = (quoteId:number) =>{
     if(likes === true && dislikes === false){
       //normal upvote
       setLikes(false)
@@ -197,9 +214,10 @@ const Home: FC = () => {
         setRandomDislikedQuote('downvote.png')
       }
     }
+    handleUpvote(quoteId)
   }
 
-  const downvote = () =>{
+  const downvote = (quoteId:number) =>{
     if(dislikes===true && likes===false){
       //normal downvote
       setDislikes(false)
@@ -215,42 +233,82 @@ const Home: FC = () => {
         setRandomLikedQuote('upvote.png')
       }
     }
+    handleDownvote(quoteId)
   }
 
   const upvoteMostLiked = (index:number) =>{
     if(likesQuotes[index] === true && dislikesQuotes[index] === false){
       //normal upvote
-      likesQuotes.splice(index,1,false)
-      mostLikedQuotes.splice(index, 1, 'upvote.png')
-      mostDislikedQuotes.splice(index, 1, 'downvote.png')
+      console.log(likesQuotes[index])
+      //likesQuotes.splice(index,1,false)
+      likesQuotes[index] = false
+      //setLikesQuotes(likesQuotes)
+      console.log(likesQuotes[index])
+      //mostLikedQuotes.splice(index, 1, 'upvote.png')
+      mostLikedQuotes[index] = 'upvote.png'
+      //setMostLikedQuotes(mostLikedQuotes)
+      //mostDislikedQuotes.splice(index, 1, 'downvote.png')
+/*       mostDislikedQuotes[index] = 'downvote.png'
+      setMostDislikedQuotes(mostDislikedQuotes) */
     }
     else if(likesQuotes[index] === false){
       //downvote->upvote
-      likesQuotes.splice(index,1,true)
-      mostLikedQuotes.splice(index, 1, 'upvoted.png')
+      //likesQuotes.splice(index,1,true)
+      likesQuotes[index] = true
+      //setLikesQuotes(likesQuotes)
+      //mostLikedQuotes.splice(index, 1, 'upvoted.png')
+      mostLikedQuotes[index] = 'upvoted.png'
+      //setMostLikedQuotes(mostLikedQuotes)
       if(dislikesQuotes[index] === true){
-        dislikesQuotes.splice(index,1,false)
-        mostDislikedQuotes.splice(index, 1, 'downvote.png')
+        //dislikesQuotes.splice(index,1,false)
+        dislikesQuotes[index] = false
+        //setDislikesQuotes(dislikesQuotes)
+        //mostDislikedQuotes.splice(index, 1, 'downvote.png')
+        mostDislikedQuotes[index] = 'downvote.png'
+        //setMostDislikedQuotes(mostDislikedQuotes)
       }
     }
+    setLikesQuotes(likesQuotes)
+    setMostLikedQuotes(mostLikedQuotes)
+    setDislikesQuotes(dislikesQuotes)
+    setMostDislikedQuotes(mostDislikedQuotes)
   }
 
   const downvoteMostLiked = (index:number) =>{
     if(dislikesQuotes[index] === true && likesQuotes[index] === false){
       //normal downvote
-      dislikesQuotes.splice(index,1,false)
-      mostDislikedQuotes.splice(index, 1, 'downvote.png')
-      mostLikedQuotes.splice(index, 1, 'upvote.png')
+      //dislikesQuotes.splice(index,1,false)
+      dislikesQuotes[index] = false
+      //setDislikesQuotes(dislikesQuotes)
+      //mostDislikedQuotes.splice(index, 1, 'downvote.png')
+      mostDislikedQuotes[index] = 'downvote.png'
+      //setMostDislikedQuotes(mostDislikedQuotes)
+      
+      mostLikedQuotes[index] = 'upvote.png'
+      //setMostLikedQuotes(mostLikedQuotes)
+      //mostLikedQuotes.splice(index, 1, 'upvote.png')
     }
     else if(dislikesQuotes[index] === false){
       //upvote->downvote
-      dislikesQuotes.splice(index,1,true)
-      mostDislikedQuotes.splice(index, 1, 'downvoted.png')
+      //dislikesQuotes.splice(index,1,true)
+      dislikesQuotes[index] = true
+      
+      //mostDislikedQuotes.splice(index, 1, 'downvoted.png')
+      mostDislikedQuotes[index] = 'downvoted.png'
+      //setMostDislikedQuotes(mostDislikedQuotes)
       if(likesQuotes[index] === true){
-        likesQuotes.splice(index,1,false)
-        mostLikedQuotes.splice(index, 1, 'upvote.png')
+        //likesQuotes.splice(index,1,false)
+        likesQuotes[index] = false
+        //setLikesQuotes(likesQuotes)
+        //mostLikedQuotes.splice(index, 1, 'upvote.png')
+        mostLikedQuotes[index] = 'upvote.png'
+        //setMostLikedQuotes(mostLikedQuotes)
       }
     }
+    setLikesQuotes(likesQuotes)
+    setMostLikedQuotes(mostLikedQuotes)
+    setDislikesQuotes(dislikesQuotes)
+    setMostDislikedQuotes(mostDislikedQuotes)
   }
 
   const upvoteMostRecent = (index:number) =>{
@@ -300,20 +358,50 @@ const Home: FC = () => {
                 <p className='quoteText'>Quote of the day is a randomly chosen quote</p>
               </div>
               {randomQuote.data ? (
-                <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}}>
-                  <div className='m-4'>
-                    <img className='voting' src={`/${randomLikedQuote}`} alt="Upvote" onClick={upvote}/>
-                    <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
-                    <img className='voting' src={`/${randomDislikedQuote}`}  alt="Downvote" onClick={downvote} />
-                  </div>
-                  <div>
-                    <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
-                    <div className='authorGrid'>
-                      <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
-                      onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
-                      <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
-                    </div>
-                  </div>
+                <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}} onPointerMove={e=>{quoteData.id = randomQuote.data.data.id; quoteData.quote = randomQuote.data.data.quote}}>
+                    {
+                      authStore.user?.id === randomQuote.data.data.user.id ? (
+                        <>
+                          <div className='m-4'>
+                            <img className='voting' src='/upvote.png' alt="Upvote"/>
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
+                            <img className='voting' src='/downvote.png' alt="Downvote"/>
+                          </div>
+                          <div>
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
+                            <div className='authorGrid'>
+                              <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
+                              onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
+                              <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
+                            </div>
+                          </div>
+                          <div className='m-4'>
+                            <Link to={`${routes.EDITQUOTE}/${randomQuote.data.data.id}`} state={{ data: quoteData }} >
+                              <img src="/settings.png" alt="Settings" />
+                            </Link>
+                            <Link to={`${routes.DELETEQUOTE}/${randomQuote.data.data.id}`} state={{ data: quoteData }} >
+                              <img src="/delete.png" alt="Delete" />
+                            </Link>
+                          </div>
+                        </>
+                      ) :(
+                        <>
+                        <div className='m-4'>
+                          <img className='voting' src={`/${randomLikedQuote}`} alt="Upvote" onClick={e => {upvote(randomQuote.data.data.id);if(likes===true){randomQuote.data.data.karma--}else{randomQuote.data.data.karma++}}}/>
+                          <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
+                          <img className='voting' src={`/${randomDislikedQuote}`}  alt="Downvote" onClick={e => {downvote(randomQuote.data.data.id);if(dislikes===true){randomQuote.data.data.karma++}else{randomQuote.data.data.karma--}}}/>
+                        </div>
+                        <div>
+                          <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
+                          <div className='authorGrid'>
+                            <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
+                            onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
+                            <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
+                          </div>
+                        </div>                          
+                        </>
+                      )
+                    }
                 </div>
               ):(
                 <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
@@ -332,11 +420,11 @@ const Home: FC = () => {
                 <div className='quoteRow'>
                   {mostLiked.data.data.map((item:QuoteType, index:number) => (
                     authStore.user?.id === item.user.id ? (
-                    <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                    <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
                       <div className='m-4'>
-                        <img className='voting' src={`/${mostLikedQuotes[index]}`}  alt="Upvote" onClick={upvote}/>
+                        <img className='voting' src={`/${mostLikedQuotes[index]}`}  alt="Upvote" onClick={()=>upvoteMostLiked(index)}/>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                        <img className='voting' src={`/${mostDislikedQuotes[index]}`}  alt="Downvote" onClick={downvote}/>
+                        <img className='voting' src={`/${mostDislikedQuotes[index]}`}  alt="Downvote" onClick={()=>downvoteMostLiked(index)}/>
                       </div>
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
@@ -347,17 +435,20 @@ const Home: FC = () => {
                         </div>
                       </div>
                       <div className='m-4'>
-                        <img src="/settings.png" alt="Settings" />
-                        <div></div>
-                        <img src="/delete.png" alt="Delete" />
+                        <Link to={`${routes.EDITQUOTE}/${item.id}`} state={{ data: quoteData }} >
+                          <img src="/settings.png" alt="Settings" />
+                        </Link>
+                        <Link to={`${routes.DELETEQUOTE}/${item.id}`} state={{ data: quoteData }} >
+                          <img src="/delete.png" alt="Delete" />
+                        </Link>
                       </div>
                     </div>
                     ):(
                       <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
                         <div className='m-4'>
-                          <img className='voting' src={`/${mostLikedQuotes[index]}`}  alt="Upvote" onClick={upvote}/>
+                          <img className='voting' src={`/${mostLikedQuotes[index]}`}  alt="Upvote" onClick={()=>upvoteMostLiked(index)}/>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                          <img className='voting' src={`/${mostDislikedQuotes[index]}`}  alt="Downvote" onClick={downvote}/>
+                          <img className='voting' src={`/${mostDislikedQuotes[index]}`}  alt="Downvote" onClick={()=>downvoteMostLiked(index)}/>
                         </div>
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
@@ -391,11 +482,11 @@ const Home: FC = () => {
                 <div className="quoteRow">
                   {recentQuotes.data.data.map((item:QuoteType, index:number) =>(
                     authStore.user?.id === item.user.id ? (
-                      <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                      <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
                         <div className='m-4'>
-                          <img className='voting' src={`/${mostRecentLikedQuotes[index]}`} alt="Upvoted" onClick={upvote}/>
+                          <img className='voting' src={`/${mostRecentLikedQuotes[index]}`} alt="Upvoted" onClick={()=>upvoteMostRecent(index)}/>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                          <img className='voting' src={`/${mostRecentDislikedQuotes[index]}`} alt="Downvote" onClick={downvote}/>
+                          <img className='voting' src={`/${mostRecentDislikedQuotes[index]}`} alt="Downvote" onClick={()=>downvoteMostRecent(index)}/>
                         </div>
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
@@ -406,17 +497,20 @@ const Home: FC = () => {
                           </div>
                         </div>
                         <div className='m-4'>
-                          <img src="/settings.png" alt="Settings" />
-                          <div></div>
-                          <img src="/delete.png" alt="Delete" />
+                          <Link to={`${routes.EDITQUOTE}/${item.id}`} state={{ data: quoteData }} >
+                            <img src="/settings.png" alt="Settings" />
+                          </Link>
+                          <Link to={`${routes.DELETEQUOTE}/${item.id}`} state={{ data: quoteData }} >
+                            <img src="/delete.png" alt="Delete" />
+                          </Link>
                         </div>
                       </div>
                     ):(
                       <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
                         <div className='m-4'>
-                          <img className='voting' src={`/${mostRecentLikedQuotes[index]}`} alt="Upvote" onClick={upvote}/>
+                          <img className='voting' src={`/${mostRecentLikedQuotes[index]}`} alt="Upvote" onClick={()=>upvoteMostRecent(index)}/>
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                            <img className='voting' src={`/${mostRecentDislikedQuotes[index]}`} alt="Downvot" onClick={downvote}/>
+                            <img className='voting' src={`/${mostRecentDislikedQuotes[index]}`} alt="Downvot" onClick={()=>downvoteMostRecent(index)}/>
                         </div>
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
