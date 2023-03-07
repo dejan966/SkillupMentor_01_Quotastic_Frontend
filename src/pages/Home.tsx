@@ -45,13 +45,24 @@ const Home: FC = () => {
   const [userId, setUserId] = useState(1)
   const [quoteData, setQuoteData] = useState({ id: 1, quote:''}) 
   const navigate = useNavigate()
+
+  const [isOpen, setIsOpen] = useState(false)
+  const [successDelete, setSuccessDelete] = useState(false)
+ 
+  const togglePopup = () => {
+    setIsOpen(!isOpen)
+  }
+  
+  const toggleSuccess = () => {
+    setSuccessDelete(!successDelete)
+  }
   
   const randomQuote = useQuery(
     ['randomQuote'],
     () => API.fetchRandomQuote(),
     {
       onSuccess(data){
-        if(authStore.user?.id === data.data.votes[0].user.id){
+        if(authStore.user?.id === data.data.votes[0]?.user.id){
           if(data.data.votes[0].value === true){
             setLikes(true)
             setRandomLikedQuote('upvoted.png')
@@ -61,7 +72,7 @@ const Home: FC = () => {
             setRandomDislikedQuote('downvoted.png')
             setRandomLikedQuote('upvote.png')
           }
-          else{
+          else if(authStore.user?.id !== data.data.votes[0]?.user.id){
             setRandomLikedQuote('upvote.png')
             setRandomDislikedQuote('downvote.png')
           }
@@ -99,7 +110,7 @@ const Home: FC = () => {
               mostDislikedQuotes.push('downvote.png')
             }
           }
-          else{
+          else if(authStore.user?.id !== data.data[i].votes[0]?.user.id){
             likesQuotes.push(false)
             dislikesQuotes.push(false)
 
@@ -145,7 +156,7 @@ const Home: FC = () => {
               mostRecentDislikedQuotes.push('downvote.png')
             }
           }
-          else{
+          else if(authStore.user?.id !== data.data[i].votes[0]?.user.id){
             recentLikesQuotes.push(false)
             recentDislikesQuotes.push(false)
 
@@ -157,12 +168,18 @@ const Home: FC = () => {
       refetchOnWindowFocus: false,
     },
   )
-
-  //console.log(mostLikedQuotes)
-/*   console.log(mostDislikedQuotes)
-  console.log(likesQuotes)
-  console.log(dislikesQuotes) */
-  console.log(likesQuotes[0])
+  
+  const deleteQuote = async (quoteId:number) => {
+    const response = await API.deleteQuote(quoteId)
+    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    }
+  }
+  //console.log(likesQuotes[0])
 
   const handleProceedUser = () => {
     if(userId === authStore.user?.id){
@@ -180,8 +197,6 @@ const Home: FC = () => {
     } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
       setApiError(response.data.message)
       setShowError(true)
-    } else {
-      navigate('/')
     }
   }
   
@@ -193,8 +208,6 @@ const Home: FC = () => {
     } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
       setApiError(response.data.message)
       setShowError(true)
-    } else {
-      navigate('/')
     }
   }
 
@@ -239,33 +252,16 @@ const Home: FC = () => {
   const upvoteMostLiked = (index:number) =>{
     if(likesQuotes[index] === true && dislikesQuotes[index] === false){
       //normal upvote
-      console.log(likesQuotes[index])
-      //likesQuotes.splice(index,1,false)
       likesQuotes[index] = false
-      //setLikesQuotes(likesQuotes)
-      console.log(likesQuotes[index])
-      //mostLikedQuotes.splice(index, 1, 'upvote.png')
       mostLikedQuotes[index] = 'upvote.png'
-      //setMostLikedQuotes(mostLikedQuotes)
-      //mostDislikedQuotes.splice(index, 1, 'downvote.png')
-/*       mostDislikedQuotes[index] = 'downvote.png'
-      setMostDislikedQuotes(mostDislikedQuotes) */
     }
     else if(likesQuotes[index] === false){
       //downvote->upvote
-      //likesQuotes.splice(index,1,true)
       likesQuotes[index] = true
-      //setLikesQuotes(likesQuotes)
-      //mostLikedQuotes.splice(index, 1, 'upvoted.png')
       mostLikedQuotes[index] = 'upvoted.png'
-      //setMostLikedQuotes(mostLikedQuotes)
       if(dislikesQuotes[index] === true){
-        //dislikesQuotes.splice(index,1,false)
         dislikesQuotes[index] = false
-        //setDislikesQuotes(dislikesQuotes)
-        //mostDislikedQuotes.splice(index, 1, 'downvote.png')
         mostDislikedQuotes[index] = 'downvote.png'
-        //setMostDislikedQuotes(mostDislikedQuotes)
       }
     }
     setLikesQuotes(likesQuotes)
@@ -277,32 +273,17 @@ const Home: FC = () => {
   const downvoteMostLiked = (index:number) =>{
     if(dislikesQuotes[index] === true && likesQuotes[index] === false){
       //normal downvote
-      //dislikesQuotes.splice(index,1,false)
       dislikesQuotes[index] = false
-      //setDislikesQuotes(dislikesQuotes)
-      //mostDislikedQuotes.splice(index, 1, 'downvote.png')
       mostDislikedQuotes[index] = 'downvote.png'
-      //setMostDislikedQuotes(mostDislikedQuotes)
-      
       mostLikedQuotes[index] = 'upvote.png'
-      //setMostLikedQuotes(mostLikedQuotes)
-      //mostLikedQuotes.splice(index, 1, 'upvote.png')
     }
     else if(dislikesQuotes[index] === false){
       //upvote->downvote
-      //dislikesQuotes.splice(index,1,true)
       dislikesQuotes[index] = true
-      
-      //mostDislikedQuotes.splice(index, 1, 'downvoted.png')
       mostDislikedQuotes[index] = 'downvoted.png'
-      //setMostDislikedQuotes(mostDislikedQuotes)
       if(likesQuotes[index] === true){
-        //likesQuotes.splice(index,1,false)
         likesQuotes[index] = false
-        //setLikesQuotes(likesQuotes)
-        //mostLikedQuotes.splice(index, 1, 'upvote.png')
         mostLikedQuotes[index] = 'upvote.png'
-        //setMostLikedQuotes(mostLikedQuotes)
       }
     }
     setLikesQuotes(likesQuotes)
@@ -359,37 +340,13 @@ const Home: FC = () => {
               </div>
               {randomQuote.data ? (
                 <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}} onPointerMove={e=>{quoteData.id = randomQuote.data.data.id; quoteData.quote = randomQuote.data.data.quote}}>
-                    {
-                      authStore.user?.id === randomQuote.data.data.user.id ? (
-                        <>
-                          <div className='m-4'>
-                            <img className='voting' src='/upvote.png' alt="Upvote"/>
-                            <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
-                            <img className='voting' src='/downvote.png' alt="Downvote"/>
-                          </div>
-                          <div>
-                            <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
-                            <div className='authorGrid'>
-                              <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
-                              onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
-                              <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
-                            </div>
-                          </div>
-                          <div className='m-4'>
-                            <Link to={`${routes.EDITQUOTE}/${randomQuote.data.data.id}`} state={{ data: quoteData }} >
-                              <img src="/settings.png" alt="Settings" />
-                            </Link>
-                            <Link to={`${routes.DELETEQUOTE}/${randomQuote.data.data.id}`} state={{ data: quoteData }} >
-                              <img src="/delete.png" alt="Delete" />
-                            </Link>
-                          </div>
-                        </>
-                      ) :(
-                        <>
+                  {
+                    authStore.user?.id === randomQuote.data.data.user.id ? (
+                      <>
                         <div className='m-4'>
-                          <img className='voting' src={`/${randomLikedQuote}`} alt="Upvote" onClick={e => {upvote(randomQuote.data.data.id);if(likes===true){randomQuote.data.data.karma--}else{randomQuote.data.data.karma++}}}/>
+                          <img className='voting' src='/upvote.png' alt="Upvote"/>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
-                          <img className='voting' src={`/${randomDislikedQuote}`}  alt="Downvote" onClick={e => {downvote(randomQuote.data.data.id);if(dislikes===true){randomQuote.data.data.karma++}else{randomQuote.data.data.karma--}}}/>
+                          <img className='voting' src='/downvote.png' alt="Downvote"/>
                         </div>
                         <div>
                           <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
@@ -398,10 +355,60 @@ const Home: FC = () => {
                             onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
                             <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
                           </div>
-                        </div>                          
-                        </>
-                      )
-                    }
+                        </div>
+                        <div className='m-4'>
+                          <Link to={`${routes.EDITQUOTE}/${randomQuote.data.data.id}`} state={{ data: quoteData }} >
+                            <img src="/settings.png" alt="Settings" />
+                          </Link>
+                          <img className='voting' src="/delete.png" alt="Delete" onClick={()=>togglePopup} />
+                          {
+                            isOpen && <QuotesDelete
+                            content={
+                            <>
+                              <h1 className="text display-6 mb-4">Are you sure?</h1>
+                              <p className='text'>The quote will be deleted. There is no undo of this action.</p>
+                              <div className="d-flex justify-content-start">
+                                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{deleteQuote(randomQuote.data.data.user.id);togglePopup();toggleSuccess()}}>
+                                    Delete
+                                </Button>
+                                <a className="text-decoration-none col-md-3" style={{color:'#000000'}} onClick={togglePopup}>Cancel</a>
+                              </div>
+                            </>
+                            }/>
+                          }
+                          {
+                            successDelete && <QuotesDelete
+                            content={
+                            <>
+                              <p className='text'>Your <span style={{color:'#DE8667'}}>quote</span> was deleted.</p>
+                              <div className="d-flex justify-content-start">
+                                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{toggleSuccess()}}>
+                                    Close
+                                </Button>
+                              </div>
+                            </>
+                            }/>
+                          }
+                        </div>
+                      </>
+                    ) :(
+                      <>
+                      <div className='m-4'>
+                        <img className='voting' src={`/${randomLikedQuote}`} alt="Upvote" onClick={e => {upvote(randomQuote.data.data.id);if(likes===true){randomQuote.data.data.karma--}else{randomQuote.data.data.karma++}}}/>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.karma}</div>
+                        <img className='voting' src={`/${randomDislikedQuote}`}  alt="Downvote" onClick={e => {downvote(randomQuote.data.data.id);if(dislikes===true){randomQuote.data.data.karma++}else{randomQuote.data.data.karma--}}}/>
+                      </div>
+                      <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
+                        <div className='authorGrid'>
+                          <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
+                          onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
+                          <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
+                        </div>
+                      </div>                          
+                      </>
+                    )
+                  }
                 </div>
               ):(
                 <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
@@ -498,11 +505,37 @@ const Home: FC = () => {
                         </div>
                         <div className='m-4'>
                           <Link to={`${routes.EDITQUOTE}/${item.id}`} state={{ data: quoteData }} >
-                            <img src="/settings.png" alt="Settings" />
+                            <img className='voting' src="/settings.png" alt="Settings" />
                           </Link>
-                          <Link to={`${routes.DELETEQUOTE}/${item.id}`} state={{ data: quoteData }} >
-                            <img src="/delete.png" alt="Delete" />
-                          </Link>
+                          <img className='voting' src="/delete.png" alt="Delete" onClick={togglePopup}/>
+                          {
+                            isOpen && <QuotesDelete
+                            content={
+                            <>
+                              <h1 className="text display-6 mb-4">Are you sure?</h1>
+                              <p className='text'>The quote will be deleted. There is no undo of this action.</p>
+                              <div className="d-flex justify-content-start">
+                                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{deleteQuote(item.id);togglePopup();toggleSuccess()}}>
+                                    Delete
+                                </Button>
+                                <a className="text-decoration-none col-md-3" style={{color:'#000000'}} onClick={togglePopup}>Cancel</a>
+                              </div>
+                            </>
+                            }/>
+                          }
+                          {
+                            successDelete && <QuotesDelete
+                            content={
+                            <>
+                              <p className='text fs-5'>Your <span style={{color:'#DE8667'}}>quote</span> was deleted.</p>
+                              <div className="d-flex justify-content-start">
+                                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{toggleSuccess()}}>
+                                    Close
+                                </Button>
+                              </div>
+                            </>
+                            }/>
+                          }
                         </div>
                       </div>
                     ):(

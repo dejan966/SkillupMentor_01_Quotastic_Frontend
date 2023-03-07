@@ -10,5 +10,5 @@ export enum routes {
   ADDNEWQUOTE='../me/myquote',
   USERQUOTESINFO='../me/quotes',
   EDITQUOTE='me/myquote/edit',
-  DELETEQUOTE='me/myquote/edit',
+  DELETEQUOTE='me/myquote/delete',
 }

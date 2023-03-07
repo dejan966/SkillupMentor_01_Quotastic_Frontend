@@ -72,10 +72,10 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
               </Form.Group>
           )}/>
           <div className="d-flex justify-content-start">
-              <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} type="submit">
-                  Submit
-              </Button>
-              <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.HOME}>Cancel</a>
+            <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} type="submit">
+                Submit
+            </Button>
+            <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.HOME}>Cancel</a>
           </div>
         </Form>
         {showError && (
