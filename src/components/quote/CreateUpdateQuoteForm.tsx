@@ -8,17 +8,38 @@ import { CreateQuoteFields, UpdateQuoteFields, useCreateUpdateQuoteForm } from '
 import { QuoteType } from '../../models/quote'
 import * as API from '../../api/Api'
 import { Controller } from 'react-hook-form'
+import QuotesEditSuccess from '../../pages/Me/Myquote/Edit/success'
 
 interface Props {
   defaultValues?: QuoteType
 }
 
 const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
-  const navigate = useNavigate()
-  
   const { handleSubmit, control } = useCreateUpdateQuoteForm({
-      defaultValues,
+    defaultValues,
   })
+
+  const [isOpen, setIsOpen] = useState(false)
+  const navigate = useNavigate()
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen)
+  }
+
+/*   const popup = () => {
+    {
+      isOpen && <QuotesEditSuccess
+      content={
+      <>
+        <h1 className="text display-6 mb-4">Are you sure?</h1>
+        <p className='text'>Your <span style={{color:'#DE8667'}}>quote</span> was edited.</p>
+        <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={togglePopup}>
+          Close
+        </Button>
+      </>
+      }/>
+    }
+  } */
 
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
@@ -51,8 +72,9 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
     } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
       setApiError(response.data.message)
       setShowError(true)
-    } else {
-        navigate('/me/quotes')
+    }
+    else{
+      navigate('/')
     }
   }
 
@@ -72,10 +94,22 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
               </Form.Group>
           )}/>
           <div className="d-flex justify-content-start">
-            <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} type="submit">
-                Submit
+            <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={togglePopup}>
+              Submit
             </Button>
             <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.HOME}>Cancel</a>
+            {
+              isOpen && <QuotesEditSuccess
+              content={
+              <>
+                <h1 className="text display-6 mb-4">Are you sure?</h1>
+                <p className='text'>Your <span style={{color:'#DE8667'}}>quote</span> was edited.</p>
+                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} type="submit">
+                  Close
+                </Button>
+              </>
+              }/>
+            }
           </div>
         </Form>
         {showError && (

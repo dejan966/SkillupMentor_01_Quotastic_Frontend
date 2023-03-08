@@ -18,22 +18,12 @@ const Home: FC = () => {
   const [dislikes, setDislikes] = useState(false)
   
   //most liked quotes
-/*   let likedQuotesM = new Array(1)
-  let dislikedQuotesM = new Array(1)
-  let likesM = new Array(1)
-  let dislikesM = new Array(1) */
-
   const [mostLikedQuotes, setMostLikedQuotes] = useState<string[]>([])
   const [mostDislikedQuotes, setMostDislikedQuotes] = useState<string[]>([])
   const [likesQuotes, setLikesQuotes] = useState<boolean[]>([])
   const [dislikesQuotes, setDislikesQuotes] = useState<boolean[]>([])
 
   //most recent quotes
-/*   let likedQuotesR = new Array(1)
-  let dislikedQuotesR = new Array(1)
-  let likesR = new Array(1)
-  let dislikesR = new Array(1) */
-
   const [mostRecentLikedQuotes, setMostRecentLikedQuotes] = useState<string[]>([])
   const [mostRecentDislikedQuotes, setMostRecentDislikedQuotes] = useState<string[]>([])
   const [recentLikesQuotes, setRecentLikesQuotes] = useState<boolean[]>([])
@@ -360,7 +350,7 @@ const Home: FC = () => {
                           <Link to={`${routes.EDITQUOTE}/${randomQuote.data.data.id}`} state={{ data: quoteData }} >
                             <img src="/settings.png" alt="Settings" />
                           </Link>
-                          <img className='voting' src="/delete.png" alt="Delete" onClick={()=>togglePopup} />
+                          <img className='voting' src="/delete.png" alt="Delete" onClick={()=>togglePopup()} />
                           {
                             isOpen && <QuotesDelete
                             content={
@@ -445,9 +435,35 @@ const Home: FC = () => {
                         <Link to={`${routes.EDITQUOTE}/${item.id}`} state={{ data: quoteData }} >
                           <img src="/settings.png" alt="Settings" />
                         </Link>
-                        <Link to={`${routes.DELETEQUOTE}/${item.id}`} state={{ data: quoteData }} >
-                          <img src="/delete.png" alt="Delete" />
-                        </Link>
+                        <img className='voting' src="/delete.png" alt="Delete" onClick={togglePopup}/>
+                          {
+                            isOpen && <QuotesDelete
+                            content={
+                            <>
+                              <h1 className="text display-6 mb-4">Are you sure?</h1>
+                              <p className='text'>The quote will be deleted. There is no undo of this action.</p>
+                              <div className="d-flex justify-content-start">
+                                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{deleteQuote(item.id);togglePopup();toggleSuccess()}}>
+                                    Delete
+                                </Button>
+                                <a className="text-decoration-none col-md-3" style={{color:'#000000'}} onClick={togglePopup}>Cancel</a>
+                              </div>
+                            </>
+                            }/>
+                          }
+                          {
+                            successDelete && <QuotesDelete
+                            content={
+                            <>
+                              <p className='text fs-5'>Your <span style={{color:'#DE8667'}}>quote</span> was deleted.</p>
+                              <div className="d-flex justify-content-start">
+                                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{toggleSuccess()}}>
+                                    Close
+                                </Button>
+                              </div>
+                            </>
+                            }/>
+                          }
                       </div>
                     </div>
                     ):(

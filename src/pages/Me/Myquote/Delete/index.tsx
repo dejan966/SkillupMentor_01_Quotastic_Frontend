@@ -1,5 +1,3 @@
-import React from 'react'
- 
 const QuotesDelete = (props:any) => {
   return (
     <div className='popup-box'>

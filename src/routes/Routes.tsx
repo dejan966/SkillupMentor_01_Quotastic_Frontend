@@ -29,6 +29,7 @@ const DeleteAcc = lazy(() => import('../pages/Me/Delete-account'))
 const QuotesAdd = lazy(() => import('../pages/Me/Myquote'))
 const QuotesEdit = lazy(() => import('../pages/Me/Myquote/Edit'))
 const QuotesDelete = lazy(() => import('../pages/Me/Myquote/Delete'))
+const QuotesEditSuccess = lazy(() => import('../pages/Me/Myquote/Edit/success'))
 
 const Upvote = lazy(()=>import('../pages/Quotes/Upvote'))
 const Downvote = lazy(()=>import('../pages/Quotes/Downvote'))
@@ -102,6 +103,11 @@ export const AppRoutes: AppRoute[] = [
     type: RouteType.PRIVATE,
     path: '/me/myquote/delete/:id',
     children: <QuotesDelete />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/me/myquote/edit/success',
+    children: <QuotesEditSuccess />,
   },
   {
     type: RouteType.PRIVATE,
