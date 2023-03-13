@@ -8,6 +8,16 @@
     padding: 25px 0;
 }
 
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    background-color: #f7f7f7f7;
+}
+
 .btnOrange {
     width:175px;
     height:40px;
@@ -28,6 +38,11 @@
     border-radius: 32px;
     padding:8px, 16px, 8px, 16px;
     font-size: 16px;
+    &:hover{
+        //background-color:rgb(215, 127, 96);
+        border-color: #DE8667;
+        text-decoration: underline;
+    }
 }
 
 .btnRegister {
@@ -35,14 +50,38 @@
     height:40px;
     font-family: 'Raleway';
     background-color: #DE8667;
+    border-color: #DE8667;
     color: #fff;
     border-radius: 32px;
     padding:8px, 16px, 8px, 16px;
     font-size: 16px;
+    &:hover{
+        background-color:rgb(215, 127, 96);
+        border-color: #DE8667;
+        color: #fff;
+        text-decoration: underline;
+    }
 }
 
 .btnLogin {
     width:137px;
+    height:40px;
+    background-color: #fff;
+    color: #DE8667;
+    border-radius: 32px;
+    padding:8px, 16px, 8px, 16px;
+    font-size: 16px;
+    border-color: #EFB467;
+    &:hover{
+        background-color:#fff;
+        color: #DE8667;
+        border-color: #EFB467;
+        text-decoration: underline;
+    } 
+}
+
+.btnSeeMore{
+    width:157px;
     height:40px;
     font-family: 'Raleway';
     background-color: #fff;
@@ -50,6 +89,20 @@
     border-radius: 32px;
     padding:8px, 16px, 8px, 16px;
     font-size: 16px;
+    border-color: #EFB467;
+    &:hover{
+        background-color:#fff;
+        color: #DE8667;
+        border-color: #EFB467;
+        text-decoration: underline;
+    } 
+}
+
+.signUpText{
+    color:#EFB467;
+    &:hover{
+        color: #EFB467 !important; 
+    }
 }
 
 .textfield{
@@ -84,16 +137,17 @@
     font-family: 'Raleway';
 }
 
-.quoteBorder{
-    border-radius: 7px;
-    border:2px solid rgb(245,245,245);
-}
-
 .profileSettings{
     width: min(100%, 420px);
     font-family: 'Raleway';
     margin: 0 auto;
     padding: 25px 0;
+}
+
+a:hover{
+    color:rgb(215, 127, 96) !important; 
+    text-decoration: underline !important;
+    cursor: pointer;
 }
 
 .textColor{
@@ -104,6 +158,10 @@
 .reverseTextColor{
     font-family: 'Raleway';
     color:#fff;
+    &:hover{
+        color:#fff !important; 
+        text-decoration: underline !important;
+    }
 }
 
 .redBackground{
@@ -131,7 +189,7 @@
     left: 0;
   }
   
-.box {
+.box{
     position: relative;
     width: 70%;
     margin: 0 auto;
@@ -164,6 +222,35 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
+.quoteBorder{
+    border-radius: 7px;
+    border:2px solid rgb(245,245,245);
+}
+
+.userKarmaBorderTop{
+    //border-radius: 12px;
+    border-top:2px solid rgb(245,245,245);
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+    border-left:2px solid rgb(245,245,245);
+    border-Right:2px solid rgb(245,245,245);
+    background-color: #fff;
+    //width:fit-content;
+    height: auto;
+}
+
+.userKarmaBorderBottom{
+    //border-radius: 12px;
+    border-bottom:2px solid rgb(245,245,245);
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-left:2px solid rgb(245,245,245);
+    border-Right:2px solid rgb(245,245,245);
+    //background-color: #fff;
+    //width:fit-content;
+    height: auto;
+}
+
 .parentGrid{
     display: flex;
     gap:20px;
@@ -191,4 +278,61 @@
 
 .content{
     flex-grow:1;
+}
+
+@media (max-width: 1038px) {
+    .grid{
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        //text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .btnRegisterHamb {
+        width:165px;
+        height:40px;
+        background-color: #DE8667;
+        border-color: #DE8667;
+        color: #fff;
+        border-radius: 32px;
+        padding:8px, 16px, 8px, 16px;
+        font-size: 16px;
+        &:hover{
+            background-color:rgb(215, 127, 96);
+            border-color: #DE8667;
+            color: #fff;
+            text-decoration: underline;
+        }
+    }
+    
+    .btnLoginHamb {
+        width:165px;
+        height:40px;
+        background-color: #fff;
+        color: #DE8667;
+        border-radius: 32px;
+        padding:8px, 16px, 8px, 16px;
+        font-size: 16px;
+        border-color: #EFB467;
+        &:hover{
+            background-color:#fff;
+            color: #DE8667;
+            border-color: #EFB467;
+            text-decoration: underline;
+        } 
+    }
+    
+    .quoteRow{
+/*         margin-left: auto;
+        margin-right: auto; */
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        justify-content: center;
+        align-items: center;
+    }
+
+ /*    .phoneScreen{
+        margin: auto;
+    } */
 }

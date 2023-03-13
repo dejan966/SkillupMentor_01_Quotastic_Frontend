@@ -26,21 +26,6 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
     setIsOpen(!isOpen)
   }
 
-/*   const popup = () => {
-    {
-      isOpen && <QuotesEditSuccess
-      content={
-      <>
-        <h1 className="text display-6 mb-4">Are you sure?</h1>
-        <p className='text'>Your <span style={{color:'#DE8667'}}>quote</span> was edited.</p>
-        <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={togglePopup}>
-          Close
-        </Button>
-      </>
-      }/>
-    }
-  } */
-
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
@@ -82,8 +67,8 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
       <>
         <Form className="form-group forms" onSubmit={onSubmit}>
           <div className="text-start text">
-              <h1 className="display-6">Are you feeling <span style={{color:'#DE8667'}}>inspired?</span></h1>
-              <div className='mb-3'>You can post quotes. You can delete them on your profile</div>
+            <h1 className="display-6">Are you feeling <span style={{color:'#DE8667'}}>inspired?</span></h1>
+            <div className='mb-3'>You can post quotes. You can delete them on your profile</div>
           </div>
           <Controller
             control={control}
@@ -94,22 +79,35 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) =>{
               </Form.Group>
           )}/>
           <div className="d-flex justify-content-start">
-            <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={togglePopup}>
-              Submit
-            </Button>
-            <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.HOME}>Cancel</a>
             {
-              isOpen && <QuotesEditSuccess
-              content={
-              <>
-                <h1 className="text display-6 mb-4">Are you sure?</h1>
-                <p className='text'>Your <span style={{color:'#DE8667'}}>quote</span> was edited.</p>
-                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} type="submit">
-                  Close
-                </Button>
-              </>
-              }/>
+              defaultValues ? (
+                <>
+                  <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={togglePopup}>
+                    Submit
+                  </Button>
+                  <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.HOME}>Cancel</a>
+                  {
+                    isOpen && <QuotesEditSuccess
+                    content={
+                    <>
+                      <p className='text'>Your <span style={{color:'#DE8667'}}>quote</span> was edited.</p>
+                      <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} type="submit">
+                        Close
+                      </Button>
+                    </>
+                    }/>
+                  }
+                </>
+              ):(
+                <>
+                  <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} type="submit">
+                    Submit
+                  </Button>
+                  <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.HOME}>Cancel</a>
+                </>
+              )
             }
+           
           </div>
         </Form>
         {showError && (

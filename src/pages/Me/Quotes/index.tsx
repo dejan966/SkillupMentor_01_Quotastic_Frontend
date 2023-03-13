@@ -2,13 +2,19 @@ import Layout from '../../../components/ui/Layout'
 import { FC, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import * as API from '../../../api/Api'
-import { Button } from 'react-bootstrap'
-import { UserType } from '../../../models/auth'
+import { Button, Toast, ToastContainer } from 'react-bootstrap'
 import { QuoteType } from '../../../models/quote'
 import { VoteType } from '../../../models/vote'
 import authStore from '../../../stores/auth.store'
+import { StatusCode } from '../../../constants/errorConstants'
+import { useNavigate } from 'react-router-dom'
 
 const UserQuotesInfo: FC = () => {
+  const [apiError, setApiError] = useState('')
+  const [showError, setShowError] = useState(false)
+  const [otherUserId, setOtherUserId] = useState(1)
+  const navigate = useNavigate()
+  
   const userId = (authStore.user?.id) as number
 
   const mostLiked = useQuery(
@@ -36,6 +42,32 @@ const UserQuotesInfo: FC = () => {
     },
   )
 
+  const handleUpvote = async (quoteId:number) => {
+    const response = await API.createUpvote(quoteId)
+    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    }
+  }
+  
+  const handleDownvote = async (quoteId:number) => {
+    const response = await API.createDownvote(quoteId)
+    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    }
+  }
+
+  const handleProceedUser = () => {
+    navigate(`../users/${otherUserId}/quotes`)
+  }
+
   return (
     <Layout>
       <div>
@@ -44,26 +76,26 @@ const UserQuotesInfo: FC = () => {
             <h2 className='red'>Most liked quotes</h2>
             <div className='mb-5'>
               {mostLiked.data ? (
-                <div className="quoteBorder quoteGrid mb-5" style={{width:400}}>
-                  {mostLiked.data.data.map((item:QuoteType, index:number)=>{
-                    <>
-                    <div key={index} className='m-4'>
-                      <img className='voting' src="/upvote.png" alt="Upvote" />
-                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                      <img className='voting' src="/downvote.png" alt="Downvote" />
-                    </div>
-                    <div>
-                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                      <div className='authorGrid'>
-                        <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35}/>
-                        <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                <div>
+                  {mostLiked.data.data.map((item: QuoteType, index:number)=>(
+                    <div className="quoteBorder quoteGrid mb-5" key={index} style={{width:400}}>
+                      <div className='m-4'>
+                        <img className='voting' src="/upvote.png" alt="Upvote" />
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                        <img className='voting' src="/downvote.png" alt="Downvote" />
+                      </div>
+                      <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                        <div className='authorGrid'>
+                          <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35}/>
+                          <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                        </div>
                       </div>
                     </div>
-                    </>
-                  })}
+                  ))}
                 </div>
               ):(
-                <h2>No quotes available</h2>
+                <div className='text text-center'>No quotes available</div>
               )}
             </div>
           </div>
@@ -73,7 +105,7 @@ const UserQuotesInfo: FC = () => {
               {mostRecent.data ? (
                 <div>
                   {mostRecent.data.data.map((item: QuoteType, index:number)=>(
-                    <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
+                    <div className="quoteBorder quoteGrid mb-5" key={index} style={{width:400}}>
                       <div className='m-4'>
                         <img className='voting' src="/upvote.png" alt="Upvote" />
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
@@ -90,14 +122,14 @@ const UserQuotesInfo: FC = () => {
                   ))}
                 </div>
               ):(
-                <h2>No quotes available</h2>
+                <div className='text text-center'>No quotes available</div>
               )}
             </div>
           </div>
           <div>
             <h2 className='text'>Liked</h2>
             <div className='mb-5'>
-              {liked.data ? (
+            {liked.data ? (
                 <div>
                   {liked.data.data.map((item: VoteType, index:number)=>(
                     <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
@@ -109,7 +141,8 @@ const UserQuotesInfo: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.quote.user.avatar}`} alt="User avatar" width={35}/>
+                          <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.quote.user.avatar}`} alt="User avatar" width={35} 
+                            onPointerMove={e=>{setOtherUserId(item.quote.user.id)}} onClick={handleProceedUser}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.quote.user.first_name + ' ' + item.quote.user.last_name}</div>
                         </div>
                       </div> 
@@ -117,7 +150,7 @@ const UserQuotesInfo: FC = () => {
                   ))} 
                 </div>
               ):(
-                <h2>No quotes available</h2>
+                <div className='text text-center'>No quotes available</div>
               )}
             </div>
           </div>
@@ -126,6 +159,16 @@ const UserQuotesInfo: FC = () => {
           <Button className="btnLogin">Load more</Button>
         </div>
       </div>
+      {showError && (
+        <ToastContainer className="p-3" position="top-end">
+          <Toast onClose={() => setShowError(false)} show={showError}>
+            <Toast.Header>
+              <strong className="me-suto text-danger">Error</strong>
+            </Toast.Header>
+            <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
+          </Toast>
+        </ToastContainer>
+      )}
     </Layout>
   )
 }

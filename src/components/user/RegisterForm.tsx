@@ -60,7 +60,7 @@ const RegisterForm: FC = () => {
       <Form className="forms" onSubmit={onSubmit}>
         <Form.Group className="d-flex flex-column justify-content-center align-items-center">
           <FormLabel htmlFor="avatar" id="avatar-p">
-            <Avatar round src="default-avatar.png" alt="Avatar" />
+            <Avatar round src={`${process.env.REACT_APP_API_URL}/uploads/Blank-Avatar.jpg`} alt="Avatar" />
           </FormLabel>
         </Form.Group>
         <Controller
@@ -196,7 +196,7 @@ const RegisterForm: FC = () => {
         </Button>
         <div className="d-flex justify-content-between align-items-center mb-2">
           <p className="mb-0">Already have an account?</p>
-          <Link className="text-decoration-none text-end" to={routes.LOGIN}>
+          <Link className="text-decoration-none text-end signUpText" to={routes.LOGIN}>
             Sign in
           </Link>
         </div>

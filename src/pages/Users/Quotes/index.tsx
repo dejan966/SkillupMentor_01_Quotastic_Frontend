@@ -6,9 +6,12 @@ import { Button } from 'react-bootstrap'
 import { UserType } from '../../../models/auth'
 import { QuoteType } from '../../../models/quote'
 import { VoteType } from '../../../models/vote'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import authStore from '../../../stores/auth.store'
 
 const UserQuotesInfo: FC = () => {
+  const [otherUserId, setOtherUserId] = useState(1)
+  const navigate = useNavigate()
   const { id } = useParams()
   const userId:number = parseInt(id!)
 
@@ -36,6 +39,14 @@ const UserQuotesInfo: FC = () => {
     },
   )
 
+  const handleProceedUser = () => {
+    if(otherUserId === authStore.user?.id){
+      navigate('../me/quotes')
+      return
+    }
+    navigate(`users/${userId}/quotes`)
+  }
+
   return (
     <Layout>
       <div>
@@ -46,7 +57,7 @@ const UserQuotesInfo: FC = () => {
               {otherUserMostLiked.data ? (
                 <div>
                   {otherUserMostLiked.data.data.map((item: QuoteType, index:number)=>(
-                    <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
+                    <div className="quoteBorder quoteGrid mb-5" key={index} style={{width:400}}>
                       <div className='m-4'>
                         <img className='voting' src="/upvote.png" alt="Upvote" />
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
@@ -63,7 +74,7 @@ const UserQuotesInfo: FC = () => {
                   ))}
                 </div>
               ):(
-                <div>No quotes available</div>
+                <div className='text text-center'>No quotes available</div>
               )}
             </div>
           </div>
@@ -90,7 +101,7 @@ const UserQuotesInfo: FC = () => {
                   ))}
                 </div>
               ):(
-                <div>No quotes available</div>
+                <div className='text text-center'>No quotes available</div>
               )}
             </div>
           </div>
@@ -109,7 +120,8 @@ const UserQuotesInfo: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote.quote}</div>
                         <div className='authorGrid'>
-                          <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.quote.user.avatar}`} alt="User avatar" width={35}/>
+<                         img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.quote.user.avatar}`} alt="User avatar" width={35} 
+                            onPointerMove={e=>{setOtherUserId(item.quote.user.id)}} onClick={handleProceedUser}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.quote.user.first_name + ' ' + item.quote.user.last_name}</div>
                         </div>
                       </div> 
@@ -117,7 +129,7 @@ const UserQuotesInfo: FC = () => {
                   ))}
                 </div>
               ):(
-                <div>No quotes available</div>
+                <div className='text text-center'>No quotes available</div>
               )}
             </div>
           </div>

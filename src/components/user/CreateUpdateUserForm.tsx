@@ -68,7 +68,6 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
               <input
                 {...field}
                 type="email"
-                placeholder="example@gmail.com"
                 aria-label="Email"
                 aria-describedby="email"
                 className={
@@ -138,7 +137,7 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
             />   
           </div>
         </div>
-        <div className="d-flex justify-content-between mb-3">
+        <div className="d-flex justify-content-between align-items-center mb-3">
           <div className="md-5">
             <Button className='btnOrange' href={routes.USERPASSWORDEDIT}>Change password</Button>
           </div>

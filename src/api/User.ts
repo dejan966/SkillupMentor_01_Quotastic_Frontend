@@ -37,6 +37,18 @@ export const updateUser = async (data: UpdateUserFields, id: number) =>
     data
   )
 
+export const fetchCurrUserUpvotes = async () =>
+  apiRequest<undefined, UserType>('get', `${apiRoutes.ME}/upvotes`)
+
+export const fetchCurrUserUpvotedQuotes = async () =>
+  apiRequest<undefined, UserType>('get', `${apiRoutes.ME}/upvoted`)
+
+export const fetchUserUpvotes = async (userId:number) =>
+  apiRequest<undefined, UserType>('get', `${apiRoutes.FETCH_USERS}/upvotes/${userId}`)
+
+export const fetchUserUpvotedQuotes = async (userId:number) =>
+  apiRequest<undefined, UserType>('get', `${apiRoutes.FETCH_USERS}/upvoted/${userId}`)
+
 export const updateUserPass = async ({current_password, password, confirm_password}: UpdateUserFields) =>
   apiRequest<UpdateUserFields, UserType>(
     'patch',

@@ -1,46 +1,19 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+<h1>Quotastic</h1>
+<p>This app will allow the user to register, write one paragraph of motivational quotes, review already registered users and their quotes, and upvote or downvote a quote. Users can also edit and delete only their own quotes.</p>
+<ul>It has the following endpoints:
+<li>/signup - Sign up to the system (username, password)</li>
+<li>/login - Logs in an existing user with a password</li>
+<li>users/me - Get the currently logged in user information</li>
+<li>users/me/upvoted - Gets number of quotes the user has upvoted and made<li>
+<li>users/me/upvotes - Gets how many people upvoted this persons quotes<li>
+<li>/me/myquote - Post your quote</li>
+<li>/me/myquote/:id - Update your quote (you can update only your quotes)</li>
+<li>me/quotes - Current users quotes</li>
+<li>/me/update-password - Update the current users password</li>
+<li>/me/update-avatar - Update the current users avatar</li>
+<li>quotes/recent - Displays the quotes from the current date downwards</li>
+<li>quotes/random - Displays quote of the day</li>
+<li>/quotes/:id - List username & result of votes of a user quote</li>
+<li>/votes/:id/upvote - Upvote a quote</li>
+<li>/votes/:id/downvote - Downvote a quote</li>
+<li>/quotes - List users and quotes in a most upvoted to least liked quotes</li>

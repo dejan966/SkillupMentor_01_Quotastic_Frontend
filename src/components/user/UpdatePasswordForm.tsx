@@ -4,21 +4,14 @@ import { useNavigate } from 'react-router-dom'
 import { StatusCode } from '../../constants/errorConstants'
 import * as API from '../../api/Api'
 import { useCreateUpdateUserForm, UpdateUserFields } from '../../hooks/react-hook-form/useCreateUpdateUser'
-import authStore from '../../stores/auth.store'
 import { Button, FormLabel, Form, Toast, ToastContainer } from 'react-bootstrap'
 import { UserType } from '../../models/auth'
 import { routes } from '../../constants/routesConstants'
 import { Controller } from 'react-hook-form'
 
-interface Props {
-    defaultValues?: UserType & { isActiveUser?: boolean }
-}
-
-const UpdatePasswordForm: FC<Props> = ({ defaultValues }) =>{
+const UpdatePasswordForm: FC = () =>{
 const navigate = useNavigate()
-const { handleSubmit, errors, control } = useCreateUpdateUserForm({
-  defaultValues,
-})
+const { handleSubmit, errors, control } = useCreateUpdateUserForm({})
 
 const [apiError, setApiError] = useState('')
 const [showError, setShowError] = useState(false)
@@ -53,28 +46,26 @@ return(
         control={control}
         name="current_password"
         render={({ field }) =>(
-<Form.Group className="mb-3">
-        <FormLabel htmlFor="oldPassword">Current password</FormLabel>
-        <input
-          {...field}
-          type="password"
-          placeholder="******"
-          aria-label="old_password"
-          aria-describedby="old_password"
-          className={
-            errors.password ? 'form-control is-invalid' : 'form-control'
-          }
-          style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
-        />
-        {errors.password && (
-          <div className="invalid-feedback text-danger">
-            {errors.password.message}
-          </div>
-        )}
-      </Form.Group>
-        )}
-        />
-      
+        <Form.Group className="mb-3">
+          <FormLabel htmlFor="oldPassword">Current password</FormLabel>
+          <input
+            {...field}
+            type="password"
+            placeholder="******"
+            aria-label="old_password"
+            aria-describedby="old_password"
+            className={
+              errors.password ? 'form-control is-invalid' : 'form-control'
+            }
+            style={{borderRadius:32, borderColor:'#DE8667', fontFamily:'Raleway'}}
+          />
+          {errors.password && (
+            <div className="invalid-feedback text-danger">
+              {errors.password.message}
+            </div>
+          )}
+          </Form.Group>
+        )}/>
       <Controller
         control={control}
         name="password"

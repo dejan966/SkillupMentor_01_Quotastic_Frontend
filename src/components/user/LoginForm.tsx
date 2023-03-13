@@ -95,7 +95,7 @@ const LoginForm: FC = () => {
         </Button>
         <div className="d-flex justify-content-between align-items-center mb-2">
           <p className="mb-0">Dont have an account yet?</p>
-          <Link className="text-decoration-none text-end" to={routes.SIGNUP}>
+          <Link className="text-decoration-none text-end signUpText" to={routes.SIGNUP}>
             Sign up
           </Link>
         </div>

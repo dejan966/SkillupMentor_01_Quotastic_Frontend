@@ -31,9 +31,6 @@ const QuotesEdit = lazy(() => import('../pages/Me/Myquote/Edit'))
 const QuotesDelete = lazy(() => import('../pages/Me/Myquote/Delete'))
 const QuotesEditSuccess = lazy(() => import('../pages/Me/Myquote/Edit/success'))
 
-const Upvote = lazy(()=>import('../pages/Quotes/Upvote'))
-const Downvote = lazy(()=>import('../pages/Quotes/Downvote'))
-
 /* Restricted routes */
 const Login = lazy(() => import('../pages/Login'))
 const Register = lazy(() => import('../pages/Register'))
@@ -108,16 +105,6 @@ export const AppRoutes: AppRoute[] = [
     type: RouteType.PRIVATE,
     path: '/me/myquote/edit/success',
     children: <QuotesEditSuccess />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/quotes/upvote/:id',
-    children: <Upvote />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/quotes/downvote/:id',
-    children: <Downvote />,
   },
   // Public Routes
   {
