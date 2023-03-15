@@ -182,7 +182,7 @@ const Home: FC = () => {
             recentLikesQuotes.push(true)
             setRecentLikesQuotes(recentLikesQuotes)
             recentDislikesQuotes.push(false)
-            setDislikesQuotes(recentDislikesQuotes)
+            setRecentDislikesQuotes(recentDislikesQuotes)
             mostRecentQuotesKarma.push(data.data[0].karma)
             setMostRecentQuotesKarma(mostRecentQuotesKarma)
           }
@@ -194,22 +194,22 @@ const Home: FC = () => {
             recentLikesQuotes.push(false)
             setRecentLikesQuotes(recentLikesQuotes)
             recentDislikesQuotes.push(true)
-            setDislikesQuotes(recentDislikesQuotes)
+            setRecentDislikesQuotes(recentDislikesQuotes)
             mostRecentQuotesKarma.push(data.data[0].karma)
             setMostRecentQuotesKarma(mostRecentQuotesKarma)
           }
-          else{
-            mostRecentLikedQuotes.push('upvote.png') 
-            setMostRecentLikedQuotes(mostRecentLikedQuotes)
-            mostRecentDislikedQuotes.push('downvote.png')
-            setMostRecentDislikedQuotes(mostRecentDislikedQuotes)
-            recentLikesQuotes.push(false)
-            setRecentLikesQuotes(recentLikesQuotes)
-            recentDislikesQuotes.push(false)
-            setDislikesQuotes(recentDislikesQuotes)
-            mostRecentQuotesKarma.push(data.data[0].karma)
-            setMostRecentQuotesKarma(mostRecentQuotesKarma)
-          }
+        }
+        else{
+          mostRecentLikedQuotes.push('upvote.png') 
+          setMostRecentLikedQuotes(mostRecentLikedQuotes)
+          mostRecentDislikedQuotes.push('downvote.png')
+          setMostRecentDislikedQuotes(mostRecentDislikedQuotes)
+          recentLikesQuotes.push(false)
+          setRecentLikesQuotes(recentLikesQuotes)
+          recentDislikesQuotes.push(false)
+          setRecentDislikesQuotes(recentDislikesQuotes)
+          mostRecentQuotesKarma.push(data.data[0].karma)
+          setMostRecentQuotesKarma(mostRecentQuotesKarma)
         }
         for(let i = 1; i<data.data.length; i++){
           if(authStore.user?.id === data.data[i].votes[0]?.user.id){
@@ -257,7 +257,7 @@ const Home: FC = () => {
       refetchOnWindowFocus: false,
     },
   )
-  
+
   const deleteQuote = async (quoteId:number) => {
     const response = await API.deleteQuote(quoteId)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
@@ -421,8 +421,6 @@ const Home: FC = () => {
         mostLikedQuotesKarma[index]-=2
         setMostLikedQuotesKarma(mostLikedQuotesKarma)
         handleDownvote(quoteId)
-        downvote(quoteId)
-      downvoteMostRecent(index, quoteId)
         return
       }
       mostDislikedQuotes[index] = 'downvoted.png'
@@ -464,8 +462,8 @@ const Home: FC = () => {
       mostRecentLikedQuotes[index] = 'upvoted.png'
       mostRecentQuotesKarma[index]++
       setRecentLikesQuotes(recentLikesQuotesCopy)
-      setMostRecentLikedQuotes(mostLikedQuotes)
-      setMostRecentQuotesKarma(mostLikedQuotesKarma)
+      setMostRecentLikedQuotes(mostRecentLikedQuotes)
+      setMostRecentQuotesKarma(mostRecentQuotesKarma)
       handleUpvote(quoteId)
       return
     }
@@ -482,8 +480,6 @@ const Home: FC = () => {
       setMostRecentDislikedQuotes(mostRecentDislikedQuotes)
       setMostRecentQuotesKarma(mostRecentQuotesKarma)
       handleDownvote(quoteId)
-/*       downvote(quoteId)
-      downvoteMostLiked(index, quoteId) */
       return
     }
     else if(recentDislikesQuotes[index] === false){
@@ -499,8 +495,6 @@ const Home: FC = () => {
         setMostRecentDislikedQuotes(mostRecentDislikedQuotes)
         setRecentDislikesQuotes(recentDislikesQuotesCopy)
         handleDownvote(quoteId)
-/*         downvote(quoteId)
-        downvoteMostLiked(index, quoteId) */
         return
       }
       mostRecentDislikedQuotes[index] = 'downvoted.png'
@@ -508,117 +502,202 @@ const Home: FC = () => {
       mostRecentQuotesKarma[index]--
       setMostRecentQuotesKarma(mostRecentQuotesKarma)
       handleDownvote(quoteId)
-/*       downvote(quoteId)
-      downvoteMostLiked(index, quoteId) */
       return
     }
   }
 
   return (
-    <>
-      <Layout>
-        {authStore.user ? (
-          <>
-            <div className='mb-5'>
-              <div className='text-center'>
-                <h2 className='red'>Quote of the day</h2>
-                <p className='quoteText'>Quote of the day is a randomly chosen quote</p>
-              </div>
-              {randomQuote.data ? (
-                <div className='quoteBorder quoteGrid mb-5 mx-auto' style={{width:420}} onPointerMove={e=>{quoteData.id = randomQuote.data.data.id; quoteData.quote = randomQuote.data.data.quote}}>
-                  {
-                    authStore.user?.id === randomQuote.data.data.user.id ? (
-                      <>
-                        <div className='m-4'>
-                          <img className='voting' src='/upvote.png' alt="Upvote"/>
-                          <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuoteKarma}</div>
-                          <img className='voting' src='/downvote.png' alt="Downvote"/>
-                        </div>
-                        <div>
-                          <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
-                          <div className='authorGrid'>
-                            <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
-                            onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
-                            <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
-                          </div>
-                        </div>
-                        <div className='m-4'>
-                          <Link to={`${routes.EDITQUOTE}/${randomQuote.data.data.id}`} state={{ data: quoteData }} >
-                            <img src="/settings.png" alt="Settings" />
-                          </Link>
-                          <div style={{color:'#fff'}}>s</div>
-                          <img className='voting' src="/delete.png" alt="Delete" onClick={()=>togglePopup()} />
-                          {
-                            isOpen && <QuotesDelete
-                            content={
-                            <>
-                              <h1 className="text display-6 mb-4">Are you sure?</h1>
-                              <p className='text'>The quote will be deleted. There is no undo of this action.</p>
-                              <div className="d-flex justify-content-start">
-                                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{deleteQuote(randomQuote.data.data.user.id);togglePopup();toggleSuccess()}}>
-                                    Delete
-                                </Button>
-                                <a className="text-decoration-none col-md-3" style={{color:'#000000'}} onClick={togglePopup}>Cancel</a>
-                              </div>
-                            </>
-                            }/>
-                          }
-                          {
-                            successDelete && <QuotesDelete
-                            content={
-                            <>
-                              <p className='text'>Your <span style={{color:'#DE8667'}}>quote</span> was deleted.</p>
-                              <div className="d-flex justify-content-start">
-                                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{toggleSuccess()}}>
-                                    Close
-                                </Button>
-                              </div>
-                            </>
-                            }/>
-                          }
-                        </div>
-                      </>
-                    ) :(
-                      <>
-                        <div className='m-4'>
-                          <img className='voting' src={`/${randomLikedQuote}`} alt="Upvote" onClick={e => {upvote(randomQuote.data.data.id)}}/>
-                          <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuoteKarma}</div>
-                          <img className='voting' src={`/${randomDislikedQuote}`}  alt="Downvote" onClick={e => {downvote(randomQuote.data.data.id)}}/>
-                        </div>
-                        <div>
-                          <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
-                          <div className='authorGrid'>
-                            <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
-                            onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
-                            <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
-                          </div>
-                        </div>                          
-                      </>
-                    )
-                  }
-                </div>
-              ):(
-                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
-                  <div className='m-4'>
-                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
-                  </div>
-                </div>
-              )}
+    <Layout>
+      {authStore.user ? (
+        <>
+          <div className='mb-5'>
+            <div className='text-center'>
+              <h2 className='red'>Quote of the day</h2>
+              <p className='quoteText'>Quote of the day is a randomly chosen quote</p>
             </div>
-            <div className='mb-5'>
-              <div className='text-center mx-auto' style={{width:420}}>
-                <h2 className='red'>Most upvoted quotes</h2>
-                <p className='quoteText'>Most upvoted quotes on the platform. Give a like to the ones you like to keep them saved in your profile.</p>
-              </div>
-              {mostLiked.data ? (
-                <div className='quoteRow'>
-                  {mostLiked.data.data.map((item:QuoteType, index:number) => (
-                    authStore.user?.id === item.user.id ? (
-                    <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+            {randomQuote.data ? (
+              <div>
+                {authStore.user?.id === randomQuote.data.data.user.id ? (
+                  <div className='quoteBorder myQuotes mx-auto mb-5' style={{width:420}} onPointerMove={e=>{quoteData.id = randomQuote.data.data.id; quoteData.quote = randomQuote.data.data.quote}}>
+                    <div className='m-4'>
+                      <img className='voting' src='/upvote.png' alt="Upvote"/>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuoteKarma}</div>
+                      <img className='voting' src='/downvote.png' alt="Downvote"/>
+                    </div>
+                    <div>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
+                      <div className='authorGrid'>
+                        <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
+                        onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
+                        <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
+                      </div>
+                    </div>
+                    <div className='m-4'>
+                      <Link to={`${routes.EDITQUOTE}/${randomQuote.data.data.id}`} state={{ data: quoteData }} >
+                        <img src="/settings.png" alt="Settings" />
+                      </Link>
+                      <div style={{color:'#fff'}}>s</div>
+                      <img className='voting' src="/delete.png" alt="Delete" onClick={()=>togglePopup()} />
+                      {
+                        isOpen && <QuotesDelete
+                        content={
+                        <>
+                          <h1 className="text display-6 mb-4">Are you sure?</h1>
+                          <p className='text'>The quote will be deleted. There is no undo of this action.</p>
+                          <div className="d-flex justify-content-start">
+                            <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{deleteQuote(randomQuote.data.data.user.id);togglePopup();toggleSuccess()}}>
+                                Delete
+                            </Button>
+                            <a className="text-decoration-none col-md-3" style={{color:'#000000'}} onClick={togglePopup}>Cancel</a>
+                          </div>
+                        </>
+                        }/>
+                      }
+                      {
+                        successDelete && <QuotesDelete
+                        content={
+                        <>
+                          <p className='text'>Your <span style={{color:'#DE8667'}}>quote</span> was deleted.</p>
+                          <div className="d-flex justify-content-start">
+                            <Button href="/" className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{toggleSuccess()}}>
+                                Close
+                            </Button>
+                          </div>
+                        </>
+                        }/>
+                      }
+                    </div>
+                  </div>
+                  ) :(
+                    <div className='quoteBorder quoteGrid mx-auto mb-5' style={{width:420}}>
                       <div className='m-4'>
-                        <img className='voting' src={`/${mostLikedQuotes[index]}`}  alt="Upvote" />
+                        <img className='voting' src={`/${randomLikedQuote}`} alt="Upvote" onClick={e => {upvote(randomQuote.data.data.id)}}/>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuoteKarma}</div>
+                        <img className='voting' src={`/${randomDislikedQuote}`}  alt="Downvote" onClick={e => {downvote(randomQuote.data.data.id)}}/>
+                      </div>
+                      <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{randomQuote.data.data.quote}</div>
+                        <div className='authorGrid'>
+                          <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${randomQuote.data.data.user.avatar}`} alt="User avatar" width={35} 
+                          onPointerMove={e=>{setUserId(randomQuote.data.data.user.id)}} onClick={handleProceedUser}/>
+                          <div style={{fontSize:15, fontFamily:'raleway'}}>{randomQuote.data.data.user.first_name + ' ' + randomQuote.data.data.user.last_name}</div>
+                        </div>
+                      </div>                          
+                    </div>
+                  )
+                }
+              </div>
+            ):(
+              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                <div className='m-4'>
+                  <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className='mb-5'>
+            <div className='text-center mx-auto' style={{width:420}}>
+              <h2 className='red'>Most upvoted quotes</h2>
+              <p className='quoteText'>Most upvoted quotes on the platform. Give a like to the ones you like to keep them saved in your profile.</p>
+            </div>
+            {mostLiked.data ? (
+              <div className='quoteRow'>
+                {mostLiked.data.data.map((item:QuoteType, index:number) => (
+                  authStore.user?.id === item.user.id ? (
+                  <div key={index} className="quoteBorder myQuotes mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
+                    <div className='m-4'>
+                      <img className='voting' src={`/${mostLikedQuotes[index]}`}  alt="Upvote" />
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                      <img className='voting' src={`/${mostDislikedQuotes[index]}`}  alt="Downvote"/>
+                    </div>
+                    <div>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                      <div className='authorGrid'>
+                        <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
+                        onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
+                        <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                      </div>
+                    </div>
+                    <div className='m-4'>
+                      <Link to={`${routes.EDITQUOTE}/${item.id}`} state={{ data: quoteData }} >
+                        <img src="/settings.png" alt="Settings" />
+                      </Link>
+                      <div style={{color:'#fff'}}>s</div>
+                      <img className='voting' src="/delete.png" alt="Delete" onClick={togglePopup}/>
+                      {
+                        isOpen && <QuotesDelete
+                        content={
+                        <>
+                          <h1 className="text display-6 mb-4">Are you sure?</h1>
+                          <p className='text'>The quote will be deleted. There is no undo of this action.</p>
+                          <div className="d-flex justify-content-start">
+                            <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{deleteQuote(item.id);togglePopup();toggleSuccess()}}>
+                                Delete
+                            </Button>
+                            <a className="text-decoration-none col-md-3" style={{color:'#000000'}} onClick={togglePopup}>Cancel</a>
+                          </div>
+                        </>
+                        }/>
+                      }
+                      {
+                        successDelete && <QuotesDelete
+                        content={
+                        <>
+                          <p className='text fs-5'>Your <span style={{color:'#DE8667'}}>quote</span> was deleted.</p>
+                          <div className="d-flex justify-content-start">
+                            <Button href="/" className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{toggleSuccess()}}>
+                                Close
+                            </Button>
+                          </div>
+                        </>
+                        }/>
+                      }
+                    </div>
+                  </div>
+                  ):(
+                    <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
+                      <div className='m-4'>
+                        <img className='voting' src={`/${mostLikedQuotes[index]}`}  alt="Upvote" onClick={()=>upvoteMostLiked(index, item.id)}/>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{mostLikedQuotesKarma[index]}</div>
+                        <img className='voting' src={`/${mostDislikedQuotes[index]}`}  alt="Downvote" onClick={()=>downvoteMostLiked(index, item.id)}/>
+                      </div>
+                      <div>
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                        <div className='authorGrid'>
+                          <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
+                          onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
+                          <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                ))}      
+              </div>
+            ):(
+              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                <div className='m-4'>
+                  <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                </div>
+              </div>
+            )}
+            <div className='text-center'>
+              <Button href={routes.MOSTLIKEDQUOTES} className='btnLogin'>Load more</Button>
+            </div>
+          </div>
+          <div className="mb-4">
+            <div className='text-center mx-auto' style={{width:420}}>
+              <h2 className='red'>Most recent quotes</h2>
+              <p className='quoteText'>Recent quotes update as soon user adds new quote. Go ahed show them that you seen the new quote and like the ones you like.</p>
+            </div>
+            {recentQuotes.data ? (
+              <div className="quoteRow">
+                {recentQuotes.data.data.map((item:QuoteType, index:number) =>(
+                  authStore.user?.id === item.user.id ? (
+                    <div key={index} className="quoteBorder myQuotes mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
+                      <div className='m-4'>
+                        <img className='voting' src={`/${mostRecentLikedQuotes[index]}`} alt="Upvoted"/>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                        <img className='voting' src={`/${mostDislikedQuotes[index]}`}  alt="Downvote"/>
+                        <img className='voting' src={`/${mostRecentDislikedQuotes[index]}`} alt="Downvote"/>
                       </div>
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
@@ -630,7 +709,7 @@ const Home: FC = () => {
                       </div>
                       <div className='m-4'>
                         <Link to={`${routes.EDITQUOTE}/${item.id}`} state={{ data: quoteData }} >
-                          <img src="/settings.png" alt="Settings" />
+                          <img className='voting' src="/settings.png" alt="Settings" />
                         </Link>
                         <div style={{color:'#fff'}}>s</div>
                         <img className='voting' src="/delete.png" alt="Delete" onClick={togglePopup}/>
@@ -655,7 +734,7 @@ const Home: FC = () => {
                           <>
                             <p className='text fs-5'>Your <span style={{color:'#DE8667'}}>quote</span> was deleted.</p>
                             <div className="d-flex justify-content-start">
-                              <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{toggleSuccess()}}>
+                              <Button href="/" className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{toggleSuccess()}}>
                                   Close
                               </Button>
                             </div>
@@ -664,204 +743,114 @@ const Home: FC = () => {
                         }
                       </div>
                     </div>
-                    ):(
-                      <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
-                        <div className='m-4'>
-                          <img className='voting' src={`/${mostLikedQuotes[index]}`}  alt="Upvote" onClick={()=>upvoteMostLiked(index, item.id)}/>
-                          <div style={{fontSize:18, fontFamily:'raleway'}}>{mostLikedQuotesKarma[index]}</div>
-                          <img className='voting' src={`/${mostDislikedQuotes[index]}`}  alt="Downvote" onClick={()=>downvoteMostLiked(index, item.id)}/>
-                        </div>
-                        <div>
-                          <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                          <div className='authorGrid'>
-                            <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
-                            onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
-                            <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  ))}      
-                </div>
-              ):(
-                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
-                  <div className='m-4'>
-                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
-                  </div>
-                </div>
-              )}
-              <div className='text-center mx-auto'>
-                <Button className='btnLogin'>Load more</Button>
-              </div>
-            </div>
-            <div className="mb-5">
-              <div className='text-center mx-auto' style={{width:420}}>
-                <h2 className='red'>Most recent quotes</h2>
-                <p className='quoteText'>Recent quotes update as soon user adds new quote. Go ahed show them that you seen the new quote and like the ones you like.</p>
-              </div>
-              {recentQuotes.data ? (
-                <div className="quoteRow">
-                  {recentQuotes.data.data.map((item:QuoteType, index:number) =>(
-                    authStore.user?.id === item.user.id ? (
-                      <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
-                        <div className='m-4'>
-                          <img className='voting' src={`/${mostRecentLikedQuotes[index]}`} alt="Upvoted"/>
-                          <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                          <img className='voting' src={`/${mostRecentDislikedQuotes[index]}`} alt="Downvote"/>
-                        </div>
-                        <div>
-                          <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                          <div className='authorGrid'>
-                            <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
-                            onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
-                            <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                          </div>
-                        </div>
-                        <div className='m-4'>
-                          <Link to={`${routes.EDITQUOTE}/${item.id}`} state={{ data: quoteData }} >
-                            <img className='voting' src="/settings.png" alt="Settings" />
-                          </Link>
-                          <div style={{color:'#fff'}}>s</div>
-                          <img className='voting' src="/delete.png" alt="Delete" onClick={togglePopup}/>
-                          {
-                            isOpen && <QuotesDelete
-                            content={
-                            <>
-                              <h1 className="text display-6 mb-4">Are you sure?</h1>
-                              <p className='text'>The quote will be deleted. There is no undo of this action.</p>
-                              <div className="d-flex justify-content-start">
-                                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{deleteQuote(item.id);togglePopup();toggleSuccess()}}>
-                                    Delete
-                                </Button>
-                                <a className="text-decoration-none col-md-3" style={{color:'#000000'}} onClick={togglePopup}>Cancel</a>
-                              </div>
-                            </>
-                            }/>
-                          }
-                          {
-                            successDelete && <QuotesDelete
-                            content={
-                            <>
-                              <p className='text fs-5'>Your <span style={{color:'#DE8667'}}>quote</span> was deleted.</p>
-                              <div className="d-flex justify-content-start">
-                                <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{toggleSuccess()}}>
-                                    Close
-                                </Button>
-                              </div>
-                            </>
-                            }/>
-                          }
-                        </div>
-                      </div>
-                    ):(
-                      <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
-                        <div className='m-4'>
-                          <img className='voting' src={`/${mostRecentLikedQuotes[index]}`} alt="Upvote" onClick={()=>upvoteMostRecent(index, item.id)}/>
-                            <div style={{fontSize:18, fontFamily:'raleway'}}>{mostRecentQuotesKarma[index]}</div>
-                            <img className='voting' src={`/${mostRecentDislikedQuotes[index]}`} alt="Downvote" onClick={()=>downvoteMostRecent(index, item.id)}/>
-                        </div>
-                        <div>
-                          <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                          <div className='authorGrid'>
-                            <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
-                            onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser} />
-                            <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  ))}
-                </div>
-              ):(
-                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
-                  <div className='m-4'>
-                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
-                  </div>
-                </div>
-              )}
-              <div className='mb-5 text-center mx-auto'>
-                <Button className='btnLogin'>Load more</Button>
-              </div>
-            </div>
-          </>
-        ):(
-          <>
-            <div className="py-4 grid mb-5 text-center">
-              <div className="text-start">
-                <div className="text">
-                  <h1 className="display-1">Welcome to <span style={{color:'#DE8667'}}>Quotastic</span></h1>
-                  <p className="col-md-8 fs-4">
-                    Quotastic is a free online tool for you to explore the quips, quotes and proverbs.
-                    Sign up and express yourself. 
-                  </p>
-                  <p className="fs-4">
-                    <Button className="btnRegister" href={routes.SIGNUP}>
-                      Sign up
-                    </Button>
-                  </p>
-                </div>
-              </div>
-              <div><img src="example_quote.png" width={456} alt="example quote" /></div>
-            </div>
-            <div className='text-center mx-auto mb-5' style={{width:400}}>
-              <h1 className='display-6'>Explore the world of <span style={{color:'#DE8667'}}>fantastic quotes</span></h1>
-            </div>
-            <div className='mb-5'>
-              <div className='text-center mx-auto' style={{width:420}}>
-                <h2 className='red'>Most upvoted quotes</h2>
-                <p className='quoteText'>Most upvoted quotes on the platform. Sign up or login to like the quotes and keep them saved in your profile.</p>
-              </div>
-              {mostLiked.data ? (
-                <div className='mb-5 quoteRow'>
-                  {mostLiked.data.data.map((item:QuoteType, index:number) => (
-                    <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                  ):(
+                    <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
                       <div className='m-4'>
-                        <Link to={routes.LOGIN}>
-                          <img className='voting' src="upvote.png" alt="Upvote" />
-                        </Link>
-                        <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                        <Link to={routes.LOGIN}>
-                          <img className='voting' src="downvote.png" alt="Downvote" />
-                        </Link>
+                        <img className='voting' src={`/${mostRecentLikedQuotes[index]}`} alt="Upvote" onClick={()=>upvoteMostRecent(index, item.id)}/>
+                          <div style={{fontSize:18, fontFamily:'raleway'}}>{mostRecentQuotesKarma[index]}</div>
+                          <img className='voting' src={`/${mostRecentDislikedQuotes[index]}`} alt="Downvote" onClick={()=>downvoteMostRecent(index, item.id)}/>
                       </div>
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
                         <div className='authorGrid'>
                           <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
-                          onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
+                          onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser} />
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
                         </div>
                       </div>
                     </div>
-                  ))}
+                  )
+                ))}
+              </div>
+            ):(
+              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                <div className='m-4'>
+                  <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
                 </div>
-              ):(
-                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
-                  <div className='m-4'>
-                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
-                  </div>
-                </div>
-              )}
-              <div className='mb-5 text-center mx-auto text'>
-                <a href={routes.LOGIN}>
-                  <Button className='btnSeeMore'>Sign up to see more</Button>
-                </a>
+              </div>
+            )}
+            <div className='mb-5 text-center mx-auto'>
+              <Button href={routes.MOSTRECENTQUOTES} className='btnLogin'>Load more</Button>
+            </div>
+          </div>
+        </>
+      ):(
+        <>
+          <div className="py-4 grid mb-5 text-center">
+            <div className="text-start">
+              <div className="text">
+                <h1 className="display-1">Welcome to <span style={{color:'#DE8667'}}>Quotastic</span></h1>
+                <p className="col-md-8 fs-4">
+                  Quotastic is a free online tool for you to explore the quips, quotes and proverbs.
+                  Sign up and express yourself. 
+                </p>
+                <p className="fs-4">
+                  <Button className="btnRegister" href={routes.SIGNUP}>
+                    Sign up
+                  </Button>
+                </p>
               </div>
             </div>
-            {showError && (
-              <ToastContainer className="p-3" position="top-end">
-                <Toast onClose={() => setShowError(false)} show={showError}>
-                  <Toast.Header>
-                    <strong className="me-suto text-danger">Error</strong>
-                  </Toast.Header>
-                  <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
-                </Toast>
-              </ToastContainer>
+            <div><img src="example_quote.png" width={456} alt="example quote" /></div>
+          </div>
+          <div className='text-center mx-auto mb-5' style={{width:400}}>
+            <h1 className='display-6'>Explore the world of <span style={{color:'#DE8667'}}>fantastic quotes</span></h1>
+          </div>
+          <div className='mb-5'>
+            <div className='text-center mx-auto' style={{width:420}}>
+              <h2 className='red'>Most upvoted quotes</h2>
+              <p className='quoteText'>Most upvoted quotes on the platform. Sign up or login to like the quotes and keep them saved in your profile.</p>
+            </div>
+            {mostLiked.data ? (
+              <div className='mb-5 quoteRow'>
+                {mostLiked.data.data.map((item:QuoteType, index:number) => (
+                  <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
+                    <div className='m-4'>
+                      <Link to={routes.LOGIN}>
+                        <img className='voting' src="upvote.png" alt="Upvote" />
+                      </Link>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
+                      <Link to={routes.LOGIN}>
+                        <img className='voting' src="downvote.png" alt="Downvote" />
+                      </Link>
+                    </div>
+                    <div>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
+                      <div className='authorGrid'>
+                        <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
+                        onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
+                        <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ):(
+              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                <div className='m-4'>
+                  <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                </div>
+              </div>
             )}
-          </>
-        )}
-      </Layout>
-    </>
+            <div className='mb-5 text-center mx-auto text'>
+              <a href={routes.LOGIN}>
+                <Button className='btnSeeMore'>Sign up to see more</Button>
+              </a>
+            </div>
+          </div>
+          {showError && (
+            <ToastContainer className="p-3" position="top-end">
+              <Toast onClose={() => setShowError(false)} show={showError}>
+                <Toast.Header>
+                  <strong className="me-suto text-danger">Error</strong>
+                </Toast.Header>
+                <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
+              </Toast>
+            </ToastContainer>
+          )}
+        </>
+      )}
+    </Layout>
   )
 }
 

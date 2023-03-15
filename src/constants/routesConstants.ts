@@ -11,4 +11,6 @@ export enum routes {
   USERQUOTESINFO='../me/quotes',
   EDITQUOTE='me/myquote/edit',
   DELETEQUOTE='me/myquote/delete',
+  MOSTLIKEDQUOTES='quotes/most-liked',
+  MOSTRECENTQUOTES='quotes/most-recent',
 }

@@ -53,16 +53,6 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) =>{
         setApiError(fileResponse.data.message)
         setShowError(true)
       } else {
-/*         if (defaultValues?.isActiveUser) {
-          // Get user with avatar image
-          const userResponse = await API.fetchCurrUser()
-          if (
-            userResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
-          ) {
-            setApiError(userResponse.data.message)
-            setShowError(true)
-          }
-        } */
         navigate(routes.USERINFO)
       }
   }

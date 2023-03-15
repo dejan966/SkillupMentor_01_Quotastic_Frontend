@@ -369,8 +369,8 @@ const Navbar: FC = () => {
           ):(
             <div>No user info available</div>
           )}
-          <div /* style={{ width:'fit-content'}} */ className='mx-auto justify-content-center align-items-center'>
-            <div style={{backgroundColor:'#DE8667'/* , width:'fit-content' */}}>
+          <div className='mx-auto justify-content-center align-items-center'>
+            <div style={{backgroundColor:'#DE8667'}}>
               <div className='userKarmaBorderTop p-4'>
                 <div className="d-flex justify-content-between">
                   <div className="col-md-5">Quotes</div>
@@ -390,15 +390,14 @@ const Navbar: FC = () => {
                     </>
                   ):(
                     <>
-                      <div className="col-md-5">2</div>
-                      <div>4</div>
+                      <div className="col-md-5">0</div>
+                      <div>0</div>
                     </>
-                  )
-                } 
+                  )} 
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </header>
         {showError && (
           <ToastContainer className="p-3" position="top-end">
@@ -527,8 +526,8 @@ const Navbar: FC = () => {
             <div>No user info available</div>
           )}
         </header>
-        <div /* style={{ width:'fit-content'}} */ className='mx-auto justify-content-center align-items-center'>
-          <div style={{backgroundColor:'#DE8667'/* , width:'fit-content' */}}>
+        <div className='mx-auto justify-content-center align-items-center'>
+          <div style={{backgroundColor:'#DE8667'}}>
             <div className='userKarmaBorderTop p-4'>
               <div className="d-flex justify-content-between">
                 <div className="col-md-5">Quotes</div>
@@ -548,8 +547,8 @@ const Navbar: FC = () => {
                   </>
                 ):(
                   <>
-                    <div className="col-md-5">2</div>
-                    <div>4</div>
+                    <div className="col-md-5">0</div>
+                    <div>0</div>
                   </>
                 )} 
               </div>

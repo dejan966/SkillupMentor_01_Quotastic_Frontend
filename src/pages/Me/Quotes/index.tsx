@@ -1,5 +1,5 @@
 import Layout from '../../../components/ui/Layout'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useQuery } from 'react-query'
 import * as API from '../../../api/Api'
 import { Button, Toast, ToastContainer } from 'react-bootstrap'
@@ -122,7 +122,11 @@ const UserQuotesInfo: FC = () => {
                   ))}
                 </div>
               ):(
-                <div className='text text-center'>No quotes available</div>
+                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                  <div className='m-4'>
+                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -150,7 +154,11 @@ const UserQuotesInfo: FC = () => {
                   ))} 
                 </div>
               ):(
-                <div className='text text-center'>No quotes available</div>
+                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                  <div className='m-4'>
+                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                  </div>
+                </div>
               )}
             </div>
           </div>

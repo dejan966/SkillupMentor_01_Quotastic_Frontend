@@ -1,12 +1,11 @@
 import Layout from '../../../components/ui/Layout'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useQuery } from 'react-query'
 import * as API from '../../../api/Api'
 import { Button } from 'react-bootstrap'
-import { UserType } from '../../../models/auth'
 import { QuoteType } from '../../../models/quote'
 import { VoteType } from '../../../models/vote'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import authStore from '../../../stores/auth.store'
 
 const UserQuotesInfo: FC = () => {
@@ -74,7 +73,11 @@ const UserQuotesInfo: FC = () => {
                   ))}
                 </div>
               ):(
-                <div className='text text-center'>No quotes available</div>
+                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                  <div className='m-4'>
+                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -84,7 +87,7 @@ const UserQuotesInfo: FC = () => {
               {otherUserMostRecent.data ? (
                 <div>
                   {otherUserMostRecent.data.data.map((item: QuoteType, index:number)=>(
-                    <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
+                    <div className="quoteBorder quoteGrid mb-5" key={index} style={{width:400}}>
                       <div className='m-4'>
                         <img className='voting' src="/upvote.png" alt="Upvote" />
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
@@ -101,7 +104,11 @@ const UserQuotesInfo: FC = () => {
                   ))}
                 </div>
               ):(
-                <div className='text text-center'>No quotes available</div>
+                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                  <div className='m-4'>
+                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -120,7 +127,7 @@ const UserQuotesInfo: FC = () => {
                       <div>
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote.quote}</div>
                         <div className='authorGrid'>
-<                         img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.quote.user.avatar}`} alt="User avatar" width={35} 
+                          <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.quote.user.avatar}`} alt="User avatar" width={35} 
                             onPointerMove={e=>{setOtherUserId(item.quote.user.id)}} onClick={handleProceedUser}/>
                           <div style={{fontSize:15, fontFamily:'raleway'}}>{item.quote.user.first_name + ' ' + item.quote.user.last_name}</div>
                         </div>
@@ -129,7 +136,11 @@ const UserQuotesInfo: FC = () => {
                   ))}
                 </div>
               ):(
-                <div className='text text-center'>No quotes available</div>
+                <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                  <div className='m-4'>
+                    <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                  </div>
+                </div>
               )}
             </div>
           </div>

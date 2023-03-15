@@ -1,5 +1,7 @@
 import { FC, lazy, Suspense } from 'react'
 import { Route, RouteProps, Routes as Switch } from 'react-router-dom'
+import QuotesMostLiked from '../pages/Quotes/most-liked'
+import QuotesMostRecent from '../pages/Quotes/most-recent'
 
 import PrivateRoute from './PrivateRoute'
 import RestrictedRoute from './RestrictedRoute'
@@ -105,6 +107,16 @@ export const AppRoutes: AppRoute[] = [
     type: RouteType.PRIVATE,
     path: '/me/myquote/edit/success',
     children: <QuotesEditSuccess />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/quotes/most-liked',
+    children: <QuotesMostLiked />,
+  },
+  {
+    type: RouteType.PRIVATE,
+    path: '/quotes/most-recent',
+    children: <QuotesMostRecent />,
   },
   // Public Routes
   {

@@ -209,6 +209,13 @@ a:hover{
     align-items: center;
 }
 
+.myQuotes{
+    display:grid;
+    grid-template-columns: 0.1fr 1fr 0.1fr;
+    justify-content: center;
+    align-items: center;
+}
+
 .quoteGrid{
     display:grid;
     grid-template-columns: 0.1fr 1fr;
@@ -218,7 +225,7 @@ a:hover{
 
 .quoteRow{
     display:grid;
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: 3, 0.1fr;
     grid-template-columns: repeat(3, 1fr);
 }
 
@@ -250,7 +257,10 @@ a:hover{
     //width:fit-content;
     height: auto;
 }
-
+.background{
+    background-color:#DE8667 !important;
+    max-width: var(--contentWidth);
+}
 .parentGrid{
     display: flex;
     gap:20px;
@@ -324,15 +334,11 @@ a:hover{
     }
     
     .quoteRow{
-/*         margin-left: auto;
-        margin-right: auto; */
+        margin-left: auto;
+        margin-right: auto; 
         grid-template-columns: 1fr;
         grid-template-rows: 1fr;
         justify-content: center;
         align-items: center;
     }
-
- /*    .phoneScreen{
-        margin: auto;
-    } */
 }
