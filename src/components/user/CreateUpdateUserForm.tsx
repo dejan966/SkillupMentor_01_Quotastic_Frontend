@@ -15,7 +15,6 @@ import { StatusCode } from '../../constants/errorConstants'
 import { observer } from 'mobx-react'
 import { UserType } from '../../models/auth'
 import { routes } from '../../constants/routesConstants'
-import authStore from '../../stores/auth.store'
 
 interface Props {
   defaultValues?: UserType & { isActiveUser?: boolean }
