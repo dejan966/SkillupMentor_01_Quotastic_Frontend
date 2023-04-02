@@ -9,6 +9,7 @@ import { QuoteType } from '../models/quote'
 import { Link, useNavigate } from 'react-router-dom'
 import { StatusCode } from '../constants/errorConstants'
 import QuotesDelete from './Me/Myquote/Delete'
+import QuoteBlock from './Users/Quotes/QuoteBlock'
 
 const Home: FC = () => {
   const [apiError, setApiError] = useState('')
@@ -604,6 +605,7 @@ const Home: FC = () => {
               <div className='quoteRow'>
                 {mostLiked.data.data.map((item:QuoteType, index:number) => (
                   authStore.user?.id === item.user.id ? (
+                    //QuoteBlock
                   <div key={index} className="quoteBorder myQuotes mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
                     <div className='m-4'>
                       <img className='voting' src={`/${mostLikedQuotes[index]}`}  alt="Upvote" />
@@ -805,23 +807,15 @@ const Home: FC = () => {
               <div className='mb-5 quoteRow'>
                 {mostLiked.data.data.map((item:QuoteType, index:number) => (
                   <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}}>
-                    <div className='m-4'>
-                      <Link to={routes.LOGIN}>
-                        <img className='voting' src="upvote.png" alt="Upvote" />
-                      </Link>
-                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
-                      <Link to={routes.LOGIN}>
-                        <img className='voting' src="downvote.png" alt="Downvote" />
-                      </Link>
-                    </div>
-                    <div>
-                      <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote}</div>
-                      <div className='authorGrid'>
-                        <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${item.user.avatar}`} alt="User avatar" width={35} 
-                        onPointerMove={e=>{setUserId(item.user.id)}} onClick={handleProceedUser}/>
-                        <div style={{fontSize:15, fontFamily:'raleway'}}>{item.user.first_name + ' ' + item.user.last_name}</div>
-                      </div>
-                    </div>
+                    <QuoteBlock 
+                      userQuote={item} 
+                      index={index} 
+                      liked={mostLikedQuotes} 
+                      disliked={mostDislikedQuotes} 
+                      likes={likesQuotes}
+                      dislikes={dislikesQuotes}
+                      karma={mostLikedQuotesKarma}
+                      />
                   </div>
                 ))}
               </div>

@@ -1,5 +1,4 @@
 import { apiRoutes } from '../constants/apiConstants'
-import { CreateVoteFields } from '../hooks/react-hook-form/useCreateUpdateVote'
 import { VoteType } from '../models/vote'
 import { apiRequest } from './Api'
 
