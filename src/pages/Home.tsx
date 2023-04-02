@@ -6,15 +6,9 @@ import authStore from '../stores/auth.store'
 import { useQuery } from 'react-query'
 import * as API from '../api/Api'
 import { QuoteType } from '../models/quote'
-import { Link, useNavigate } from 'react-router-dom'
-import { StatusCode } from '../constants/errorConstants'
-import QuotesDelete from './Me/Myquote/Delete'
 import QuoteBlock from './Users/Quotes/QuoteBlock'
 
 const Home: FC = () => {
-  const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
-  
   //most liked quotes
   const [mostLikedQuotes, setMostLikedQuotes] = useState<string[]>([])
   const [mostDislikedQuotes, setMostDislikedQuotes] = useState<string[]>([])
@@ -35,21 +29,6 @@ const Home: FC = () => {
   const [randomQuoteKarma, setRandomQuoteKarma] = useState(1)
   const [likes, setLikes] = useState(false)
   const [dislikes, setDislikes] = useState(false)
-
-  const [userId, setUserId] = useState(1)
-  const [quoteData, setQuoteData] = useState({ id: 1, quote:''}) 
-  const navigate = useNavigate()
-
-  const [isOpen, setIsOpen] = useState(false)
-  const [successDelete, setSuccessDelete] = useState(false)
- 
-  const togglePopup = () => {
-    setIsOpen(!isOpen)
-  }
-  
-  const toggleSuccess = () => {
-    setSuccessDelete(!successDelete)
-  }
   
   const randomQuote = useQuery(
     ['randomQuote'],
@@ -259,47 +238,6 @@ const Home: FC = () => {
     },
   )
 
-  const deleteQuote = async (quoteId:number) => {
-    const response = await API.deleteQuote(quoteId)
-    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
-      setShowError(true)
-    }
-  }
-
-  const handleProceedUser = () => {
-    if(userId === authStore.user?.id){
-      navigate('me/quotes')
-      return
-    }
-    navigate(`users/${userId}/quotes`)
-  }
-
-  const handleUpvote = async (quoteId:number) => {
-    const response = await API.createUpvote(quoteId)
-    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
-      setShowError(true)
-    }
-  }
-  
-  const handleDownvote = async (quoteId:number) => {
-    const response = await API.createDownvote(quoteId)
-    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
-      setShowError(true)
-    }
-  }
-
   return (
     <Layout>
       {authStore.user ? (
@@ -310,10 +248,9 @@ const Home: FC = () => {
               <p className='quoteText'>Quote of the day is a randomly chosen quote</p>
             </div>
             {randomQuote.data ? (
-              <div className='quoteRow'>
+              <div className='quoteRow mx-auto myQuotes' style={{width:420}}>
                 <QuoteBlock 
                   userQuote={randomQuote.data.data} 
-                  key={0} 
                   liked={randomLikedQuote} 
                   disliked={randomDislikedQuote} 
                   likes={likes}
@@ -322,7 +259,7 @@ const Home: FC = () => {
                 />
               </div>
             ):(
-              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+              <div className="quoteBorder mb-5 mx-auto" style={{width:420}}>
                 <div className='m-4'>
                   <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
                 </div>
@@ -350,7 +287,7 @@ const Home: FC = () => {
                 )}      
               </div>
             ):(
-              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+              <div className="quoteBorder mb-5 mx-auto" style={{width:420}}>
                 <div className='m-4'>
                   <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
                 </div>
@@ -369,18 +306,18 @@ const Home: FC = () => {
               <div className="quoteRow">
                 {recentQuotes.data.data.map((item:QuoteType, index:number) =>
                   <QuoteBlock 
-                  userQuote={item} 
-                  key={index} 
-                  liked={mostRecentLikedQuotes[index]} 
-                  disliked={mostRecentDislikedQuotes[index]} 
-                  likes={recentLikesQuotes[index]}
-                  dislikes={recentDislikesQuotes[index]}
-                  karma={mostRecentQuotesKarma[index]}
-                />
+                    userQuote={item} 
+                    key={index} 
+                    liked={mostRecentLikedQuotes[index]} 
+                    disliked={mostRecentDislikedQuotes[index]} 
+                    likes={recentLikesQuotes[index]}
+                    dislikes={recentDislikesQuotes[index]}
+                    karma={mostRecentQuotesKarma[index]}
+                  />
                 )}
               </div>
             ):(
-              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+              <div className="quoteBorder mb-5 mx-auto" style={{width:420}}>
                 <div className='m-4'>
                   <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
                 </div>
@@ -422,19 +359,18 @@ const Home: FC = () => {
               <div className='mb-5 quoteRow'>
                 {mostLiked.data.data.map((item:QuoteType, index:number) => (
                   <QuoteBlock 
-                      userQuote={item} 
-                      key={index} 
-                      liked={mostLikedQuotes[index]} 
-                      disliked={mostDislikedQuotes[index]} 
-                      likes={likesQuotes[index]}
-                      dislikes={dislikesQuotes[index]}
-                      karma={mostLikedQuotesKarma[index]}
-                    />
-                  
+                    userQuote={item} 
+                    key={index} 
+                    liked={mostLikedQuotes[index]} 
+                    disliked={mostDislikedQuotes[index]} 
+                    likes={likesQuotes[index]}
+                    dislikes={dislikesQuotes[index]}
+                    karma={mostLikedQuotesKarma[index]}
+                  />
                 ))}
               </div>
             ):(
-              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+              <div className="quoteBorder mb-5 mx-auto" style={{width:420}}>
                 <div className='m-4'>
                   <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
                 </div>
@@ -445,17 +381,7 @@ const Home: FC = () => {
                 <Button className='btnSeeMore'>Sign up to see more</Button>
               </a>
             </div>
-          </div>
-          {showError && (
-            <ToastContainer className="p-3" position="top-end">
-              <Toast onClose={() => setShowError(false)} show={showError}>
-                <Toast.Header>
-                  <strong className="me-suto text-danger">Error</strong>
-                </Toast.Header>
-                <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
-              </Toast>
-            </ToastContainer>
-          )}
+          </div>          
         </>
       )}
     </Layout>
