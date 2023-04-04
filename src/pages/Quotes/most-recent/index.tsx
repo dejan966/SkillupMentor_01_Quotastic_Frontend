@@ -5,7 +5,7 @@ import * as API from '../../../api/Api'
 import authStore from '../../../stores/auth.store'
 import { Link, useNavigate } from 'react-router-dom'
 import { StatusCode } from '../../../constants/errorConstants'
-import { Button } from 'react-bootstrap'
+import { Button, Toast, ToastContainer } from 'react-bootstrap'
 import { routes } from '../../../constants/routesConstants'
 import { QuoteType } from '../../../models/quote'
 import QuotesDelete from '../../Me/Myquote/Delete'
@@ -57,7 +57,6 @@ const QuotesMostRecent: FC = () => {
                 mostRecentQuotesKarma.push(data.data[0].karma)
                 setMostRecentQuotesKarma(mostRecentQuotesKarma)
                 }
-                
             }
             else{
               mostRecentLikedQuotes.push('upvote.png') 
@@ -301,7 +300,7 @@ const QuotesMostRecent: FC = () => {
                   </div>
                 </div>
               ):(
-                <div key={index} className="quoteBorder quoteGrid mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
+                <div key={index} className="quoteBorder myQuotes mb-5" style={{width:400}} onPointerMove={e=>{quoteData.id = item.id; quoteData.quote = item.quote}}>
                   <div className='m-4'>
                     <img className='voting' src={`/${mostRecentLikedQuotes[index]}`} alt="Upvote" onClick={()=>upvoteMostRecent(index, item.id)}/>
                       <div style={{fontSize:18, fontFamily:'raleway'}}>{mostRecentQuotesKarma[index]}</div>
@@ -326,6 +325,16 @@ const QuotesMostRecent: FC = () => {
             </div>
           </div>
         )}
+        {showError && (
+        <ToastContainer className="p-3" position="top-end">
+          <Toast onClose={() => setShowError(false)} show={showError}>
+            <Toast.Header>
+              <strong className="me-suto text-danger">Error</strong>
+            </Toast.Header>
+            <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
+          </Toast>
+        </ToastContainer>
+      )}
       </Layout>
     )
 }

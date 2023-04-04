@@ -56,7 +56,7 @@ const UserQuotesInfo: FC = () => {
               {otherUserMostLiked.data ? (
                 <div>
                   {otherUserMostLiked.data.data.map((item: QuoteType, index:number)=>(
-                    <div className="quoteBorder quoteGrid mb-5" key={index} style={{width:400}}>
+                    <div className="quoteBorder myQuotes mb-5" key={index} style={{width:400}}>
                       <div className='m-4'>
                         <img className='voting' src="/upvote.png" alt="Upvote" />
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
@@ -87,7 +87,7 @@ const UserQuotesInfo: FC = () => {
               {otherUserMostRecent.data ? (
                 <div>
                   {otherUserMostRecent.data.data.map((item: QuoteType, index:number)=>(
-                    <div className="quoteBorder quoteGrid mb-5" key={index} style={{width:400}}>
+                    <div className="quoteBorder myQuotes mb-5" key={index} style={{width:400}}>
                       <div className='m-4'>
                         <img className='voting' src="/upvote.png" alt="Upvote" />
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.karma}</div>
@@ -118,7 +118,7 @@ const UserQuotesInfo: FC = () => {
               {otherUserLiked.data ? (
                 <div>
                   {otherUserLiked.data.data.map((item: VoteType, index:number)=>(
-                    <div className="quoteBorder quoteGrid mb-5"  key={index} style={{width:400}}>
+                    <div className="quoteBorder myQuotes mb-5"  key={index} style={{width:400}}>
                       <div className='m-4'>
                         <img className='voting' src="/upvoted.png" alt="Upvoted" />
                         <div style={{fontSize:18, fontFamily:'raleway'}}>{item.quote.karma}</div>

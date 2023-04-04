@@ -6,9 +6,15 @@ import authStore from '../stores/auth.store'
 import { useQuery } from 'react-query'
 import * as API from '../api/Api'
 import { QuoteType } from '../models/quote'
-import QuoteBlock from './Users/Quotes/QuoteBlock'
+import { Link, useNavigate } from 'react-router-dom'
+import { StatusCode } from '../constants/errorConstants'
+import QuotesDelete from './Me/Myquote/Delete'
+import QuoteBlock from './QuoteBlock'
 
 const Home: FC = () => {
+  const [apiError, setApiError] = useState('')
+  const [showError, setShowError] = useState(false)
+  
   //most liked quotes
   const [mostLikedQuotes, setMostLikedQuotes] = useState<string[]>([])
   const [mostDislikedQuotes, setMostDislikedQuotes] = useState<string[]>([])
@@ -29,8 +35,23 @@ const Home: FC = () => {
   const [randomQuoteKarma, setRandomQuoteKarma] = useState(1)
   const [likes, setLikes] = useState(false)
   const [dislikes, setDislikes] = useState(false)
+
+  const [userId, setUserId] = useState(1)
+  const [quoteData, setQuoteData] = useState({ id: 1, quote:''}) 
+  const navigate = useNavigate()
+
+  const [isOpen, setIsOpen] = useState(false)
+  const [successDelete, setSuccessDelete] = useState(false)
+ 
+  const togglePopup = () => {
+    setIsOpen(!isOpen)
+  }
   
-  const randomQuote = useQuery(
+  const toggleSuccess = () => {
+    setSuccessDelete(!successDelete)
+  }
+  
+  const {data:randomQuote, isLoading:isLoadingRandom} = useQuery(
     ['randomQuote'],
     () => API.fetchRandomQuote(),
     {
@@ -47,18 +68,19 @@ const Home: FC = () => {
             setRandomDislikedQuote('downvoted.png')
             setRandomLikedQuote('upvote.png')
           }
-          else if(authStore.user?.id !== data.data.votes[0]?.user.id){
-            setRandomQuoteKarma(data.data.karma)
-            setRandomLikedQuote('upvote.png')
-            setRandomDislikedQuote('downvote.png')
-          }
+         
+        }
+        else if(authStore.user?.id !== data.data.votes[0]?.user.id){
+          setRandomQuoteKarma(data.data.karma)
+          setRandomLikedQuote('upvote.png')
+          setRandomDislikedQuote('downvote.png')
         }
       },
       refetchOnWindowFocus: false,
     },
   )
 
-  const mostLiked = useQuery(
+  const {data:mostLiked, isLoading:isLoadingMostLiked} = useQuery(
     ['quote'],
     () => API.fetchQuotes(),
     {
@@ -118,14 +140,6 @@ const Home: FC = () => {
               mostDislikedQuotes.push('downvoted.png')
               mostLikedQuotesKarma.push(data.data[i].karma)
             }
-            else{
-              likesQuotes.push(false)
-              dislikesQuotes.push(false)
-
-              mostLikedQuotes.push('upvote.png')
-              mostDislikedQuotes.push('downvote.png')
-              mostLikedQuotesKarma.push(data.data[i].karma)
-            }
           }
           else if(authStore.user?.id !== data.data[i].votes[0]?.user.id){
             likesQuotes.push(false)
@@ -148,7 +162,7 @@ const Home: FC = () => {
     },
   )
 
-  const recentQuotes = useQuery(
+  const {data:recentQuotes, isLoading:isLoadingMostRecent} = useQuery(
     ['recentQuotes'],
     () => API.usersMostRecentQuotes(),
     {
@@ -208,14 +222,6 @@ const Home: FC = () => {
               mostRecentDislikedQuotes.push('downvoted.png')
               mostRecentQuotesKarma.push(data.data[i].karma)
             }
-            else{
-              recentLikesQuotes.push(false)
-              recentDislikesQuotes.push(false)
-
-              mostRecentLikedQuotes.push('upvote.png')
-              mostRecentDislikedQuotes.push('downvote.png')
-              mostRecentQuotesKarma.push(data.data[i].karma)
-            }
           }
           else if(authStore.user?.id !== data.data[i].votes[0]?.user.id){
             recentLikesQuotes.push(false)
@@ -238,6 +244,254 @@ const Home: FC = () => {
     },
   )
 
+  const deleteQuote = async (quoteId:number) => {
+    const response = await API.deleteQuote(quoteId)
+    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    }
+  }
+
+  const handleProceedUser = () => {
+    if(userId === authStore.user?.id){
+      navigate('me/quotes')
+      return
+    }
+    navigate(`users/${userId}/quotes`)
+  }
+
+  const handleUpvote = async (quoteId:number) => {
+    const response = await API.createUpvote(quoteId)
+    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    }
+  }
+  
+  const handleDownvote = async (quoteId:number) => {
+    const response = await API.createDownvote(quoteId)
+    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    }
+  }
+
+  const upvote = (quoteId:number) =>{
+    if(likes === true && dislikes === false){
+      setLikes(false)
+      setRandomLikedQuote('upvote.png')
+      setRandomDislikedQuote('downvote.png')
+      let karma = randomQuoteKarma
+      karma--
+      setRandomQuoteKarma(karma)
+      handleUpvote(quoteId)
+      return
+    }
+    else if(likes === false){
+      let karma = randomQuoteKarma
+      setLikes(true)
+      if(dislikes === true){
+        setDislikes(false)
+        karma+=2
+        setRandomQuoteKarma(karma)
+        setRandomDislikedQuote('downvote.png')
+        setRandomLikedQuote('upvoted.png')
+        return
+      }
+      setRandomLikedQuote('upvoted.png')
+      karma++
+      setRandomQuoteKarma(karma)
+      handleUpvote(quoteId)
+      return
+    }
+  }
+
+  const downvote = (quoteId:number) =>{
+    if(dislikes===true){
+      setDislikes(false)
+      setRandomDislikedQuote('downvote.png')
+      setRandomLikedQuote('upvote.png')
+      let karma = randomQuoteKarma
+      karma++
+      setRandomQuoteKarma(karma)
+      handleDownvote(quoteId)
+      return
+    }
+    else if(dislikes === false){
+      setDislikes(true)
+      let karma = randomQuoteKarma
+      if(likes === true){
+        setLikes(false)
+        setRandomLikedQuote('upvote.png')
+        setRandomDislikedQuote('downvoted.png')
+        karma-=2
+        setRandomQuoteKarma(karma)
+        handleDownvote(quoteId)
+        return
+      }
+      karma--
+      setRandomQuoteKarma(karma)
+      setRandomDislikedQuote('downvoted.png')
+      handleDownvote(quoteId)
+      return
+    }
+  }
+
+  const upvoteMostLiked = (index:number, quoteId:number) =>{
+    const likesQuotesCopy = {...likesQuotes}
+    const dislikesQuotesCopy = {...dislikesQuotes}
+    if(likesQuotes[index] === true){
+      likesQuotesCopy[index] = false
+      mostLikedQuotesKarma[index]--
+      mostLikedQuotes[index] = 'upvote.png'
+      setLikesQuotes(likesQuotesCopy)
+      setMostLikedQuotesKarma(mostLikedQuotesKarma)
+      handleUpvote(quoteId)
+      return
+    }
+    else if(likesQuotes[index] === false){
+      likesQuotesCopy[index] = true
+      if(dislikesQuotes[index] === true){
+        setLikesQuotes(likesQuotesCopy)
+        mostLikedQuotes[index] = 'upvoted.png'
+        dislikesQuotesCopy[index] = false
+        setDislikesQuotes(dislikesQuotesCopy)
+        mostLikedQuotesKarma[index]+=2
+        mostDislikedQuotes[index] = 'downvote.png'
+        setMostLikedQuotes(mostLikedQuotes)
+        setMostDislikedQuotes(mostDislikedQuotes)
+        setMostLikedQuotesKarma(mostLikedQuotesKarma)
+        handleUpvote(quoteId)
+        return
+      }
+      setLikesQuotes(likesQuotesCopy)
+      mostLikedQuotes[index] = 'upvoted.png'
+      mostLikedQuotesKarma[index]++
+      setMostLikedQuotes(mostLikedQuotes)
+      setMostLikedQuotesKarma(mostLikedQuotesKarma)
+      handleUpvote(quoteId)
+      return
+    }
+  }
+
+  const downvoteMostLiked = (index:number, quoteId:number) =>{
+    const likesQuotesCopy = {...likesQuotes}
+    const dislikesQuotesCopy = {...dislikesQuotes}
+    if(dislikesQuotes[index] === true){
+      dislikesQuotesCopy[index] = false
+      setDislikesQuotes(dislikesQuotesCopy)
+      mostDislikedQuotes[index] = 'downvote.png'
+      mostLikedQuotesKarma[index]++
+      setMostLikedQuotesKarma(mostLikedQuotesKarma)
+      handleDownvote(quoteId)
+      return
+    }
+    else if(dislikesQuotes[index] === false){
+      dislikesQuotesCopy[index] = true
+      if(likesQuotes[index] === true){
+        likesQuotesCopy[index] = false
+        mostDislikedQuotes[index] = 'downvoted.png'
+        setDislikesQuotes(dislikesQuotesCopy)
+        setLikesQuotes(likesQuotesCopy)
+        mostLikedQuotes[index] = 'upvote.png'
+        setMostDislikedQuotes(mostDislikedQuotes)
+        mostLikedQuotesKarma[index]-=2
+        setMostLikedQuotesKarma(mostLikedQuotesKarma)
+        handleDownvote(quoteId)
+        return
+      }
+      mostDislikedQuotes[index] = 'downvoted.png'
+      setDislikesQuotes(dislikesQuotesCopy)
+      mostLikedQuotesKarma[index]--
+      setMostLikedQuotesKarma(mostLikedQuotesKarma)
+      handleDownvote(quoteId)
+      return
+    }
+  }
+
+  const upvoteMostRecent = (index:number, quoteId:number) =>{
+    const recentLikesQuotesCopy = {...recentLikesQuotes}
+    const recentDislikesQuotesCopy = {...recentDislikesQuotes}
+    if(recentLikesQuotes[index] === true){
+      mostRecentLikedQuotes[index] = 'upvote.png'
+      recentLikesQuotesCopy[index] = false
+      mostRecentQuotesKarma[index]--
+      setRecentLikesQuotes(recentLikesQuotesCopy)
+      setMostRecentLikedQuotes(mostRecentLikedQuotes)
+      setMostRecentQuotesKarma(mostRecentQuotesKarma)
+      handleUpvote(quoteId)
+      return
+    }
+    else if(recentLikesQuotes[index] === false){
+      recentLikesQuotesCopy[index] = true
+      if(recentDislikesQuotes[index] === true){
+        recentDislikesQuotesCopy[index]=false
+        mostRecentLikedQuotes[index] = 'upvoted.png'
+        mostRecentQuotesKarma[index]+=2
+        setMostRecentQuotesKarma(mostRecentQuotesKarma)
+        setRecentDislikesQuotes(recentDislikesQuotesCopy)
+        setMostRecentLikedQuotes(mostRecentLikedQuotes)
+        mostRecentDislikedQuotes[index] = 'downvote.png'
+        setMostRecentDislikedQuotes(mostRecentDislikedQuotes)
+        handleUpvote(quoteId)
+        return
+      }
+      mostRecentLikedQuotes[index] = 'upvoted.png'
+      mostRecentQuotesKarma[index]++
+      setRecentLikesQuotes(recentLikesQuotesCopy)
+      setMostRecentLikedQuotes(mostRecentLikedQuotes)
+      setMostRecentQuotesKarma(mostRecentQuotesKarma)
+      handleUpvote(quoteId)
+      return
+    }
+  }
+
+  const downvoteMostRecent = (index:number, quoteId:number) =>{
+    const recentLikesQuotesCopy = {...recentLikesQuotes}
+    const recentDislikesQuotesCopy = {...recentDislikesQuotes}
+    if(recentDislikesQuotes[index] === true){
+      recentDislikesQuotesCopy[index] = false
+      mostRecentDislikedQuotes[index] = 'downvote.png'
+      mostRecentQuotesKarma[index]++
+      setRecentDislikesQuotes(recentDislikesQuotesCopy)
+      setMostRecentDislikedQuotes(mostRecentDislikedQuotes)
+      setMostRecentQuotesKarma(mostRecentQuotesKarma)
+      handleDownvote(quoteId)
+      return
+    }
+    else if(recentDislikesQuotes[index] === false){
+      recentDislikesQuotesCopy[index] = true
+      if(recentLikesQuotes[index] === true){
+        recentLikesQuotesCopy[index] = false
+        mostRecentDislikedQuotes[index] = 'downvoted.png'
+        mostRecentLikedQuotes[index] = 'upvote.png'
+        mostRecentQuotesKarma[index]-=2
+        setRecentLikesQuotes(recentLikesQuotesCopy)
+        setMostRecentLikedQuotes(mostRecentLikedQuotes)
+        setMostRecentQuotesKarma(mostRecentQuotesKarma)
+        setMostRecentDislikedQuotes(mostRecentDislikedQuotes)
+        setRecentDislikesQuotes(recentDislikesQuotesCopy)
+        handleDownvote(quoteId)
+        return
+      }
+      mostRecentDislikedQuotes[index] = 'downvoted.png'
+      setRecentDislikesQuotes(recentDislikesQuotesCopy)
+      mostRecentQuotesKarma[index]--
+      setMostRecentQuotesKarma(mostRecentQuotesKarma)
+      handleDownvote(quoteId)
+      return
+    }
+  }
+
   return (
     <Layout>
       {authStore.user ? (
@@ -247,23 +501,33 @@ const Home: FC = () => {
               <h2 className='red'>Quote of the day</h2>
               <p className='quoteText'>Quote of the day is a randomly chosen quote</p>
             </div>
-            {randomQuote.data ? (
-              <div className='quoteRow mx-auto myQuotes' style={{width:420}}>
-                <QuoteBlock 
-                  userQuote={randomQuote.data.data} 
-                  liked={randomLikedQuote} 
-                  disliked={randomDislikedQuote} 
-                  likes={likes}
-                  dislikes={dislikes}
-                  karma={randomQuoteKarma}
-                />
-              </div>
-            ):(
-              <div className="quoteBorder mb-5 mx-auto" style={{width:420}}>
+            {isLoadingRandom ? (
+              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
                 <div className='m-4'>
-                  <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                  <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>Loading...</div>
                 </div>
               </div>
+            ):(
+              <>
+                {randomQuote ? (
+                  <div className='myQuotes mx-auto mb-5' style={{width:420}} onPointerMove={e=>{quoteData.id = randomQuote.data.data.id; quoteData.quote = randomQuote.data.data.quote}}>
+                    <QuoteBlock
+                      userQuote={randomQuote.data} 
+                      liked={randomLikedQuote} 
+                      disliked={randomDislikedQuote} 
+                      likes={likes}
+                      dislikes={dislikes}
+                      karma={randomQuoteKarma}
+                    />
+                  </div>
+                  ):(
+                  <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                    <div className='m-4'>
+                      <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
           <div className='mb-5'>
@@ -271,27 +535,36 @@ const Home: FC = () => {
               <h2 className='red'>Most upvoted quotes</h2>
               <p className='quoteText'>Most upvoted quotes on the platform. Give a like to the ones you like to keep them saved in your profile.</p>
             </div>
-            {mostLiked.data ? (
-              <div className='quoteRow'>
-                {mostLiked.data.data.map((item:QuoteType, index:number) => (
-                  <QuoteBlock 
-                    userQuote={item} 
-                    key={index} 
-                    liked={mostLikedQuotes[index]} 
-                    disliked={mostDislikedQuotes[index]} 
-                    likes={likesQuotes[index]}
-                    dislikes={dislikesQuotes[index]}
-                    karma={mostLikedQuotesKarma[index]}
-                  />
-                  )
-                )}      
-              </div>
-            ):(
-              <div className="quoteBorder mb-5 mx-auto" style={{width:420}}>
+            {isLoadingMostLiked ?(
+              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
                 <div className='m-4'>
                   <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
                 </div>
               </div>
+            ):(
+              <>
+                {mostLiked ? (
+                  <div className='quoteRow'>
+                    {mostLiked.data.map((item:QuoteType, index:number) =>(
+                    <QuoteBlock 
+                      userQuote={item} 
+                      key={index} 
+                      liked={mostLikedQuotes[index]} 
+                      disliked={mostDislikedQuotes[index]} 
+                      likes={likesQuotes[index]}
+                      dislikes={dislikesQuotes[index]}
+                      karma={mostLikedQuotesKarma[index]}
+                    />
+                    ))}      
+                  </div>
+                ):(
+                  <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                    <div className='m-4'>
+                      <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
             <div className='text-center'>
               <Button href={routes.MOSTLIKEDQUOTES} className='btnLogin'>Load more</Button>
@@ -302,26 +575,36 @@ const Home: FC = () => {
               <h2 className='red'>Most recent quotes</h2>
               <p className='quoteText'>Recent quotes update as soon user adds new quote. Go ahed show them that you seen the new quote and like the ones you like.</p>
             </div>
-            {recentQuotes.data ? (
-              <div className="quoteRow">
-                {recentQuotes.data.data.map((item:QuoteType, index:number) =>
-                  <QuoteBlock 
-                    userQuote={item} 
-                    key={index} 
-                    liked={mostRecentLikedQuotes[index]} 
-                    disliked={mostRecentDislikedQuotes[index]} 
-                    likes={recentLikesQuotes[index]}
-                    dislikes={recentDislikesQuotes[index]}
-                    karma={mostRecentQuotesKarma[index]}
-                  />
-                )}
-              </div>
-            ):(
-              <div className="quoteBorder mb-5 mx-auto" style={{width:420}}>
+            {isLoadingMostRecent?(
+              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
                 <div className='m-4'>
                   <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
                 </div>
               </div>
+            ):(
+              <>
+                {recentQuotes ? (
+                  <div className="quoteRow">
+                    {recentQuotes.data.map((item:QuoteType, index:number) =>(
+                      <QuoteBlock 
+                        userQuote={item} 
+                        key={index} 
+                        liked={mostRecentLikedQuotes[index]} 
+                        disliked={mostRecentDislikedQuotes[index]} 
+                        likes={recentLikesQuotes[index]}
+                        dislikes={recentDislikesQuotes[index]}
+                        karma={mostRecentQuotesKarma[index]}
+                      />
+                    ))}
+                  </div>
+                ):(
+                  <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                    <div className='m-4'>
+                      <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
             <div className='mb-5 text-center mx-auto'>
               <Button href={routes.MOSTRECENTQUOTES} className='btnLogin'>Load more</Button>
@@ -355,33 +638,53 @@ const Home: FC = () => {
               <h2 className='red'>Most upvoted quotes</h2>
               <p className='quoteText'>Most upvoted quotes on the platform. Sign up or login to like the quotes and keep them saved in your profile.</p>
             </div>
-            {mostLiked.data ? (
-              <div className='mb-5 quoteRow'>
-                {mostLiked.data.data.map((item:QuoteType, index:number) => (
-                  <QuoteBlock 
-                    userQuote={item} 
-                    key={index} 
-                    liked={mostLikedQuotes[index]} 
-                    disliked={mostDislikedQuotes[index]} 
-                    likes={likesQuotes[index]}
-                    dislikes={dislikesQuotes[index]}
-                    karma={mostLikedQuotesKarma[index]}
-                  />
-                ))}
-              </div>
-            ):(
-              <div className="quoteBorder mb-5 mx-auto" style={{width:420}}>
+            {isLoadingMostLiked ?(
+              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
                 <div className='m-4'>
                   <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
                 </div>
               </div>
+            ):(
+              <>
+              {mostLiked ? (
+              <div className='quoteRow'>
+                {mostLiked.data.map((item:QuoteType, index:number) =>(
+                <QuoteBlock 
+                  userQuote={item} 
+                  key={index} 
+                  liked={mostLikedQuotes[index]} 
+                  disliked={mostDislikedQuotes[index]} 
+                  likes={likesQuotes[index]}
+                  dislikes={dislikesQuotes[index]}
+                  karma={mostLikedQuotesKarma[index]}
+                />
+                ))}      
+              </div>
+            ):(
+              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                <div className='m-4'>
+                  <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                </div>
+              </div>
+            )}
+              </>
             )}
             <div className='mb-5 text-center mx-auto text'>
               <a href={routes.LOGIN}>
                 <Button className='btnSeeMore'>Sign up to see more</Button>
               </a>
             </div>
-          </div>          
+          </div>
+          {showError && (
+            <ToastContainer className="p-3" position="top-end">
+              <Toast onClose={() => setShowError(false)} show={showError}>
+                <Toast.Header>
+                  <strong className="me-suto text-danger">Error</strong>
+                </Toast.Header>
+                <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
+              </Toast>
+            </ToastContainer>
+          )}
         </>
       )}
     </Layout>
