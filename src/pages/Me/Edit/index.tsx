@@ -1,5 +1,5 @@
-import Layout from '../../../components/ui/Layout'
-import CreateUpdateUserForm from '../../../components/user/CreateUpdateUserForm'
+import Layout from 'components/ui/Layout'
+import CreateUpdateUserForm from 'components/user/CreateUpdateUserForm'
 import { FC } from 'react'
 import { useLocation } from 'react-router-dom'
 

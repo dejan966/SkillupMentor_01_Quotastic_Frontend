@@ -1,12 +1,12 @@
-import Layout from '../../../components/ui/Layout'
+import Layout from 'components/ui/Layout'
 import { FC, useState } from 'react'
 import { useQuery } from 'react-query'
-import * as API from '../../../api/Api'
+import * as API from 'api/Api'
 import { Button } from 'react-bootstrap'
-import { QuoteType } from '../../../models/quote'
-import { VoteType } from '../../../models/vote'
+import { QuoteType } from 'models/quote'
+import { VoteType } from 'models/vote'
 import { useNavigate, useParams } from 'react-router-dom'
-import authStore from '../../../stores/auth.store'
+import authStore from 'stores/auth.store'
 
 const UserQuotesInfo: FC = () => {
   const [otherUserId, setOtherUserId] = useState(1)

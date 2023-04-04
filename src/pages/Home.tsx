@@ -1,11 +1,11 @@
-import Layout from '../components/ui/Layout'
+import Layout from 'components/ui/Layout'
 import { FC, useState } from 'react'
 import { Button, Toast, ToastContainer } from 'react-bootstrap'
-import { routes } from '../constants/routesConstants'
-import authStore from '../stores/auth.store'
+import { routes } from 'constants/routesConstants'
+import authStore from 'stores/auth.store'
 import { useQuery } from 'react-query'
-import * as API from '../api/Api'
-import { QuoteType } from '../models/quote'
+import * as API from 'api/Api'
+import { QuoteType } from 'models/quote'
 import { useNavigate } from 'react-router-dom'
 import QuoteBlock from './QuoteBlock'
 import { StatusCode } from 'constants/errorConstants'
@@ -405,7 +405,7 @@ const Home: FC = () => {
             )}
             <div className='mb-5 text-center mx-auto text'>
               <a href={routes.LOGIN}>
-                <Button className='btnSeeMore'>Sign up to see more</Button>
+                <Button className='btnSeeMore'>Sign in to see more</Button>
               </a>
             </div>
           </div>

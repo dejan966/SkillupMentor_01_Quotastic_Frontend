@@ -1,14 +1,14 @@
 import { FC, useState } from 'react'
 import { useQuery } from 'react-query'
-import Layout from '../../../components/ui/Layout'
-import * as API from '../../../api/Api'
-import authStore from '../../../stores/auth.store'
+import Layout from 'components/ui/Layout'
+import * as API from 'api/Api'
+import authStore from 'stores/auth.store'
 import { Link, useNavigate } from 'react-router-dom'
-import { StatusCode } from '../../../constants/errorConstants'
+import { StatusCode } from 'constants/errorConstants'
 import { Button, Toast, ToastContainer } from 'react-bootstrap'
-import { routes } from '../../../constants/routesConstants'
-import { QuoteType } from '../../../models/quote'
-import QuotesDelete from '../../Me/Myquote/Delete'
+import { routes } from 'constants/routesConstants'
+import { QuoteType } from 'models/quote'
+import QuotesDelete from 'pages/Me/Myquote/Delete'
 
 const QuotesMostLiked: FC = () => {
   const [apiError, setApiError] = useState('')

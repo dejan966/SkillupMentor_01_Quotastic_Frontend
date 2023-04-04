@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
-import { QuoteType } from '../../models/quote'
+import { QuoteType } from 'models/quote'
 
 export interface CreateQuoteFields {
   quote:string

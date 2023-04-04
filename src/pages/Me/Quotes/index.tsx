@@ -1,12 +1,12 @@
-import Layout from '../../../components/ui/Layout'
+import Layout from 'components/ui/Layout'
 import { FC, useState } from 'react'
 import { useQuery } from 'react-query'
-import * as API from '../../../api/Api'
+import * as API from 'api/Api'
 import { Button, Toast, ToastContainer } from 'react-bootstrap'
-import { QuoteType } from '../../../models/quote'
-import { VoteType } from '../../../models/vote'
-import authStore from '../../../stores/auth.store'
-import { StatusCode } from '../../../constants/errorConstants'
+import { QuoteType } from 'models/quote'
+import { VoteType } from 'models/vote'
+import authStore from 'stores/auth.store'
+import { StatusCode } from 'constants/errorConstants'
 import { useNavigate } from 'react-router-dom'
 
 const UserQuotesInfo: FC = () => {

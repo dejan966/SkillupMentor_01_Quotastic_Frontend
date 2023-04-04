@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
-import { UserType } from '../models/auth'
-import { userStorage } from '../utils/localStorage'
+import { UserType } from 'models/auth'
+import { userStorage } from 'utils/localStorage'
 
 export interface AuthContextType {
   user?: UserType | null

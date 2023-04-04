@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import Layout from '../components/ui/Layout'
+import Layout from 'components/ui/Layout'
 
 const Page404: FC = () => {
   return (

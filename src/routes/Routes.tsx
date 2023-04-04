@@ -1,7 +1,7 @@
 import { FC, lazy, Suspense } from 'react'
 import { Route, RouteProps, Routes as Switch } from 'react-router-dom'
-import QuotesMostLiked from '../pages/Quotes/most-liked'
-import QuotesMostRecent from '../pages/Quotes/most-recent'
+import QuotesMostLiked from 'pages/Quotes/most-liked'
+import QuotesMostRecent from 'pages/Quotes/most-recent'
 
 import PrivateRoute from './PrivateRoute'
 import RestrictedRoute from './RestrictedRoute'

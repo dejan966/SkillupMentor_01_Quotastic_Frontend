@@ -1,10 +1,10 @@
-import * as API from '.././api/Api'
-import { StatusCode } from '.././constants/errorConstants'
-import { routes } from '.././constants/routesConstants'
+import * as API from 'api/Api'
+import { StatusCode } from 'constants/errorConstants'
+import { routes } from 'constants/routesConstants'
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import authStore from '.././stores/auth.store'
-import { userStorage } from '.././utils/localStorage'
+import authStore from 'stores/auth.store'
+import { userStorage } from 'utils/localStorage'
 
 const useAuth = () => {
   const navigate = useNavigate()

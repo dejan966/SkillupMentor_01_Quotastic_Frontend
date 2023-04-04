@@ -1,4 +1,4 @@
-import authStore from '../stores/auth.store'
+import authStore from 'stores/auth.store'
 import { observer } from 'mobx-react'
 import { FC } from 'react'
 import { Navigate, RouteProps, useLocation } from 'react-router-dom'

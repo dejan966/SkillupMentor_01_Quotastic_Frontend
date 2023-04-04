@@ -1,12 +1,11 @@
 import { observer } from 'mobx-react'
 import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { StatusCode } from '../../constants/errorConstants'
-import * as API from '../../api/Api'
-import { useCreateUpdateUserForm, UpdateUserFields } from '../../hooks/react-hook-form/useCreateUpdateUser'
+import { StatusCode } from 'constants/errorConstants'
+import * as API from 'api/Api'
+import { useCreateUpdateUserForm, UpdateUserFields } from 'hooks/react-hook-form/useCreateUpdateUser'
 import { Button, FormLabel, Form, Toast, ToastContainer } from 'react-bootstrap'
-import { UserType } from '../../models/auth'
-import { routes } from '../../constants/routesConstants'
+import { routes } from 'constants/routesConstants'
 import { Controller } from 'react-hook-form'
 
 const UpdatePasswordForm: FC = () =>{

@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { UserType } from '../../models/auth'
+import { UserType } from 'models/auth'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 

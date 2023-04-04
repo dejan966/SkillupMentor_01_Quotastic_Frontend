@@ -1,12 +1,12 @@
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { Button, Toast, ToastContainer } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
-import { StatusCode } from '../constants/errorConstants'
-import { routes } from '../constants/routesConstants'
-import { QuoteType } from '../models/quote'
-import authStore from '../stores/auth.store'
+import { StatusCode } from 'constants/errorConstants'
+import { routes } from 'constants/routesConstants'
+import { QuoteType } from 'models/quote'
+import authStore from 'stores/auth.store'
 import QuotesDelete from './Me/Myquote/Delete'
-import * as API from '../api/Api'
+import * as API from 'api/Api'
 
 interface Props {
   userQuote: QuoteType;
@@ -50,7 +50,6 @@ const QuoteBlock: FC<Props> = ({ userQuote, likes, dislikes, index, upvote, down
     }
     navigate(`users/${userQuote.user.id}/quotes`)
   }
-
 
   return(
     <div className="quoteBorder myQuotes mb-5" style={{width:400}}>
