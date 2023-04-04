@@ -10,216 +10,26 @@ import * as API from '../api/Api'
 
 interface Props {
   userQuote: QuoteType;
-  liked:string;
-  disliked:string;
-  likes:boolean;
-  dislikes:boolean;
-  karma:number;
+  likes?:boolean;
+  dislikes?:boolean;
+  index:number;
+  upvote:(index:number, quoteId:number)=>void;
+  downvote:(index:number, quoteId:number)=>void;
 }
 
-const QuoteBlock: FC<Props> = ({ userQuote, liked, disliked, likes, dislikes, karma })=>{
+const QuoteBlock: FC<Props> = ({ userQuote, likes, dislikes, index, upvote, downvote })=>{
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [successDelete, setSuccessDelete] = useState(false)
   const navigate = useNavigate()
-  
-  const [mostLikedQuotes, setMostLikedQuotes] = useState<string>(liked)
-  const [mostDislikedQuotes, setMostDislikedQuotes] = useState<string>(disliked)
-  const [likesQuotes, setLikesQuotes] = useState<boolean>(likes)
-  const [dislikesQuotes, setDislikesQuotes] = useState<boolean>(dislikes)
-  const [mostLikedQuotesKarma, setMostLikedQuotesKarma] = useState<number>(karma)
-  const [userId, setUserId] = useState(1)
-  
+
   const togglePopup = () => {
     setIsOpen(!isOpen)
   }
-
-/*   const getQuotes = async () =>{
-    const data = await (
-      await fetch(
-        'http://localhost:8080/quotes'
-      )
-    ).json()
-    console.log(data)
-    if(data[0].votes[0]){
-      if(data[0].votes[0].value === true){
-        liked = 'upvoted.png'
-        disliked = 'downvote.png'
-        likes = true
-        dislikes = false
-        karma = data[0].karma
-      }
-      else if(data[0].votes[0].value === false){
-        liked = 'upvote.png'
-        disliked = 'downvoted.png'
-        likes = false
-        dislikes = true
-        karma = data[0].karma
-      }
-    }
-    else{
-      liked = 'upvote.png'
-      disliked = 'downvote.png'
-      likes = false
-      dislikes = false
-      karma = data[0].karma
-    }
-    for(let i = 1; i<data.length; i++){
-      if(authStore.user?.id === data[i].votes[0]?.user.id){
-        if(data[i].votes[0]?.value === true){
-          likes = true
-          dislikes = false
-          
-          liked = 'upvoted.png'
-          disliked = 'downvote.png'
-          karma = data[i].karma
-        } else if(data[i].votes[0]?.value === false){
-          likes = false
-          dislikes = true
-
-          liked = 'upvote.png'
-          disliked = 'downvoted.png'
-          karma = data[i].karma
-        }
-        else{
-          likes = false
-          dislikes = false
-
-          liked = 'upvote.png'
-          disliked = 'downvote.png'
-          karma = data[i].karma
-        }
-      }
-      else if(authStore.user?.id !== data[i].votes[0]?.user.id){
-        likes = false
-        dislikes = false
-
-        liked = 'upvote.png'
-        disliked = 'downvote.png'
-        karma = data[i].karma
-      }
-    }    
-  }
-  useEffect(() => {
-    getQuotes()
-  },[getQuotes]) */
-
-
   
   const toggleSuccess = () => {
     setSuccessDelete(!successDelete)
-  }
-
-  /* const upvote = (quoteId:number) =>{
-    let quoteKarma = karma
-    if(likes === true){
-      likes = false
-      quoteKarma--
-      karma = quoteKarma
-      liked = 'upvote.png'
-      handleUpvote(quoteId)
-      return
-    }
-    else if(likes === false){
-      likes = true
-      if(dislikes === true){
-        liked = 'upvoted.png'
-        dislikes = false
-        quoteKarma+=2
-        karma = quoteKarma
-        disliked = 'downvote.png'
-        handleUpvote(quoteId)
-        return
-      }
-      liked = 'upvote.png'
-      quoteKarma++
-      karma = quoteKarma
-      handleUpvote(quoteId)
-      return
-    }
-  }
-
-  const downvote = (quoteId:number) =>{
-    if(dislikes === true){
-      dislikes = false
-      disliked = 'downvote.png'
-      karma++
-      handleDownvote(quoteId)
-      return
-    }
-    else if(dislikes === false){
-      dislikes = true
-      if(likes === true){
-        likes = false
-        disliked = 'downvoted.png'
-        liked = 'upvote.png'
-        karma-=2
-        handleDownvote(quoteId)
-        return
-      }
-      disliked = 'downvoted.png'
-      karma--
-      handleDownvote(quoteId)
-      return
-    }
-  } */
-  const upvote = (quoteId:number) =>{
-    let quoteKarma = karma
-    if(likesQuotes === true){
-      setLikesQuotes(false)
-      quoteKarma--
-      setMostLikedQuotesKarma(quoteKarma)
-      setMostLikedQuotes('upvote.png')
-      handleUpvote(quoteId)
-      return
-    }
-    else if(likesQuotes === false){
-      setLikesQuotes(true)
-      if(dislikesQuotes === true){
-        setMostLikedQuotes('upvoted.png')
-        setDislikesQuotes(false)
-        quoteKarma+=2
-        setMostLikedQuotesKarma(quoteKarma)
-        setMostDislikedQuotes('downvote.png')
-        handleUpvote(quoteId)
-        return
-      }
-      setMostLikedQuotes('upvoted.png')
-      quoteKarma++
-      setMostLikedQuotesKarma(quoteKarma)
-      handleUpvote(quoteId)
-      return
-    }
-  }
-
-  const downvote = (quoteId:number) =>{
-    let quoteKarma = karma
-    if(dislikesQuotes === true){
-      setDislikesQuotes(false)
-      setMostDislikedQuotes('downvote.png')
-      quoteKarma++
-      setMostLikedQuotesKarma(quoteKarma)
-      handleDownvote(quoteId)
-      return
-    }
-    else if(dislikesQuotes === false){
-      setDislikesQuotes(true)
-      if(likesQuotes === true){
-        setLikesQuotes(false)
-        setMostDislikedQuotes('downvoted.png')
-        setMostLikedQuotes('upvote.png')
-        quoteKarma-=2
-        setMostLikedQuotesKarma(quoteKarma)
-        handleDownvote(quoteId)
-        return
-      }
-      setMostDislikedQuotes('downvoted.png')
-      quoteKarma--
-      setMostLikedQuotesKarma(quoteKarma)
-      handleDownvote(quoteId)
-      return
-    }
   }
 
   const deleteQuote = async (quoteId:number) => {
@@ -234,34 +44,14 @@ const QuoteBlock: FC<Props> = ({ userQuote, liked, disliked, likes, dislikes, ka
   }
 
   const handleProceedUser = () => {
-    if(userId === authStore.user?.id){
+    if(userQuote.user.id === authStore.user?.id){
       navigate('me/quotes')
       return
     }
-    navigate(`users/${userId}/quotes`)
+    navigate(`users/${userQuote.user.id}/quotes`)
   }
 
-  const handleUpvote = async (quoteId:number) => {
-    const response = await API.createUpvote(quoteId)
-    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
-      setShowError(true)
-    }
-  }
 
-  const handleDownvote = async (quoteId:number) => {
-    const response = await API.createDownvote(quoteId)
-    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
-      setShowError(true)
-    }
-  }
   return(
     <div className="quoteBorder myQuotes mb-5" style={{width:400}}>
       {authStore.user ? (
@@ -269,15 +59,15 @@ const QuoteBlock: FC<Props> = ({ userQuote, liked, disliked, likes, dislikes, ka
           {authStore.user?.id === userQuote.user.id ? (
             <>
               <div className='m-4'>
-                <img className='voting' src={`/${mostLikedQuotes}`}  alt="Upvote"/>
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{mostLikedQuotesKarma}</div>
-                <img className='voting' src={`/${mostDislikedQuotes}`}  alt="Downvote"/>
+                <img className='voting' src={'/upvote.png'}  alt="Upvote"/>
+                <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.karma}</div>
+                <img className='voting' src={'/downvote.png'}  alt="Downvote"/>
               </div>
               <div>
                 <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
                 <div className='authorGrid'>
                   <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} alt="User avatar" width={35} 
-                  onPointerMove={e=>{setUserId(userQuote.user.id)}} onClick={handleProceedUser}/>
+                   onClick={handleProceedUser}/>
                   <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
                 </div>
               </div>
@@ -319,19 +109,41 @@ const QuoteBlock: FC<Props> = ({ userQuote, liked, disliked, likes, dislikes, ka
             </>
           ):(
             <>
+            {likes === true && dislikes === false ?
+            (
+              <>
               <div className='m-4'>
-                <img className='voting' src={`/${mostLikedQuotes}`}  alt="Upvote" onClick={e => {upvote(userQuote.id)}}/>
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{mostLikedQuotesKarma}</div>
-                <img className='voting' src={`/${mostDislikedQuotes}`}  alt="Downvote" onClick={e => {downvote(userQuote.id)}}/>
+                <img className='voting' src={'/upvoted.png'}  alt="Upvote" onClick={e => {upvote(index, userQuote.id)}}/>
+                <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.karma}</div>
+                <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote(index, userQuote.id)}}/>
               </div>
               <div>
                 <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
                 <div className='authorGrid'>
                   <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} alt="User avatar" width={35} 
-                  onPointerMove={e=>{setUserId(userQuote.user.id)}} onClick={handleProceedUser}/>
+                   onClick={handleProceedUser}/>
                   <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
                 </div>
               </div>
+              </>
+            ):(
+              <>
+              <div className='m-4'>
+                <img className='voting' src={'/upvote.png'}  alt="Upvote" onClick={e => {upvote(index, userQuote.id)}}/>
+                <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.karma}</div>
+                <img className='voting' src={'/downvoted.png'}  alt="Downvote" onClick={e => {downvote(index, userQuote.id)}}/>
+              </div>
+              <div>
+                <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
+                <div className='authorGrid'>
+                  <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} alt="User avatar" width={35} 
+                   onClick={handleProceedUser}/>
+                  <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
+                </div>
+              </div>
+              </>
+            )}
+              
             </>
           )}
         </>
@@ -350,7 +162,7 @@ const QuoteBlock: FC<Props> = ({ userQuote, liked, disliked, likes, dislikes, ka
             <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
             <div className='authorGrid'>
               <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} alt="User avatar" width={35} 
-              onPointerMove={e=>{setUserId(userQuote.user.id)}} onClick={handleProceedUser}/>
+               onClick={handleProceedUser}/>
               <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
             </div>
           </div>
@@ -368,7 +180,6 @@ const QuoteBlock: FC<Props> = ({ userQuote, liked, disliked, likes, dislikes, ka
       )}
     </div>
   )
-  
 }
 
 export default QuoteBlock
