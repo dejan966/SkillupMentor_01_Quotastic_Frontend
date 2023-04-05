@@ -12,12 +12,13 @@ interface Props {
   userQuote: QuoteType;
   likes?:boolean;
   dislikes?:boolean;
+  karma?:number;
   index:number;
-  upvote:(index:number, quoteId:number)=>void;
-  downvote:(index:number, quoteId:number)=>void;
+  upvote?:(index:number, quoteId:number)=>void;
+  downvote?:(index:number, quoteId:number)=>void;
 }
 
-const QuoteBlock: FC<Props> = ({ userQuote, likes, dislikes, index, upvote, downvote })=>{
+const QuoteBlock: FC<Props> = ({ userQuote, likes, dislikes, karma, index, upvote, downvote })=>{
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -86,7 +87,7 @@ const QuoteBlock: FC<Props> = ({ userQuote, likes, dislikes, index, upvote, down
                       <Button className="btnRegister col-md-3" style={{borderColor:'#DE8667'}} onClick={e=>{deleteQuote(userQuote.id);togglePopup();toggleSuccess()}}>
                           Delete
                       </Button>
-                      <a className="text-decoration-none col-md-3" style={{color:'#000000'}} onClick={togglePopup}>Cancel</a>
+                      <p className="text-decoration-none col-md-3" style={{color:'#000000'}} onClick={togglePopup}>Cancel</p>
                     </div>
                   </>
                   }/>
@@ -111,38 +112,78 @@ const QuoteBlock: FC<Props> = ({ userQuote, likes, dislikes, index, upvote, down
             {likes === true && dislikes === false ?
             (
               <>
-              <div className='m-4'>
-                <img className='voting' src={'/upvoted.png'}  alt="Upvote" onClick={e => {upvote(index, userQuote.id)}}/>
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.karma}</div>
-                <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote(index, userQuote.id)}}/>
-              </div>
-              <div>
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
-                <div className='authorGrid'>
-                  <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} alt="User avatar" width={35} 
-                   onClick={handleProceedUser}/>
-                  <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
+                <div className='m-4'>
+                  <img 
+                    className='voting' 
+                    src={'/upvoted.png'}  
+                    alt="Upvote" 
+                    onClick={e => {upvote!(index, userQuote.id)}}
+                  />
+                  <div style={{fontSize:18, fontFamily:'raleway'}}>{karma}</div>
+                  <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(index, userQuote.id)}}/>
                 </div>
-              </div>
+                <div>
+                  <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
+                  <div className='authorGrid'>
+                    <img 
+                      className='voting userAvatar' 
+                      src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} 
+                      alt="User avatar" 
+                      width={35} 
+                      onClick={handleProceedUser}
+                    />
+                    <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
+                  </div>
+                </div>
               </>
             ):(
               <>
-              <div className='m-4'>
-                <img className='voting' src={'/upvote.png'}  alt="Upvote" onClick={e => {upvote(index, userQuote.id)}}/>
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.karma}</div>
-                <img className='voting' src={'/downvoted.png'}  alt="Downvote" onClick={e => {downvote(index, userQuote.id)}}/>
-              </div>
-              <div>
-                <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
-                <div className='authorGrid'>
-                  <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} alt="User avatar" width={35} 
-                   onClick={handleProceedUser}/>
-                  <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
-                </div>
-              </div>
+                {likes === false && dislikes === true ? 
+                (
+                  <>
+                    <div className='m-4'>
+                      <img 
+                        className='voting'
+                        src={'/upvote.png'}
+                        alt="Upvote"
+                        onClick={e => {upvote!(index, userQuote.id)}}
+                      />
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{karma}</div>
+                      <img className='voting' src={'/downvoted.png'}  alt="Downvote" onClick={e => {downvote!(index, userQuote.id)}}/>
+                    </div>
+                    <div>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
+                      <div className='authorGrid'>
+                        <img 
+                          className='voting userAvatar' 
+                          src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} 
+                          alt="User avatar" 
+                          width={35} 
+                          onClick={handleProceedUser}
+                        />
+                        <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
+                      </div>
+                    </div>
+                  </>
+                ):(
+                  <>
+                    <div className='m-4'>
+                      <img className='voting' src={'/upvote.png'}  alt="Upvote" onClick={e => {upvote!(index, userQuote.id)}}/>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{karma}</div>
+                      <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(index, userQuote.id)}}/>
+                    </div>
+                    <div>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
+                      <div className='authorGrid'>
+                        <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} alt="User avatar" width={35} 
+                        onClick={handleProceedUser}/>
+                        <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </>
             )}
-              
             </>
           )}
         </>

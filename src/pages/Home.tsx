@@ -15,93 +15,66 @@ const Home: FC = () => {
   const [showError, setShowError] = useState(false)
   const navigate = useNavigate()
   
-  const [mostLikedQuotes, setMostLikedQuotes] = useState<string[]>([])
-  const [mostDislikedQuotes, setMostDislikedQuotes] = useState<string[]>([])
   const [likesQuotes, setLikesQuotes] = useState<boolean[]>([])
   const [dislikesQuotes, setDislikesQuotes] = useState<boolean[]>([])
-  const [mostLikedQuotesKarma, setMostLikedQuotesKarma] = useState<number[]>([])
+  const [quotesKarma, setQuotesKarma] = useState<number[]>([])
 
   const grabQuotes = (data:any) =>{
     if(data.data[0].votes[0]){
       if(data.data[0].votes[0].value === true){
-        mostLikedQuotes.push('upvoted.png') 
-        setMostLikedQuotes(mostLikedQuotes)
-        mostDislikedQuotes.push('downvote.png')
-        setMostDislikedQuotes(mostDislikedQuotes)
         likesQuotes.push(true)
         setLikesQuotes(likesQuotes)
         dislikesQuotes.push(false)
         setDislikesQuotes(dislikesQuotes)
-        mostLikedQuotesKarma.push(data.data[0].karma)
-        setMostLikedQuotesKarma(mostLikedQuotesKarma)
+        quotesKarma.push(data.data[0].karma)
+        setQuotesKarma(quotesKarma)
       }
       else if(data.data[0].votes[0].value === false){
-        mostLikedQuotes.push('upvote.png') 
-        setMostLikedQuotes(mostLikedQuotes)
-        mostDislikedQuotes.push('downvoted.png')
-        setMostDislikedQuotes(mostDislikedQuotes)
         likesQuotes.push(false)
         setLikesQuotes(likesQuotes)
         dislikesQuotes.push(true)
         setDislikesQuotes(dislikesQuotes)
-        mostLikedQuotesKarma.push(data.data[0].karma)
-        setMostLikedQuotesKarma(mostLikedQuotesKarma)
+        quotesKarma.push(data.data[0].karma)
+        setQuotesKarma(quotesKarma)
       }
     }
     else{
-      mostLikedQuotes.push('upvote.png') 
-      setMostLikedQuotes(mostLikedQuotes)
-      mostDislikedQuotes.push('downvote.png')
-      setMostDislikedQuotes(mostDislikedQuotes)
       likesQuotes.push(false)
       setLikesQuotes(likesQuotes)
       dislikesQuotes.push(false)
       setDislikesQuotes(dislikesQuotes)
-      mostLikedQuotesKarma.push(data.data[0].karma)
-      setMostLikedQuotesKarma(mostLikedQuotesKarma)
+      quotesKarma.push(data.data[0].karma)
+      setQuotesKarma(quotesKarma)
     }
     for(let i = 1; i<data.data.length; i++){
       if(authStore.user?.id === data.data[i].votes[0]?.user.id){
         if(data.data[i].votes[0]?.value === true){
           likesQuotes.push(true)
           dislikesQuotes.push(false)
-          
-          mostLikedQuotes.push('upvoted.png')
-          mostDislikedQuotes.push('downvote.png')
-          mostLikedQuotesKarma.push(data.data[i].karma)
+          quotesKarma.push(data.data[i].karma)
         } else if(data.data[i].votes[0]?.value === false){
           likesQuotes.push(false)
           dislikesQuotes.push(true)
-
-          mostLikedQuotes.push('upvote.png')
-          mostDislikedQuotes.push('downvoted.png')
-          mostLikedQuotesKarma.push(data.data[i].karma)
+          quotesKarma.push(data.data[i].karma)
         }
         else{
           likesQuotes.push(false)
           dislikesQuotes.push(false)
-
-          mostLikedQuotes.push('upvote.png')
-          mostDislikedQuotes.push('downvote.png')
-          mostLikedQuotesKarma.push(data.data[i].karma)
+          quotesKarma.push(data.data[i].karma)
         }
       }
       else if(authStore.user?.id !== data.data[i].votes[0]?.user.id){
         likesQuotes.push(false)
         dislikesQuotes.push(false)
-
-        mostLikedQuotes.push('upvote.png')
-        mostDislikedQuotes.push('downvote.png')
-        mostLikedQuotesKarma.push(data.data[i].karma)
+        quotesKarma.push(data.data[i].karma)
       }
     }
-    setMostLikedQuotes(mostLikedQuotes)
-    setMostDislikedQuotes(mostDislikedQuotes)
-
     setLikesQuotes(likesQuotes)
     setDislikesQuotes(dislikesQuotes)
 
-    setMostLikedQuotesKarma(mostLikedQuotesKarma)
+    setQuotesKarma(quotesKarma)
+    console.log(likesQuotes)
+    console.log(dislikesQuotes)
   }
   const {data: randomQuote, isLoading:isLoadingRandom} = useQuery(
     ['randomQuote'],
@@ -163,10 +136,9 @@ const Home: FC = () => {
     const dislikesQuotesCopy = {...dislikesQuotes}
     if(likesQuotes[index] === true){
       likesQuotesCopy[index] = false
-      mostLikedQuotesKarma[index]--
-      mostLikedQuotes[index] = 'upvote.png'
+      quotesKarma[index]--
       setLikesQuotes(likesQuotesCopy)
-      setMostLikedQuotesKarma(mostLikedQuotesKarma)
+      setQuotesKarma(quotesKarma)
       handleUpvote(quoteId)
       return
     }
@@ -174,22 +146,16 @@ const Home: FC = () => {
       likesQuotesCopy[index] = true
       if(dislikesQuotes[index] === true){
         setLikesQuotes(likesQuotesCopy)
-        mostLikedQuotes[index] = 'upvoted.png'
         dislikesQuotesCopy[index] = false
         setDislikesQuotes(dislikesQuotesCopy)
-        mostLikedQuotesKarma[index]+=2
-        mostDislikedQuotes[index] = 'downvote.png'
-        setMostLikedQuotes(mostLikedQuotes)
-        setMostDislikedQuotes(mostDislikedQuotes)
-        setMostLikedQuotesKarma(mostLikedQuotesKarma)
+        quotesKarma[index]+=2
+        setQuotesKarma(quotesKarma)
         handleUpvote(quoteId)
         return
       }
       setLikesQuotes(likesQuotesCopy)
-      mostLikedQuotes[index] = 'upvoted.png'
-      mostLikedQuotesKarma[index]++
-      setMostLikedQuotes(mostLikedQuotes)
-      setMostLikedQuotesKarma(mostLikedQuotesKarma)
+      quotesKarma[index]++
+      setQuotesKarma(quotesKarma)
       handleUpvote(quoteId)
       return
     }
@@ -201,9 +167,8 @@ const Home: FC = () => {
     if(dislikesQuotes[index] === true){
       dislikesQuotesCopy[index] = false
       setDislikesQuotes(dislikesQuotesCopy)
-      mostDislikedQuotes[index] = 'downvote.png'
-      mostLikedQuotesKarma[index]++
-      setMostLikedQuotesKarma(mostLikedQuotesKarma)
+      quotesKarma[index]++
+      setQuotesKarma(quotesKarma)
       handleDownvote(quoteId)
       return
     }
@@ -211,20 +176,16 @@ const Home: FC = () => {
       dislikesQuotesCopy[index] = true
       if(likesQuotes[index] === true){
         likesQuotesCopy[index] = false
-        mostDislikedQuotes[index] = 'downvoted.png'
         setDislikesQuotes(dislikesQuotesCopy)
         setLikesQuotes(likesQuotesCopy)
-        mostLikedQuotes[index] = 'upvote.png'
-        setMostDislikedQuotes(mostDislikedQuotes)
-        mostLikedQuotesKarma[index]-=2
-        setMostLikedQuotesKarma(mostLikedQuotesKarma)
+        quotesKarma[index]-=2
+        setQuotesKarma(quotesKarma)
         handleDownvote(quoteId)
         return
       }
-      mostDislikedQuotes[index] = 'downvoted.png'
       setDislikesQuotes(dislikesQuotesCopy)
-      mostLikedQuotesKarma[index]--
-      setMostLikedQuotesKarma(mostLikedQuotesKarma)
+      quotesKarma[index]--
+      setQuotesKarma(quotesKarma)
       handleDownvote(quoteId)
       return
     }
@@ -252,6 +213,8 @@ const Home: FC = () => {
                     <QuoteBlock
                       userQuote={randomQuote.data} 
                       likes={likesQuotes[0]}
+                      dislikes={dislikesQuotes[0]}
+                      karma={quotesKarma[0]}
                       index={0}
                       upvote={upvote}
                       downvote={downvote}
@@ -288,6 +251,7 @@ const Home: FC = () => {
                       key={index} 
                       likes={likesQuotes[index]}
                       dislikes={dislikesQuotes[index]}
+                      karma={quotesKarma[index]}
                       index={index}
                       upvote={upvote}
                       downvote={downvote}
@@ -327,6 +291,7 @@ const Home: FC = () => {
                         userQuote={item} 
                         key={index} 
                         likes={likesQuotes[index]}
+                        karma={quotesKarma[index]}
                         index={index}
                         upvote={upvote}
                         downvote={downvote}
@@ -382,25 +347,23 @@ const Home: FC = () => {
               </div>
             ):(
               <>
-              {mostLiked ? (
-              <div className='quoteRow'>
-                {mostLiked.data.map((item:QuoteType, index:number) =>(
-                <QuoteBlock 
-                  userQuote={item} 
-                  key={index}
-                  index={index}
-                  upvote={upvote}
-                  downvote={downvote}
-                />
-                ))}      
-              </div>
-            ):(
-              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
-                <div className='m-4'>
-                  <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
-                </div>
-              </div>
-            )}
+                {mostLiked ? (
+                  <div className='quoteRow'>
+                    {mostLiked.data.map((item:QuoteType, index:number) =>(
+                      <QuoteBlock 
+                        userQuote={item} 
+                        key={index}
+                        index={index}
+                      />
+                    ))}      
+                  </div>
+                ):(
+                  <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                    <div className='m-4'>
+                      <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                    </div>
+                  </div>
+                )}
               </>
             )}
             <div className='mb-5 text-center mx-auto text'>
