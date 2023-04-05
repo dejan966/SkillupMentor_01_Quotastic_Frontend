@@ -73,9 +73,8 @@ const Home: FC = () => {
     setDislikesQuotes(dislikesQuotes)
 
     setQuotesKarma(quotesKarma)
-    console.log(likesQuotes)
-    console.log(dislikesQuotes)
   }
+
   const {data: randomQuote, isLoading:isLoadingRandom} = useQuery(
     ['randomQuote'],
     () => API.fetchRandomQuote(),
