@@ -10,12 +10,12 @@ import * as API from 'api/Api'
 
 interface Props {
   userQuote: QuoteType;
-  likedQuote?:string;
-  dislikedQuote?:string;
+  likedQuote?:number;
+  dislikedQuote?:number;
   karma?:number;
   index:number;
-  upvote?:(index:number, quoteId:number)=>void;
-  downvote?:(index:number, quoteId:number)=>void;
+  upvote?:(index:number, quoteId:number, likeState:string, dislikeState:string)=>void;
+  downvote?:(index:number, quoteId:number, likeState:string, dislikeState:string)=>void;
 }
 
 const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, dislikedQuote, karma, index, upvote, downvote })=>{
@@ -109,7 +109,7 @@ const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, dislikedQuote, karma, in
             </>
           ):(
             <>
-            {likedQuote === userQuote.quote ?
+            {likedQuote === userQuote.id ?
             (
               <>
                 <div className='m-4'>
@@ -117,10 +117,10 @@ const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, dislikedQuote, karma, in
                     className='voting' 
                     src={'/upvoted.png'}  
                     alt="Upvote" 
-                    onClick={e => {upvote!(index, userQuote.id)}}
+                    onClick={e => {upvote!(index, userQuote.id, '/upvoted.png', '/downvote.png')}}
                   />
                   <div style={{fontSize:18, fontFamily:'raleway'}}>{karma}</div>
-                  <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(index, userQuote.id)}}/>
+                  <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(index, userQuote.id,'/downvote.png', '/upvoted.png')}}/>
                 </div>
                 <div>
                   <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
@@ -138,7 +138,7 @@ const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, dislikedQuote, karma, in
               </>
             ):(
               <>
-                {dislikedQuote === userQuote.quote ? 
+                {dislikedQuote === userQuote.id ? 
                 (
                   <>
                     <div className='m-4'>
@@ -146,10 +146,10 @@ const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, dislikedQuote, karma, in
                         className='voting'
                         src={'/upvote.png'}
                         alt="Upvote"
-                        onClick={e => {upvote!(index, userQuote.id)}}
+                        onClick={e => {upvote!(index, userQuote.id, '/upvote.png', 'downvote.png')}}
                       />
                       <div style={{fontSize:18, fontFamily:'raleway'}}>{karma}</div>
-                      <img className='voting' src={'/downvoted.png'}  alt="Downvote" onClick={e => {downvote!(index, userQuote.id)}}/>
+                      <img className='voting' src={'/downvoted.png'}  alt="Downvote" onClick={e => {downvote!(index, userQuote.id, '/downvoted.png', '/upvote.png')}}/>
                     </div>
                     <div>
                       <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
@@ -168,9 +168,9 @@ const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, dislikedQuote, karma, in
                 ):(
                   <>
                     <div className='m-4'>
-                      <img className='voting' src={'/upvote.png'}  alt="Upvote" onClick={e => {upvote!(index, userQuote.id)}}/>
+                      <img className='voting' src={'/upvote.png'}  alt="Upvote" onClick={e => {upvote!(index, userQuote.id, '/upvote.png', '/downvote.png')}}/>
                       <div style={{fontSize:18, fontFamily:'raleway'}}>{karma}</div>
-                      <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(index, userQuote.id)}}/>
+                      <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(index, userQuote.id, '/downvote.png', '/upvote.png')}}/>
                     </div>
                     <div>
                       <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
