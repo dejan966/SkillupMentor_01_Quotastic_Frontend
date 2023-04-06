@@ -15,6 +15,8 @@ const Home: FC = () => {
   const [showError, setShowError] = useState(false)
   const navigate = useNavigate()
   
+  const [likedQuotes, setLikedQuotes] = useState<number[]>([])
+  const [dislikedQuotes, setDislikedQuotes] = useState<number[]>([])
   const [likesQuotes, setLikesQuotes] = useState<boolean[]>([])
   const [dislikesQuotes, setDislikesQuotes] = useState<boolean[]>([])
   const [quotesKarma, setQuotesKarma] = useState<number[]>([])
@@ -22,55 +24,41 @@ const Home: FC = () => {
   const grabQuotes = (data:any) =>{
     if(data.data[0].votes[0]){
       if(data.data[0].votes[0].value === true){
-        likesQuotes.push(true)
-        setLikesQuotes(likesQuotes)
-        dislikesQuotes.push(false)
-        setDislikesQuotes(dislikesQuotes)
+        likedQuotes.push(data.data[0].id)
+        setLikedQuotes(likedQuotes)
         quotesKarma.push(data.data[0].karma)
         setQuotesKarma(quotesKarma)
       }
       else if(data.data[0].votes[0].value === false){
-        likesQuotes.push(false)
-        setLikesQuotes(likesQuotes)
-        dislikesQuotes.push(true)
-        setDislikesQuotes(dislikesQuotes)
+        dislikedQuotes.push(data.data[0].id)
+        setDislikedQuotes(dislikedQuotes)
         quotesKarma.push(data.data[0].karma)
         setQuotesKarma(quotesKarma)
       }
     }
     else{
-      likesQuotes.push(false)
-      setLikesQuotes(likesQuotes)
-      dislikesQuotes.push(false)
-      setDislikesQuotes(dislikesQuotes)
       quotesKarma.push(data.data[0].karma)
       setQuotesKarma(quotesKarma)
     }
     for(let i = 1; i<data.data.length; i++){
       if(authStore.user?.id === data.data[i].votes[0]?.user.id){
         if(data.data[i].votes[0]?.value === true){
-          likesQuotes.push(true)
-          dislikesQuotes.push(false)
+          likedQuotes.push(data.data[i].id)
           quotesKarma.push(data.data[i].karma)
         } else if(data.data[i].votes[0]?.value === false){
-          likesQuotes.push(false)
-          dislikesQuotes.push(true)
+          dislikedQuotes.push(data.data[i].id)
           quotesKarma.push(data.data[i].karma)
         }
         else{
-          likesQuotes.push(false)
-          dislikesQuotes.push(false)
           quotesKarma.push(data.data[i].karma)
         }
       }
       else if(authStore.user?.id !== data.data[i].votes[0]?.user.id){
-        likesQuotes.push(false)
-        dislikesQuotes.push(false)
         quotesKarma.push(data.data[i].karma)
       }
     }
-    setLikesQuotes(likesQuotes)
-    setDislikesQuotes(dislikesQuotes)
+    setLikedQuotes(likedQuotes)
+    setDislikedQuotes(dislikedQuotes)
 
     setQuotesKarma(quotesKarma)
   }
@@ -131,28 +119,28 @@ const Home: FC = () => {
   }
 
   const upvote = (index:number, quoteId:number) =>{
-    const likesQuotesCopy = {...likesQuotes}
-    const dislikesQuotesCopy = {...dislikesQuotes}
-    if(likesQuotes[index] === true){
-      likesQuotesCopy[index] = false
+    const likedQuotesCopy = {...likedQuotes}
+    const dislikedQuotesCopy = {...dislikedQuotes}
+    if(likedQuotes[index] === quoteId){
+      likedQuotesCopy.splice(index,1) // zbrišeš value v arrayu
       quotesKarma[index]--
-      setLikesQuotes(likesQuotesCopy)
+      setLikedQuotes(likedQuotesCopy)
       setQuotesKarma(quotesKarma)
       handleUpvote(quoteId)
       return
     }
-    else if(likesQuotes[index] === false){
-      likesQuotesCopy[index] = true
+    else if(likedQuotes[index] === quoteId){
+      likedQuotesCopy.splice(index,1)
       if(dislikesQuotes[index] === true){
-        setLikesQuotes(likesQuotesCopy)
-        dislikesQuotesCopy[index] = false
-        setDislikesQuotes(dislikesQuotesCopy)
+        setLikedQuotes(likedQuotesCopy)
+        dislikedQuotesCopy[index] = quoteId
+        setDislikedQuotes(dislikedQuotesCopy)
         quotesKarma[index]+=2
         setQuotesKarma(quotesKarma)
         handleUpvote(quoteId)
         return
       }
-      setLikesQuotes(likesQuotesCopy)
+      setLikedQuotes(likedQuotesCopy)
       quotesKarma[index]++
       setQuotesKarma(quotesKarma)
       handleUpvote(quoteId)
@@ -161,28 +149,28 @@ const Home: FC = () => {
   }
 
   const downvote = (index:number, quoteId:number) =>{
-    const likesQuotesCopy = {...likesQuotes}
-    const dislikesQuotesCopy = {...dislikesQuotes}
-    if(dislikesQuotes[index] === true){
-      dislikesQuotesCopy[index] = false
-      setDislikesQuotes(dislikesQuotesCopy)
+    const likedQuotesCopy = {...likedQuotes}
+    const dislikedQuotesCopy = {...dislikedQuotes}
+    if(dislikedQuotes[index] === quoteId){
+      dislikedQuotesCopy.splice(index,1)
+      setDislikedQuotes(dislikedQuotesCopy)
       quotesKarma[index]++
       setQuotesKarma(quotesKarma)
       handleDownvote(quoteId)
       return
     }
     else if(dislikesQuotes[index] === false){
-      dislikesQuotesCopy[index] = true
-      if(likesQuotes[index] === true){
-        likesQuotesCopy[index] = false
-        setDislikesQuotes(dislikesQuotesCopy)
-        setLikesQuotes(likesQuotesCopy)
+      dislikedQuotesCopy[index] = true
+      if(likedQuotes[index] === quoteId){
+        likedQuotesCopy[index] = false
+        setDislikedQuotes(dislikedQuotesCopy)
+        setLikesQuotes(likedQuotesCopy)
         quotesKarma[index]-=2
         setQuotesKarma(quotesKarma)
         handleDownvote(quoteId)
         return
       }
-      setDislikesQuotes(dislikesQuotesCopy)
+      setDislikedQuotes(dislikedQuotesCopy)
       quotesKarma[index]--
       setQuotesKarma(quotesKarma)
       handleDownvote(quoteId)
@@ -211,8 +199,8 @@ const Home: FC = () => {
                   <div className='myQuotes mx-auto mb-5' style={{width:420}}>
                     <QuoteBlock
                       userQuote={randomQuote.data} 
-                      likes={likesQuotes[0]}
-                      dislikes={dislikesQuotes[0]}
+                      likedQuote={likedQuotes[0]}
+                      dislikedQuote={dislikedQuotes[0]}
                       karma={quotesKarma[0]}
                       index={0}
                       upvote={upvote}
@@ -248,8 +236,8 @@ const Home: FC = () => {
                     <QuoteBlock 
                       userQuote={item} 
                       key={index} 
-                      likes={likesQuotes[index]}
-                      dislikes={dislikesQuotes[index]}
+                      likedQuote={likedQuotes[index]}
+                      dislikedQuote={dislikedQuotes[index]}
                       karma={quotesKarma[index]}
                       index={index}
                       upvote={upvote}
@@ -289,8 +277,8 @@ const Home: FC = () => {
                       <QuoteBlock 
                         userQuote={item} 
                         key={index} 
-                        likes={likesQuotes[index]}
-                        karma={quotesKarma[index]}
+                        likedQuote={likedQuotes[index]}
+                        dislikedQuote={dislikedQuotes[index]}
                         index={index}
                         upvote={upvote}
                         downvote={downvote}

@@ -14,62 +14,48 @@ const QuotesMostLiked: FC = () => {
   const [showError, setShowError] = useState(false)
   const navigate = useNavigate()
   
-  const [likesQuotes, setLikesQuotes] = useState<boolean[]>([])
-  const [dislikesQuotes, setDislikesQuotes] = useState<boolean[]>([])
+  const [likedQuotes, setLikedQuotes] = useState<string[]>([])
+  const [dislikedQuotes, setDislikedQuotes] = useState<string[]>([])
   const [quotesKarma, setQuotesKarma] = useState<number[]>([])
 
   const grabQuotes = (data:any) =>{
     if(data.data[0].votes[0]){
       if(data.data[0].votes[0].value === true){
-        likesQuotes.push(true)
-        setLikesQuotes(likesQuotes)
-        dislikesQuotes.push(false)
-        setDislikesQuotes(dislikesQuotes)
+        likedQuotes.push(data.data[0].quote)
+        setLikedQuotes(likedQuotes)
         quotesKarma.push(data.data[0].karma)
         setQuotesKarma(quotesKarma)
       }
       else if(data.data[0].votes[0].value === false){
-        likesQuotes.push(false)
-        setLikesQuotes(likesQuotes)
-        dislikesQuotes.push(true)
-        setDislikesQuotes(dislikesQuotes)
+        dislikedQuotes.push(data.data[0].quote)
+        setDislikedQuotes(dislikedQuotes)
         quotesKarma.push(data.data[0].karma)
         setQuotesKarma(quotesKarma)
       }
     }
     else{
-      likesQuotes.push(false)
-      setLikesQuotes(likesQuotes)
-      dislikesQuotes.push(false)
-      setDislikesQuotes(dislikesQuotes)
       quotesKarma.push(data.data[0].karma)
       setQuotesKarma(quotesKarma)
     }
     for(let i = 1; i<data.data.length; i++){
       if(authStore.user?.id === data.data[i].votes[0]?.user.id){
         if(data.data[i].votes[0]?.value === true){
-          likesQuotes.push(true)
-          dislikesQuotes.push(false)
+          likedQuotes.push(data.data[i].quote)
           quotesKarma.push(data.data[i].karma)
         } else if(data.data[i].votes[0]?.value === false){
-          likesQuotes.push(false)
-          dislikesQuotes.push(true)
+          dislikedQuotes.push(data.data[i].quote)
           quotesKarma.push(data.data[i].karma)
         }
         else{
-          likesQuotes.push(false)
-          dislikesQuotes.push(false)
           quotesKarma.push(data.data[i].karma)
         }
       }
       else if(authStore.user?.id !== data.data[i].votes[0]?.user.id){
-        likesQuotes.push(false)
-        dislikesQuotes.push(false)
         quotesKarma.push(data.data[i].karma)
       }
     }
-    setLikesQuotes(likesQuotes)
-    setDislikesQuotes(dislikesQuotes)
+    setLikedQuotes(likedQuotes)
+    setDislikedQuotes(dislikedQuotes)
 
     setQuotesKarma(quotesKarma)
   }

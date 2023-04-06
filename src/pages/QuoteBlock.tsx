@@ -10,15 +10,15 @@ import * as API from 'api/Api'
 
 interface Props {
   userQuote: QuoteType;
-  likes?:boolean;
-  dislikes?:boolean;
+  likedQuote?:string;
+  dislikedQuote?:string;
   karma?:number;
   index:number;
   upvote?:(index:number, quoteId:number)=>void;
   downvote?:(index:number, quoteId:number)=>void;
 }
 
-const QuoteBlock: FC<Props> = ({ userQuote, likes, dislikes, karma, index, upvote, downvote })=>{
+const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, dislikedQuote, karma, index, upvote, downvote })=>{
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -109,7 +109,7 @@ const QuoteBlock: FC<Props> = ({ userQuote, likes, dislikes, karma, index, upvot
             </>
           ):(
             <>
-            {likes === true && dislikes === false ?
+            {likedQuote === userQuote.quote ?
             (
               <>
                 <div className='m-4'>
@@ -138,7 +138,7 @@ const QuoteBlock: FC<Props> = ({ userQuote, likes, dislikes, karma, index, upvot
               </>
             ):(
               <>
-                {likes === false && dislikes === true ? 
+                {dislikedQuote === userQuote.quote ? 
                 (
                   <>
                     <div className='m-4'>
