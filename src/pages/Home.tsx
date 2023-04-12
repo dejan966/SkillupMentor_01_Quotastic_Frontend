@@ -20,44 +20,50 @@ const Home: FC = () => {
   const [quotesKarma, setQuotesKarma] = useState<number[]>([])
 
   const grabQuotes = (data: any) => {
-    if (data.data[0].votes[0]) {
-      if (data.data[0].votes[0].value === true) {
-        likedQuotes.push(data.data[0].id)
-        setLikedQuotes(likedQuotes)
-        quotesKarma.push(data.data[0].karma)
-        setQuotesKarma(quotesKarma)
-      } else if (data.data[0].votes[0].value === false) {
-        dislikedQuotes.push(data.data[0].id)
-        setDislikedQuotes(dislikedQuotes)
-        quotesKarma.push(data.data[0].karma)
-        setQuotesKarma(quotesKarma)
-      }
-    } else {
-      quotesKarma.push(data.data[0].karma)
-      setQuotesKarma(quotesKarma)
-    }
-    for (let i = 1; i < data.data.length; i++) {
-      if (authStore.user?.id === data.data[i].votes[0]?.user.id) {
-        if (data.data[i].votes[0]?.value === true) {
-          likedQuotes.push(data.data[i].id)
-          quotesKarma.push(data.data[i].karma)
-        } else if (data.data[i].votes[0]?.value === false) {
-          dislikedQuotes.push(data.data[i].id)
-          quotesKarma.push(data.data[i].karma)
-        } else {
+    for (let i = 0; i < data.data.length; i++) {
+      if (data.data[i]?.votes) {
+        if (authStore.user?.id === data.data[i].votes[0]?.user.id) {
+          if (data.data[i].votes[0]?.value === true) {
+            console.log(i + ' ' + true)
+            likedQuotes.push(data.data[i].id)
+            dislikedQuotes.push(0)
+            quotesKarma.push(data.data[i].karma)
+            setLikedQuotes(likedQuotes)
+            setDislikedQuotes(dislikedQuotes)
+            setQuotesKarma(quotesKarma)
+          } else if (data.data[i].votes[0]?.value === false) {
+            console.log(i + ' ' + false)
+            likedQuotes.push(0)
+            dislikedQuotes.push(data.data[i].id)
+            quotesKarma.push(data.data[i].karma)
+            setLikedQuotes(likedQuotes)
+            setDislikedQuotes(dislikedQuotes)
+            setQuotesKarma(quotesKarma)
+          } else {
+            console.log(i + ' ' + 'Nič')
+            likedQuotes.push(0)
+            dislikedQuotes.push(0)
+            quotesKarma.push(data.data[i].karma)
+            setLikedQuotes(likedQuotes)
+            setDislikedQuotes(dislikedQuotes)
+            setQuotesKarma(quotesKarma)
+          }
+        } else if (authStore.user?.id !== data.data[i].votes[0]?.user.id) {
+          console.log(i + ' ' + 'Nič')
+          likedQuotes.push(0)
+          dislikedQuotes.push(0)
           quotesKarma.push(data.data[i].karma)
         }
-      } else if (authStore.user?.id !== data.data[i].votes[0]?.user.id) {
+      } else {
         quotesKarma.push(data.data[i].karma)
+        setQuotesKarma(quotesKarma)
       }
     }
-    setLikedQuotes(likedQuotes)
-    setDislikedQuotes(dislikedQuotes)
-
-    setQuotesKarma(quotesKarma)
   }
+  console.log('liked: ' + likedQuotes)
+  console.log('disliked: ' + dislikedQuotes)
 
-  const { data: randomQuote, isLoading: isLoadingRandom } = useQuery(
+  /*   const { data: randomQuote, isLoading: isLoadingRandom } = useQuery(
     ['randomQuote'],
     () => API.fetchRandomQuote(),
     {
@@ -67,14 +73,11 @@ const Home: FC = () => {
       refetchOnWindowFocus: false,
     },
   )
-
+ */
   const { data: mostLiked, isLoading: isLoadingMostLiked } = useQuery(
     ['quote'],
     () => API.fetchQuotes(),
     {
-      onSuccess(data) {
-        grabQuotes(data)
-      },
       refetchOnWindowFocus: false,
     },
   )
@@ -111,22 +114,32 @@ const Home: FC = () => {
       setShowError(true)
     }
   }
+  console.log(quotesKarma)
 
-  console.log(likedQuotes)
-
-  const upvote = (index: number, quoteId: number, likeState:string, dislikeState:string) => {
+  const upvote = (
+    index: number,
+    quoteId: number,
+    likeState: string,
+    dislikeState: string,
+  ) => {
     const likedQuotesCopy = { ...likedQuotes }
     const dislikedQuotesCopy = { ...dislikedQuotes }
-    if(likeState === '/upvote.png' && dislikeState === '/downvote.png'){
+    if (likeState === '/upvote.png' && dislikeState === '/downvote.png') {
       likedQuotesCopy.push(quoteId)
       quotesKarma[index]++
-    } else if(likeState === '/upvoted.png' && dislikeState === '/downvote.png'){
+    } else if (
+      likeState === '/upvoted.png' &&
+      dislikeState === '/downvote.png'
+    ) {
       likedQuotesCopy.splice(index, 1) //deletes the value from the array
       quotesKarma[index]--
-    } else if(likeState === '/upvote.png' && dislikeState === '/downvoted.png'){
+    } else if (
+      likeState === '/upvote.png' &&
+      dislikeState === '/downvoted.png'
+    ) {
       dislikedQuotesCopy.splice(index, 1) //deletes the value from the array
       likedQuotesCopy.push(quoteId)
-      quotesKarma[index]+=2
+      quotesKarma[index] += 2
       setDislikedQuotes(dislikedQuotesCopy)
     }
     console.log(likedQuotesCopy[index])
@@ -135,19 +148,30 @@ const Home: FC = () => {
     handleUpvote(quoteId)
   }
 
-  const downvote = (index: number, quoteId: number, likeState:string, dislikeState:string) => {
+  const downvote = (
+    index: number,
+    quoteId: number,
+    likeState: string,
+    dislikeState: string,
+  ) => {
     const likedQuotesCopy = { ...likedQuotes }
     const dislikedQuotesCopy = { ...dislikedQuotes }
-    if(dislikeState === '/downvote.png' && likeState === '/upvote.png'){
+    if (dislikeState === '/downvote.png' && likeState === '/upvote.png') {
       dislikedQuotesCopy.push(quoteId)
       quotesKarma[index]--
-    } else if(dislikeState === '/downvoted.png' && likeState === '/upvote.png'){
+    } else if (
+      dislikeState === '/downvoted.png' &&
+      likeState === '/upvote.png'
+    ) {
       dislikedQuotesCopy.splice(index, 1) //deletes the value from the array
       quotesKarma[index]++
-    } else if(dislikeState === '/downvote.png' && likeState === '/upvoted.png'){
+    } else if (
+      dislikeState === '/downvote.png' &&
+      likeState === '/upvoted.png'
+    ) {
       likedQuotesCopy.splice(index, 1) //deletes the value from the array
       dislikedQuotesCopy.push(quoteId)
-      quotesKarma[index]-=2
+      quotesKarma[index] -= 2
       setLikedQuotes(dislikedQuotesCopy)
     }
     setDislikedQuotes(likedQuotesCopy)
@@ -166,48 +190,16 @@ const Home: FC = () => {
                 Quote of the day is a randomly chosen quote
               </p>
             </div>
-            {isLoadingRandom ? (
-              <div className="quoteBorder mb-5 mx-auto" style={{ width: 400 }}>
-                <div className="m-4">
-                  <div
-                    className="text-center"
-                    style={{ fontSize: 18, fontFamily: 'raleway' }}
-                  >
-                    Loading...
-                  </div>
+            <div className="quoteBorder mb-5 mx-auto" style={{ width: 400 }}>
+              <div className="m-4">
+                <div
+                  className="text-center"
+                  style={{ fontSize: 18, fontFamily: 'raleway' }}
+                >
+                  There are no quotes available.
                 </div>
               </div>
-            ) : (
-              <>
-                {randomQuote ? (
-                  <div className="myQuotes mx-auto mb-5" style={{ width: 420 }}>
-                    <QuoteBlock
-                      userQuote={randomQuote.data}
-                      likedQuote={likedQuotes[0]}
-                      dislikedQuote={dislikedQuotes[0]}
-                      karma={quotesKarma[0]}
-                      index={0}
-                      upvote={upvote}
-                      downvote={downvote}
-                    />
-                  </div>
-                ) : (
-                  <div
-                    className="quoteBorder mb-5 mx-auto"
-                    style={{ width: 400 }}
-                  >
-                    <div className="m-4">
-                      <div
-                        className="text-center"
-                        style={{ fontSize: 18, fontFamily: 'raleway' }}
-                      >
-                        There are no quotes available.
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
+            </div>
           </div>
           <div className="mb-5">
             <div className="text-center mx-auto" style={{ width: 420 }}>
@@ -230,44 +222,36 @@ const Home: FC = () => {
               </div>
             ) : (
               <>
-                {(() => {
-                        for(let i =0; i< likedQuotes.length;i++){
-                          <>
-                            {mostLiked ?(
-                              <div className='quoteRow'>
-                                {mostLiked.data.map((item:QuoteType, index:number)=>(
-                                  <QuoteBlock
-                                    key={index}
-                                    userQuote={item}
-                                    likedQuote={likedQuotes[i]}
-                                    dislikedQuote={dislikedQuotes[i]}
-                                    karma={quotesKarma[index]}
-                                    index={index}
-                                    upvote={upvote}
-                                    downvote={downvote}
-                                  />
-                                ))}
-                              </div>
-                            ):(
-                              <div
-                                className="quoteBorder mb-5 mx-auto"
-                                style={{ width: 400 }}
-                              >
-                                <div className="m-4">
-                                  <div
-                                    className="text-center"
-                                    style={{ fontSize: 18, fontFamily: 'raleway' }}
-                                  >
-                                    There are no quotes available.
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-
-                            
-                          </>
-                        }
-                      })()}
+                {mostLiked ? (
+                  <div className="quoteRow">
+                    {mostLiked.data.map((item: QuoteType, index: number) => (
+                      <QuoteBlock
+                        key={index}
+                        userQuote={item}
+                        likedQuote={likedQuotes}
+                        dislikedQuote={dislikedQuotes}
+                        karma={quotesKarma}
+                        
+                        upvote={upvote}
+                        downvote={downvote}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div
+                    className="quoteBorder mb-5 mx-auto"
+                    style={{ width: 400 }}
+                  >
+                    <div className="m-4">
+                      <div
+                        className="text-center"
+                        style={{ fontSize: 18, fontFamily: 'raleway' }}
+                      >
+                        There are no quotes available.
+                      </div>
+                    </div>
+                  </div>
+                )}
               </>
             )}
             <div className="text-center">
@@ -303,9 +287,10 @@ const Home: FC = () => {
                       <QuoteBlock
                         key={index}
                         userQuote={item}
-                        likedQuote={likedQuotes[index]}
-                        dislikedQuote={dislikedQuotes[index]}
-                        index={index}
+                        likedQuote={likedQuotes}
+                        dislikedQuote={dislikedQuotes}
+                        karma={quotesKarma}
+                        
                         upvote={upvote}
                         downvote={downvote}
                       />
@@ -388,11 +373,7 @@ const Home: FC = () => {
                 {mostLiked ? (
                   <div className="quoteRow">
                     {mostLiked.data.map((item: QuoteType, index: number) => (
-                      <QuoteBlock 
-                        key={index}  
-                        userQuote={item} 
-                        index={index} 
-                      />
+                      <QuoteBlock key={index} userQuote={item}  />
                     ))}
                   </div>
                 ) : (

@@ -89,19 +89,30 @@ const QuotesMostLiked: FC = () => {
     }
   }
 
-  const upvote = (index: number, quoteId: number, likeState:string, dislikeState:string) => {
+  const upvote = (
+    index: number,
+    quoteId: number,
+    likeState: string,
+    dislikeState: string,
+  ) => {
     const likedQuotesCopy = { ...likedQuotes }
     const dislikedQuotesCopy = { ...dislikedQuotes }
-    if(likeState === '/upvote.png' && dislikeState === '/downvote.png'){
+    if (likeState === '/upvote.png' && dislikeState === '/downvote.png') {
       likedQuotesCopy.push(quoteId)
       quotesKarma[index]++
-    } else if(likeState === '/upvoted.png' && dislikeState === '/downvote.png'){
+    } else if (
+      likeState === '/upvoted.png' &&
+      dislikeState === '/downvote.png'
+    ) {
       likedQuotesCopy.splice(index, 1) //deletes the value from the array
       quotesKarma[index]--
-    } else if(likeState === '/upvote.png' && dislikeState === '/downvoted.png'){
+    } else if (
+      likeState === '/upvote.png' &&
+      dislikeState === '/downvoted.png'
+    ) {
       dislikedQuotesCopy.splice(index, 1) //deletes the value from the array
       likedQuotesCopy.push(quoteId)
-      quotesKarma[index]+=2
+      quotesKarma[index] += 2
       setDislikedQuotes(dislikedQuotesCopy)
     }
     setLikedQuotes(likedQuotesCopy)
@@ -109,19 +120,30 @@ const QuotesMostLiked: FC = () => {
     handleUpvote(quoteId)
   }
 
-  const downvote = (index: number, quoteId: number, likeState:string, dislikeState:string) => {
+  const downvote = (
+    index: number,
+    quoteId: number,
+    likeState: string,
+    dislikeState: string,
+  ) => {
     const likedQuotesCopy = { ...likedQuotes }
     const dislikedQuotesCopy = { ...dislikedQuotes }
-    if(dislikeState === '/downvote.png' && likeState === '/upvote.png'){
+    if (dislikeState === '/downvote.png' && likeState === '/upvote.png') {
       dislikedQuotesCopy.push(quoteId)
       quotesKarma[index]--
-    } else if(dislikeState === '/downvoted.png' && likeState === '/upvote.png'){
+    } else if (
+      dislikeState === '/downvoted.png' &&
+      likeState === '/upvote.png'
+    ) {
       dislikedQuotesCopy.splice(index, 1) //deletes the value from the array
       quotesKarma[index]++
-    } else if(dislikeState === '/downvote.png' && likeState === '/upvoted.png'){
+    } else if (
+      dislikeState === '/downvote.png' &&
+      likeState === '/upvoted.png'
+    ) {
       likedQuotesCopy.splice(index, 1) //deletes the value from the array
       dislikedQuotesCopy.push(quoteId)
-      quotesKarma[index]-=2
+      quotesKarma[index] -= 2
       setLikedQuotes(dislikedQuotesCopy)
     }
     setDislikedQuotes(likedQuotesCopy)
@@ -151,12 +173,10 @@ const QuotesMostLiked: FC = () => {
             <div className="quoteRow">
               {mostLiked.data.map((item: QuoteType, index: number) => (
                 <QuoteBlock
-                  userQuote={item}
                   key={index}
-                  likedQuote={likedQuotes[index]}
-                  dislikedQuote={dislikedQuotes[index]}
-                  karma={quotesKarma[index]}
-                  index={index}
+                  userQuote={item}
+                  likedQuote={likedQuotes}
+                  dislikedQuote={dislikedQuotes}
                   upvote={upvote}
                   downvote={downvote}
                 />
