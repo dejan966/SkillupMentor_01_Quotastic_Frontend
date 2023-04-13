@@ -156,46 +156,7 @@ const QuotesMostLiked: FC = () => {
       <div className="text-start mb-4" style={{ width: 420 }}>
         <h2 className="red">Most upvoted quotes</h2>
       </div>
-      {isLoadingMostLiked ? (
-        <div className="quoteBorder mb-5 mx-auto" style={{ width: 400 }}>
-          <div className="m-4">
-            <div
-              className="text-center"
-              style={{ fontSize: 18, fontFamily: 'raleway' }}
-            >
-              There are no quotes available.
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          {mostLiked ? (
-            <div className="quoteRow">
-              {mostLiked.data.map((item: QuoteType, index: number) => (
-                <QuoteBlock
-                  key={index}
-                  userQuote={item}
-                  likedQuote={likedQuotes}
-                  dislikedQuote={dislikedQuotes}
-                  upvote={upvote}
-                  downvote={downvote}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="quoteBorder mb-5 mx-auto" style={{ width: 400 }}>
-              <div className="m-4">
-                <div
-                  className="text-center"
-                  style={{ fontSize: 18, fontFamily: 'raleway' }}
-                >
-                  There are no quotes available.
-                </div>
-              </div>
-            </div>
-          )}
-        </>
-      )}
+
       {showError && (
         <ToastContainer className="p-3" position="top-end">
           <Toast onClose={() => setShowError(false)} show={showError}>

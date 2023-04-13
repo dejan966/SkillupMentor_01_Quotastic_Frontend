@@ -222,6 +222,19 @@ a:hover{
     grid-template-columns: repeat(3, 1fr);
 }
 
+.quotesDB{
+    display:grid;
+    grid-template-rows: 3, 1fr;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.quotesDB2{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+}
+
 .quoteBorder{
     border-radius: 7px;
     border:2px solid rgb(245,245,245);
