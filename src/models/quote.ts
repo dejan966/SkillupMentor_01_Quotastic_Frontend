@@ -1,3 +1,5 @@
+import { VoteType } from "./vote"
+
 export type QuoteType = {
   id:number
   karma:number
@@ -9,11 +11,5 @@ export type QuoteType = {
     last_name:string
     avatar:string
   }
-  votes:{
-    id:number
-    value:boolean
-    user:{
-      id:number
-    }
-  }
+  votes:VoteType[]
 }

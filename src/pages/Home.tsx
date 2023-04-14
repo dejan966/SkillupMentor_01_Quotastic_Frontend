@@ -21,7 +21,7 @@ const Home: FC = () => {
     for (let i = 0; i < data.data.length; i++) {
 /*       if (data.data[i].votes) {
         if (authStore.user?.id === data.data[i].votes[0]?.user.id) {
-          //likedQuotes.push(data.data[i].votes.value)
+          likedQuote.push(data.data[i].votes[0].value)
         }
       } */
       likedQuotes.push(data.data[i])
@@ -46,7 +46,6 @@ const Home: FC = () => {
     },
     refetchOnWindowFocus: false,
   })
-  console.log(likedQuotes)
 
   const { data: mostLiked, isLoading: isLoadingMostLiked } = useQuery(
     ['quote'],
@@ -86,27 +85,32 @@ const Home: FC = () => {
     }
   }
 
+  //console.log(likedQuotes.flat(2))
 
   const upvote = (
-    index: number,
     quoteId: number,
     likeState: string,
     dislikeState: string,
   ) => {
     console.log('upvote')
-    likedQuotes.splice(index, 1)
+    /* const quote = likedQuotes.find(obj => {
+      return obj.id === quoteId;
+    }) */
+    const index = likedQuotes.findIndex(obj => {
+      return obj.id === quoteId
+    })
+    likedQuotes.splice(index, 1) //deletes the item in the array
     setLikedQuotes(likedQuotes)
     handleUpvote(quoteId)
   }
 
   const downvote = (
-    index: number,
     quoteId: number,
     likeState: string,
     dislikeState: string,
   ) => {
     console.log('downvote')
-    likedQuotes.splice(index, 1)
+    //likedQuotes.splice(index, 1)
     setLikedQuotes(likedQuotes)
     handleDownvote(quoteId)
   }

@@ -1,4 +1,4 @@
-export type VoteType ={
+export type VoteType = {
     id:number
     value:boolean
     quote:{

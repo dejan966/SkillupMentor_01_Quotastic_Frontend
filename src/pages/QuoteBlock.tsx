@@ -11,9 +11,8 @@ import * as API from 'api/Api'
 interface Props {
   userQuote: QuoteType;
   likedQuote?:QuoteType[];
-  dislikedQuote?:number[];
-  upvote?:(index:number, quoteId:number, likeState:string, dislikeState:string)=>void;
-  downvote?:(index:number, quoteId:number, likeState:string, dislikeState:string)=>void;
+  upvote?:(quoteId:number, likeState:string, dislikeState:string)=>void;
+  downvote?:(quoteId:number, likeState:string, dislikeState:string)=>void;
 }
 
 const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, upvote, downvote })=>{
@@ -107,93 +106,75 @@ const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, upvote, downvote })=>{
             </>
           ):(
             <>
-            {likedQuote?.map((element, index)=>
-            <div key={index}>
-            {element.id === userQuote.id ? (
-              <>
-              {element.votes.value === true ? (
-                <>
-                {console.log('liked')}
-                <div className='m-4'>
-                  <img 
-                    className='voting' 
-                    src={'/upvoted.png'}  
-                    alt="Upvote" 
-                    onClick={e => {upvote!(index, userQuote.id, '/upvoted.png', '/downvote.png')}}
-                  />
-                  <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
-                  <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(index, element.id,'/downvote.png', '/upvoted.png')}}/>
-                </div>
-                <div>
-                  <div style={{fontSize:18, fontFamily:'raleway'}}>{element.quote}</div>
-                  <div className='authorGrid'>
-                    <img 
-                      className='voting userAvatar' 
-                      src={`${process.env.REACT_APP_API_URL}/uploads/${element.user.avatar}`} 
-                      alt="User avatar" 
-                      width={35} 
-                      onClick={handleProceedUser}
-                    />
-                    <div style={{fontSize:15, fontFamily:'raleway'}}>{element.user.first_name + ' ' + element.user.last_name}</div>
-                  </div>
-                </div>
-                </>
-              ):(
-              <>
-                {element.votes.value === false ? (
-                <>
-                {console.log('disliked')}
-                  <div className='m-4'>
-                    <img 
-                      className='voting'
-                      src={'/upvote.png'}
-                      alt="Upvote"
-                      onClick={e => {upvote!(index, userQuote.id, '/upvote.png', 'downvote.png')}}
-                    />
-                    <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
-                    <img className='voting' src={'/downvoted.png'}  alt="Downvote" onClick={e => {downvote!(index, element.id, '/downvoted.png', '/upvote.png')}}/>
+            <div>
+                      <div className='m-4'>
+                      {likedQuote?.reduce((result:any[], element, _i)=>{
+                    if(element.id === userQuote.id){
+                      if(element.votes.length > 0){
+                        <>
+                        {element.votes.map((vote=>{
+                          
+                          if(vote.value === true){
+                            result.push(<>
+                              <img 
+                              className='voting' 
+                              src={'/upvoted.png'}  
+                              alt="Upvote" 
+                              onClick={e => {upvote!(userQuote.id, '/upvoted.png', '/downvote.png')}}
+                            />
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
+                            <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(element.id,'/downvote.png', '/upvoted.png')}}/>
+                          
+                              </>)
+                          } else if(vote.value === false){
+                            result.push(<>
+                              <img 
+                            className='voting' 
+                            src={'/upvote.png'}  
+                            alt="Upvote" 
+                            onClick={e => {upvote!(userQuote.id, '/upvote.png', '/downvoted.png')}}
+                          />
+                          <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
+                          <img className='voting' src={'/downvoted.png'}  alt="Downvote" onClick={e => {downvote!(element.id,'/downvote.png', '/upvoted.png')}}/>
+                        </>)
+                          }
+                          
+                       } ))}
+                        </>
+                        
+                      } else if(element.votes.length===0){
+                        result.push(<>
+                          <img 
+                        className='voting' 
+                        src={'/upvote.png'}  
+                        alt="Upvote"
+                        onClick={e => {upvote!(userQuote.id, '/upvote.png', '/downvote.png')}}
+                      />
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
+                      <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(element.id,'/downvote.png', '/upvoted.png')}}/>
+                    </>)
+                      }
+                    }
+                    return result
+                  }, [])}
                   </div>
                   <div>
-                    <div style={{fontSize:18, fontFamily:'raleway'}}>{element.quote}</div>
+                    <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
                     <div className='authorGrid'>
                       <img 
                         className='voting userAvatar' 
-                        src={`${process.env.REACT_APP_API_URL}/uploads/${element.user.avatar}`} 
+                        src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} 
                         alt="User avatar" 
                         width={35} 
                         onClick={handleProceedUser}
                       />
-                      <div style={{fontSize:15, fontFamily:'raleway'}}>{element.user.first_name + ' ' + element.user.last_name}</div>
+                      <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
                     </div>
                   </div>
-                </>
-              ):(
-                <div className='quotesDB2'>
-                  <div className='m-4'>
-                    <img className='voting' src={'/upvote.png'}  alt="Upvote" onClick={e => {upvote!(index, element.id, '/upvote.png', '/downvote.png')}}/>
-                    <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
-                    <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(index, element.id, '/downvote.png', '/upvote.png')}}/>
-                  </div>
-                  <div className='quotesDB2'>
-                    <div style={{fontSize:18, fontFamily:'raleway'}}>{element.quote}</div>
-                    <div className='quotesDB2'>
-                      <img className='voting userAvatar' src={`${process.env.REACT_APP_API_URL}/uploads/${element.user.avatar}`} alt="User avatar" width={35} 
-                      onClick={handleProceedUser}/>
-                      <div style={{fontSize:15, fontFamily:'raleway'}}>{element.user.first_name + ' ' + element.user.last_name}</div>
-                    </div>
-                  </div>
-                </div> 
-              )}
-              </>
-              )}
-                
-              </>
-             ):(
-              null
-             )}
+                  
+              
+              
             </div>
-            )}
-          
               </>
             )}
         </>

@@ -230,7 +230,15 @@ a:hover{
 
 .quotesDB2{
     display:grid;
-    grid-template-columns: 1fr 1fr;
+    //grid-template-rows: 2, 1fr;
+    //grid-template-columns: 2, 1fr;
+    justify-content: center;
+    align-items: center;
+}
+
+.authorGrid2{
+    display:grid;
+    grid-template-columns: 0.1fr 1fr;
     justify-content: center;
     align-items: center;
 }
