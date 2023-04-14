@@ -106,7 +106,7 @@ const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, upvote, downvote })=>{
             </>
           ):(
             <>
-            <div>
+            <div className='myQuotes' style={{width:400}}>
                       <div className='m-4'>
                       {likedQuote?.reduce((result:any[], element, _i)=>{
                     if(element.id === userQuote.id){
@@ -171,9 +171,6 @@ const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, upvote, downvote })=>{
                       <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
                     </div>
                   </div>
-                  
-              
-              
             </div>
               </>
             )}
