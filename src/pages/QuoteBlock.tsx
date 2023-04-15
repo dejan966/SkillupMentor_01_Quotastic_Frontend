@@ -11,11 +11,10 @@ import * as API from 'api/Api'
 interface Props {
   userQuote: QuoteType;
   likedQuote?:QuoteType[];
-  upvote?:(quoteId:number, likeState:string, dislikeState:string)=>void;
-  downvote?:(quoteId:number, likeState:string, dislikeState:string)=>void;
+  voting?:(quoteId:number, vote:string, likeState:string, dislikeState:string)=>void;
 }
 
-const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, upvote, downvote })=>{
+const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, voting })=>{
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -106,73 +105,76 @@ const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, upvote, downvote })=>{
             </>
           ):(
             <>
-            <div className='myQuotes' style={{width:400}}>
-                      <div className='m-4'>
-                      {likedQuote?.reduce((result:any[], element, _i)=>{
-                    if(element.id === userQuote.id){
-                      if(element.votes.length > 0){
-                        <>
-                        {element.votes.map((vote=>{
-                          
-                          if(vote.value === true){
-                            result.push(<>
-                              <img 
+              <div className='myQuotes' style={{width:400}}>
+                <div className='m-4'>
+                {likedQuote?.reduce((result:any[], element, _i)=>{
+                  if(element.id === userQuote.id){
+                    if(element.votes.length > 0){
+                      <>
+                      {element.votes.map((vote=>{
+                        if(vote.value === true){
+                          result.push(
+                          <>
+                            <img 
                               className='voting' 
                               src={'/upvoted.png'}  
                               alt="Upvote" 
-                              onClick={e => {upvote!(userQuote.id, '/upvoted.png', '/downvote.png')}}
+                              onClick={e => {voting!(userQuote.id, 'upvote', '/upvoted.png', '/downvote.png')}}
                             />
                             <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
-                            <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(element.id,'/downvote.png', '/upvoted.png')}}/>
-                          
-                              </>)
-                          } else if(vote.value === false){
-                            result.push(<>
-                              <img 
-                            className='voting' 
-                            src={'/upvote.png'}  
-                            alt="Upvote" 
-                            onClick={e => {upvote!(userQuote.id, '/upvote.png', '/downvoted.png')}}
-                          />
-                          <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
-                          <img className='voting' src={'/downvoted.png'}  alt="Downvote" onClick={e => {downvote!(element.id,'/downvote.png', '/upvoted.png')}}/>
-                        </>)
-                          }
-                          
-                       } ))}
-                        </>
-                        
-                      } else if(element.votes.length===0){
-                        result.push(<>
-                          <img 
-                        className='voting' 
-                        src={'/upvote.png'}  
-                        alt="Upvote"
-                        onClick={e => {upvote!(userQuote.id, '/upvote.png', '/downvote.png')}}
-                      />
-                      <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
-                      <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {downvote!(element.id,'/downvote.png', '/upvoted.png')}}/>
-                    </>)
-                      }
+                            <img className='voting' src={'/downvote.png'} alt="Downvote" onClick={e => {voting!(element.id, 'downvote', '/downvote.png', '/upvoted.png')}}/>
+                          </>
+                          )
+                        } else if(vote.value === false){
+                          result.push(
+                          <>
+                            <img 
+                              className='voting' 
+                              src={'/upvote.png'}  
+                              alt="Upvote" 
+                              onClick={e => {voting!(userQuote.id, 'upvote', '/upvote.png', '/downvoted.png')}}
+                            />
+                            <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
+                            <img className='voting' src={'/downvoted.png'} alt="Downvote" onClick={e => {voting!(element.id, 'downvote', '/downvote.png', '/upvoted.png')}}/>
+                          </>
+                          )
+                        }
+                      } ))}
+                      </>
+                      
+                    } else if(element.votes.length===0){
+                      result.push(
+                      <>
+                        <img 
+                          className='voting' 
+                          src={'/upvote.png'}  
+                          alt="Upvote"
+                          onClick={e => {voting!(userQuote.id, 'upvote', '/upvote.png', '/downvote.png')}}
+                        />
+                        <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
+                        <img className='voting' src={'/downvote.png'}  alt="Downvote" onClick={e => {voting!(element.id, 'downvote', '/downvote.png', '/upvoted.png')}}/>
+                      </>
+                      )
                     }
-                    return result
-                  }, [])}
+                  }
+                  return result
+                }, [])}
+                </div>
+                <div>
+                  <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
+                  <div className='authorGrid'>
+                    <img 
+                      className='voting userAvatar' 
+                      src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} 
+                      alt="User avatar" 
+                      width={35} 
+                      onClick={handleProceedUser}
+                    />
+                    <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
                   </div>
-                  <div>
-                    <div style={{fontSize:18, fontFamily:'raleway'}}>{userQuote.quote}</div>
-                    <div className='authorGrid'>
-                      <img 
-                        className='voting userAvatar' 
-                        src={`${process.env.REACT_APP_API_URL}/uploads/${userQuote.user.avatar}`} 
-                        alt="User avatar" 
-                        width={35} 
-                        onClick={handleProceedUser}
-                      />
-                      <div style={{fontSize:15, fontFamily:'raleway'}}>{userQuote.user.first_name + ' ' + userQuote.user.last_name}</div>
-                    </div>
-                  </div>
-            </div>
-              </>
+                </div>
+              </div>
+            </>
             )}
         </>
       ):(

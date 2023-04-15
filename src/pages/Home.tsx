@@ -16,12 +16,16 @@ const Home: FC = () => {
   const navigate = useNavigate()
 
   const [likedQuotes, setLikedQuotes] = useState<QuoteType[]>([])
+  const [likesQuotes, setLikesQuotes] = useState<string[]>([])
+  const [dislikesQuotes, setDislikesQuotes] = useState<string[]>([])
 
   const grabQuotes = (data: any) => {
     for (let i = 0; i < data.data.length; i++) {
 /*       if (data.data[i].votes) {
-        if (authStore.user?.id === data.data[i].votes[0]?.user.id) {
-          likedQuote.push(data.data[i].votes[0].value)
+        if (data.data[i].votes[0].value === true) {
+          likesQuotes.push('/upvoted.png')
+        }else if(data.data[i].votes[0].value === false){
+          dislikesQuotes.push('/downvoted.png')
         }
       } */
       likedQuotes.push(data.data[i])
@@ -85,34 +89,22 @@ const Home: FC = () => {
     }
   }
 
-  //console.log(likedQuotes.flat(2))
-
-  const upvote = (
+  const voting = (
     quoteId: number,
+    vote:string,
     likeState: string,
     dislikeState: string,
   ) => {
-    console.log('upvote')
-    /* const quote = likedQuotes.find(obj => {
-      return obj.id === quoteId;
-    }) */
     const index = likedQuotes.findIndex(obj => {
       return obj.id === quoteId
     })
     likedQuotes.splice(index, 1) //deletes the item in the array
     setLikedQuotes(likedQuotes)
-    handleUpvote(quoteId)
-  }
-
-  const downvote = (
-    quoteId: number,
-    likeState: string,
-    dislikeState: string,
-  ) => {
-    console.log('downvote')
-    //likedQuotes.splice(index, 1)
-    setLikedQuotes(likedQuotes)
-    handleDownvote(quoteId)
+    
+    if(vote === 'upvote')
+      handleUpvote(quoteId)
+    else if(vote === 'downvote')
+      handleDownvote(quoteId)
   }
 
   return (
@@ -165,8 +157,7 @@ const Home: FC = () => {
                         key={index}
                         userQuote={item}
                         likedQuote={likedQuotes}
-                        upvote={upvote}
-                        downvote={downvote}
+                        voting={voting}
                       />
                     ))}
                   </div>
@@ -221,8 +212,7 @@ const Home: FC = () => {
                         key={index}
                         userQuote={item}
                         likedQuote={likedQuotes}
-                        upvote={upvote}
-                        downvote={downvote}
+                        voting={voting}
                       />
                     ))}
                   </div>
