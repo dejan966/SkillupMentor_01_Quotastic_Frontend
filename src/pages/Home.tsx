@@ -18,6 +18,7 @@ const Home: FC = () => {
   const [likedQuotes, setLikedQuotes] = useState<QuoteType[]>([])
   const [likedStroke, setLikedStroke] = useState<string[]>([])
   const [dislikedStroke, setDislikedStroke] = useState<string[]>([])
+  const [quotesKarma, setQuotesKarma] = useState<number[]>([])
 
   const grabQuotes = (data: any) => {
     for (let i = 0; i < data.data.length; i++) {
@@ -33,11 +34,13 @@ const Home: FC = () => {
         likedStroke.push('black')
         dislikedStroke.push('black')
       }
+      quotesKarma.push(data.data[i].karma)
       likedQuotes.push(data.data[i])
     }
     setLikedStroke(likedStroke)
     setDislikedStroke(dislikedStroke)
     setLikedQuotes(likedQuotes)
+    setQuotesKarma(quotesKarma)
   }
 
   /*   const { data: randomQuote, isLoading: isLoadingRandom } = useQuery(
@@ -109,29 +112,60 @@ const Home: FC = () => {
       return obj.id === quoteId
     })
 
+    /* if(vote === 'upvote'){
+      if(likeState === '#DE8667'){
+        likedStrokeCopy[index] = 'black'
+        likedQuotes[index].karma = likedQuotes[index].karma--
+        setLikedQuotes(likedQuotes)
+      } else if(likeState === 'black'){
+        likedStrokeCopy[index] = '#DE8667'
+        if(dislikeState === '#DE8667'){
+          dislikedStrokeCopy[index] = 'black'
+          likedQuotes[index].karma = likedQuotes[index].karma+=2
+          setLikedQuotes(likedQuotes)
+          setDislikedStroke(dislikedStrokeCopy)
+          handleUpvote(quoteId)
+          return
+        }
+        likedQuotes[index].karma = likedQuotes[index].karma++
+      }
+      setLikedStroke(likedStrokeCopy)
+      setLikedQuotes(likedQuotes)
+      handleUpvote(quoteId)
+    } */
     if(vote === 'upvote'){
       if(likeState === '#DE8667'){
         likedStrokeCopy[index] = 'black'
+        likedQuotes[index].karma--
       } else if(likeState === 'black'){
         likedStrokeCopy[index] = '#DE8667'
         if(dislikeState === '#DE8667'){
           dislikedStrokeCopy[index] = 'black'
           setDislikedStroke(dislikedStrokeCopy)
+          likedQuotes[index].karma+=2
+        } else{
+          likedQuotes[index].karma++
         }
       }
+      setLikedQuotes(likedQuotes)
       setLikedStroke(likedStrokeCopy)
       handleUpvote(quoteId)
     }
     else if(vote === 'downvote'){
       if(dislikeState === '#DE8667'){
         dislikedStrokeCopy[index] = 'black'
+        likedQuotes[index].karma++
       } else if(dislikeState === 'black'){
         dislikedStrokeCopy[index] = '#DE8667'
         if(likeState === '#DE8667'){
           likedStrokeCopy[index] = 'black'
           setLikedStroke(likedStrokeCopy)
+          likedQuotes[index].karma-=2
+        } else{
+          likedQuotes[index].karma--
         }
       }
+      setLikedQuotes(likedQuotes)
       setDislikedStroke(dislikedStrokeCopy)
       handleDownvote(quoteId)
     }
