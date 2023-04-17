@@ -38,7 +38,7 @@ export const updateUser = async (data: UpdateUserFields, id: number) =>
   )
 
 export const deleteUser = async (id: number) =>
-  apiRequest<string, UserType>('delete', `${apiRoutes.USERS_PREFIX}/${id}`)
+  apiRequest<undefined, UserType>('delete', `${apiRoutes.USERS_PREFIX}/${id}`)
 
 export const fetchCurrUserUpvotes = async () =>
   apiRequest<undefined, UserType>('get', `${apiRoutes.ME}/upvotes`)

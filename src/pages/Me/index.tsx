@@ -9,6 +9,7 @@ import { routes } from 'constants/routesConstants'
 import Avatar from 'react-avatar'
 import { Link, useNavigate } from 'react-router-dom'
 import SuccessPopup from 'pages/Success'
+import authStore from 'stores/auth.store'
 
 const UserInfo: FC = () => {
   const navigate = useNavigate()
@@ -39,6 +40,7 @@ const UserInfo: FC = () => {
       setApiError(response.data.message)
       setShowError(true)
     } else {
+      authStore.signout()
       navigate('/')
     }
   }
@@ -131,7 +133,7 @@ const UserInfo: FC = () => {
                 </Link>
                 <p
                   className="text-decoration-none col-md-3"
-                  style={{ color: '#000000' }}
+                  style={{ color: '#000000', cursor:'pointer' }}
                   onClick={togglePopup}
                 >
                   Delete account

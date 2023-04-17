@@ -18,7 +18,6 @@ const Home: FC = () => {
   const [likedQuotes, setLikedQuotes] = useState<QuoteType[]>([])
   const [likedStroke, setLikedStroke] = useState<string[]>([])
   const [dislikedStroke, setDislikedStroke] = useState<string[]>([])
-  const [quotesKarma, setQuotesKarma] = useState<number[]>([])
 
   const grabQuotes = (data: any) => {
     for (let i = 0; i < data.data.length; i++) {
@@ -34,13 +33,11 @@ const Home: FC = () => {
         likedStroke.push('black')
         dislikedStroke.push('black')
       }
-      quotesKarma.push(data.data[i].karma)
       likedQuotes.push(data.data[i])
     }
     setLikedStroke(likedStroke)
     setDislikedStroke(dislikedStroke)
     setLikedQuotes(likedQuotes)
-    setQuotesKarma(quotesKarma)
   }
 
   const { data: randomQuote, isLoading: isLoadingRandom } = useQuery(
@@ -203,7 +200,7 @@ const Home: FC = () => {
                     className="text-center"
                     style={{ fontSize: 18, fontFamily: 'raleway' }}
                   >
-                    There are no quotes available.
+                    Loading...
                   </div>
                 </div>
               </div>
@@ -212,7 +209,8 @@ const Home: FC = () => {
                 {mostLiked ? (
                   <div className="quoteRow">
                     {mostLiked.data.map((item: QuoteType, index: number) => (
-                      <QuoteBlock
+                      <>
+                        <QuoteBlock
                         key={index}
                         userQuote={item}
                         likedQuote={likedQuotes}
@@ -220,6 +218,7 @@ const Home: FC = () => {
                         dislikeColor={dislikedStroke}
                         voting={voting}
                       />
+                      </>
                     ))}
                   </div>
                 ) : (
@@ -260,7 +259,7 @@ const Home: FC = () => {
                     className="text-center"
                     style={{ fontSize: 18, fontFamily: 'raleway' }}
                   >
-                    There are no quotes available.
+                    Loading...
                   </div>
                 </div>
               </div>
@@ -377,8 +376,8 @@ const Home: FC = () => {
               </>
             )}
             <div className="mb-5 text-center mx-auto text">
-              <a href={routes.LOGIN}>
-                <Button className="btnSeeMore">Sign in to see more</Button>
+              <a href={routes.SIGNUP}>
+                <Button className="btnSeeMore">Sign up to see more</Button>
               </a>
             </div>
           </div>
