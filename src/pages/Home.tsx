@@ -16,20 +16,27 @@ const Home: FC = () => {
   const navigate = useNavigate()
 
   const [likedQuotes, setLikedQuotes] = useState<QuoteType[]>([])
-  const [likesQuotes, setLikesQuotes] = useState<string[]>([])
-  const [dislikesQuotes, setDislikesQuotes] = useState<string[]>([])
+  const [likedStroke, setLikedStroke] = useState<string[]>([])
+  const [dislikedStroke, setDislikedStroke] = useState<string[]>([])
 
   const grabQuotes = (data: any) => {
     for (let i = 0; i < data.data.length; i++) {
-/*       if (data.data[i].votes) {
+      if (data.data[i]?.votes[0]) {
         if (data.data[i].votes[0].value === true) {
-          likesQuotes.push('/upvoted.png')
+          likedStroke.push('#DE8667')
+          dislikedStroke.push('black')
         }else if(data.data[i].votes[0].value === false){
-          dislikesQuotes.push('/downvoted.png')
+          likedStroke.push('black')
+          dislikedStroke.push('#DE8667')
         }
-      } */
+      } else {
+        likedStroke.push('black')
+        dislikedStroke.push('black')
+      }
       likedQuotes.push(data.data[i])
     }
+    setLikedStroke(likedStroke)
+    setDislikedStroke(dislikedStroke)
     setLikedQuotes(likedQuotes)
   }
 
@@ -95,16 +102,39 @@ const Home: FC = () => {
     likeState: string,
     dislikeState: string,
   ) => {
+    const likedStrokeCopy = {...likedStroke}
+    const dislikedStrokeCopy = {...dislikedStroke}
+
     const index = likedQuotes.findIndex(obj => {
       return obj.id === quoteId
     })
-    likedQuotes.splice(index, 1) //deletes the item in the array
-    setLikedQuotes(likedQuotes)
-    
-    if(vote === 'upvote')
+
+    if(vote === 'upvote'){
+      if(likeState === '#DE8667'){
+        likedStrokeCopy[index] = 'black'
+      } else if(likeState === 'black'){
+        likedStrokeCopy[index] = '#DE8667'
+        if(dislikeState === '#DE8667'){
+          dislikedStrokeCopy[index] = 'black'
+          setDislikedStroke(dislikedStrokeCopy)
+        }
+      }
+      setLikedStroke(likedStrokeCopy)
       handleUpvote(quoteId)
-    else if(vote === 'downvote')
+    }
+    else if(vote === 'downvote'){
+      if(dislikeState === '#DE8667'){
+        dislikedStrokeCopy[index] = 'black'
+      } else if(dislikeState === 'black'){
+        dislikedStrokeCopy[index] = '#DE8667'
+        if(likeState === '#DE8667'){
+          likedStrokeCopy[index] = 'black'
+          setLikedStroke(likedStrokeCopy)
+        }
+      }
+      setDislikedStroke(dislikedStrokeCopy)
       handleDownvote(quoteId)
+    }
   }
 
   return (
@@ -157,6 +187,8 @@ const Home: FC = () => {
                         key={index}
                         userQuote={item}
                         likedQuote={likedQuotes}
+                        likeColor={likedStroke}
+                        dislikeColor={dislikedStroke}
                         voting={voting}
                       />
                     ))}
@@ -212,6 +244,8 @@ const Home: FC = () => {
                         key={index}
                         userQuote={item}
                         likedQuote={likedQuotes}
+                        likeColor={likedStroke}
+                        dislikeColor={dislikedStroke}
                         voting={voting}
                       />
                     ))}

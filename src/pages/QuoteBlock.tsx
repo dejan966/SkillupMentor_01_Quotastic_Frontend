@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Button, Toast, ToastContainer } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { StatusCode } from 'constants/errorConstants'
@@ -11,14 +11,17 @@ import * as API from 'api/Api'
 interface Props {
   userQuote: QuoteType;
   likedQuote?:QuoteType[];
+  likeColor?:string[];
+  dislikeColor?:string[];
   voting?:(quoteId:number, vote:string, likeState:string, dislikeState:string)=>void;
 }
 
-const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, voting })=>{
+const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, likeColor, dislikeColor, voting })=>{
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [successDelete, setSuccessDelete] = useState(false)
+  
   const navigate = useNavigate()
 
   const togglePopup = () => {
@@ -159,136 +162,47 @@ const QuoteBlock: FC<Props> = ({ userQuote, likedQuote, voting })=>{
             <>
               <div className='myQuotes' style={{width:400}}>
                 <div className='m-4'>
-                {likedQuote?.reduce((result:any[], element, _i)=>{
+                {likedQuote?.reduce((result:any[], element, i)=>{
                   if(element.id === userQuote.id){
-                    if(element.votes.length > 0){
-                      <>
-                      {element.votes.map((vote=>{
-                        if(vote.value === true){
-                          result.push(
-                          <>
-                            <div className='cursor-pointer' onClick={e => {voting!(element.id, 'upvote', '/upvoted.png', '/downvote.png')}}>
-                              <svg 
-                                width="13" 
-                                height="7" 
-                                viewBox="0 0 13 7" 
-                                fill="none" 
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path 
-                                  d="M1.5 6L6.5 1L11.5 6" 
-                                  stroke="#DE8667" 
-                                  strokeWidth="2" 
-                                  strokeLinecap="round" 
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                            </div>
-                            <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
-                            <div className='cursor-pointer' onClick={e => {voting!(element.id, 'downvote', '/downvote.png', '/upvoted.png')}}>
-                              <svg 
-                                width="13" 
-                                height="7" 
-                                viewBox="0 0 13 7" 
-                                fill="none" 
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path 
-                                  d="M11.5 1L6.5 6L1.5 0.999999"
-                                  stroke="black" 
-                                  strokeWidth="2" 
-                                  strokeLinecap="round" 
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                            </div>
-                          </>
-                          )
-                        } else if(vote.value === false){
-                          result.push(
-                          <>
-                            <div className='cursor-pointer' onClick={e => {voting!(element.id, 'upvote', '/upvote.png', '/downvoted.png')}}>
-                              <svg 
-                                width="13" 
-                                height="7" 
-                                viewBox="0 0 13 7" 
-                                fill="none" 
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path 
-                                  d="M1.5 6L6.5 1L11.5 6" 
-                                  stroke="#322D38" 
-                                  strokeWidth="2" 
-                                  strokeLinecap="round" 
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                            </div>
-                            <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
-                            <div onClick={e => {voting!(element.id, 'downvote', '/upvote.png', '/downvoted.png')}}>
-                              <svg 
-                                width="13" 
-                                height="7" 
-                                viewBox="0 0 13 7" 
-                                fill="none" 
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path 
-                                  d="M11.5 1L6.5 6L1.5 0.999999" 
-                                  stroke="#DE8667" 
-                                  strokeWidth="2" 
-                                  strokeLinecap="round" 
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                            </div>
-                          </>
-                          )
-                        }
-                      } ))}
-                      </>
-                      
-                    } else if(element.votes.length===0){
-                      result.push(
-                      <>
-                        <div className='cursor-pointer' onClick={e => {voting!(element.id, 'upvote', '/upvote.png', '/downvote.png')}}>
-                          <svg 
-                            width="13" 
-                            height="7" 
-                            viewBox="0 0 13 7" 
-                            fill="none" 
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path 
-                              d="M1.5 6L6.5 1L11.5 6" 
-                              stroke="#322D38" 
-                              strokeWidth="2" 
-                              strokeLinecap="round" 
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </div>
-                        <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
-                        <div className='cursor-pointer' onClick={e => {voting!(element.id, 'downvote', '/upvote.png', '/downvote.png')}}>
-                          <svg 
-                            width="13" 
-                            height="7" 
-                            viewBox="0 0 13 7" 
-                            fill="none" 
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path 
-                              d="M11.5 1L6.5 6L1.5 0.999999"
-                              stroke="black" 
-                              strokeWidth="2" 
-                              strokeLinecap="round" 
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </div>
-                      </>
-                      )
-                    }
+                    result.push(
+                    <>
+                      <div className='cursor-pointer' onClick={e => {voting!(element.id, 'upvote', likeColor![i], dislikeColor![i])}}>
+                        <svg 
+                          width="13" 
+                          height="7" 
+                          viewBox="0 0 13 7" 
+                          fill="none" 
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path 
+                            d="M1.5 6L6.5 1L11.5 6" 
+                            stroke={likeColor![i]} 
+                            strokeWidth="2" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                      <div style={{fontSize:18, fontFamily:'raleway'}}>{element.karma}</div>
+                      <div className='cursor-pointer' onClick={e => {voting!(element.id, 'downvote', likeColor![i], dislikeColor![i])}}>
+                        <svg 
+                          width="13" 
+                          height="7" 
+                          viewBox="0 0 13 7" 
+                          fill="none" 
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path 
+                            d="M11.5 1L6.5 6L1.5 0.999999"
+                            stroke={dislikeColor![i]}
+                            strokeWidth="2" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                    </>
+                    )
                   }
                   return result
                 }, [])}
