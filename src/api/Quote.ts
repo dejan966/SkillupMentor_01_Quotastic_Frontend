@@ -24,6 +24,9 @@ export const fetchUserMostRecentQuotes = async (userId:number) =>
 export const usersMostRecentQuotes = async () => 
   apiRequest<never, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/recent`)
 
+export const usersMostLikedQuotes = async () => 
+  apiRequest<never, QuoteType>('get', `${apiRoutes.FETCH_QUOTES}/mostLiked`)
+
 export const createQuote = async (data: CreateQuoteFields) =>
 apiRequest<CreateQuoteFields, void>('post', apiRoutes.QUOTES_PREFIX, data)
 

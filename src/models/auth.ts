@@ -1,3 +1,6 @@
+import { QuoteType } from "./quote"
+import { VoteType } from "./vote"
+
 export type UserType = {
   id: number
   first_name: string
@@ -7,17 +10,6 @@ export type UserType = {
   password:string
   confirm_password:string
   avatar: string
-  quotes:{
-    id:number
-    karma:number
-    quote:string
-    posted_when:string
-  }
-  votes:{
-    id:number
-    value:boolean
-    user:{
-      id:number
-    }
-  }
+  quotes:QuoteType[]
+  votes:VoteType[]
 }
