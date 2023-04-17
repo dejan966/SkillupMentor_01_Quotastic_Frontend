@@ -38,7 +38,6 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
 
   const handleUpdate = async (data: UpdateUserFields) => {
     const response = await API.updateUser(data, defaultValues?.id as number)
-    console.log(defaultValues?.id)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -145,10 +144,12 @@ const CreateUpdateUserForm: FC<Props> = ({ defaultValues }) => {
           </div>
         </div>
         <div className="d-flex justify-content-start">
-          <Button className="btnRegister col-md-3" type="submit">
-            Submit
-          </Button>
-          <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.USERINFO}>Cancel</a>
+          <div className="justify-content-center">
+            <Button className="btnRegister col-md-3" type="submit">
+              Submit
+            </Button>
+            <a className="text-decoration-none col-md-3 mx-3" style={{color:'#000000'}} href={routes.USERINFO}>Cancel</a>
+          </div>
         </div>
       </Form>
       {showError && (

@@ -9,11 +9,11 @@ interface Props {
 const Layout: FC<Props> = ({ children }) => {
   return (
     <>
-    <div className="display">
-      <Navbar />
+      <div className="display">
+        <Navbar />
         <div className="container p-4 content">{children}</div>
-      <Footer />
-    </div>
+        <Footer />
+      </div>
     </>
   )
 }

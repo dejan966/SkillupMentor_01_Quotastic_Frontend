@@ -115,10 +115,12 @@ return(
         )}
       />
       <div className="d-flex justify-content-start">
-        <Button className="btnRegister col-md-3" type="submit">
-          Submit
-        </Button>
-        <a className="text-decoration-none col-md-3" style={{color:'#000000'}} href={routes.USEREDIT}>Cancel</a>
+        <div className="justify-content-center">
+          <Button className="btnRegister col-md-3" type="submit">
+            Submit
+          </Button>
+          <a className="text-decoration-none col-md-3 mx-3" style={{color:'#000000'}} href={routes.USEREDIT}>Cancel</a>
+        </div>
       </div>
     </Form>
     {showError && (
