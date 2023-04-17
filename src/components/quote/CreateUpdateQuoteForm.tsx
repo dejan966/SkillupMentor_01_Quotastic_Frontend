@@ -12,7 +12,7 @@ import {
 import { QuoteType } from 'models/quote'
 import * as API from 'api/Api'
 import { Controller } from 'react-hook-form'
-import QuotesEditSuccess from 'pages/Me/Myquote/Edit/success'
+import SuccessPopup from 'pages/Success'
 
 interface Props {
   defaultValues?: QuoteType
@@ -97,7 +97,6 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) => {
                 <Button
                   className="btnRegister col-md-3"
                   style={{ borderColor: '#DE8667' }}
-                  type="submit"
                   onClick={togglePopup}
                 >
                   Submit
@@ -111,7 +110,7 @@ const CreateUpdateQuoteForm: FC<Props> = ({ defaultValues }) => {
                 </a>
               </div>
               {isOpen && (
-                <QuotesEditSuccess
+                <SuccessPopup
                   content={
                     <>
                       <p className="text">

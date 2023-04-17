@@ -17,28 +17,26 @@ type AppRoute = RouteProps & {
 }
 
 /* Public routes */
-const Home = lazy(() => import('../pages/Home'))
+const Home = lazy(() => import('pages/Home'))
+const Success = lazy(() => import('pages/Success'))
 
 /* Private routes */
-const UserInfo = lazy(() => import('../pages/Me'))
-const UserEdit = lazy(() => import('../pages/Me/Edit'))
-const UsersQuotes = lazy(() => import('../pages/Users/Quotes'))
-const UserQuotes = lazy(() => import('../pages/Me/Quotes'))
-const UserPasswordEdit = lazy(() => import('../pages/Me/Update-password'))
-const UserAvatarEdit = lazy(() => import('../pages/Me/Update-avatar'))
-const DeleteAcc = lazy(() => import('../pages/Me/Delete-account'))
+const UserInfo = lazy(() => import('pages/Me'))
+const UserEdit = lazy(() => import('pages/Me/Edit'))
+const UsersQuotes = lazy(() => import('pages/Users/Quotes'))
+const UserQuotes = lazy(() => import('pages/Me/Quotes'))
+const UserPasswordEdit = lazy(() => import('pages/Me/Update-password'))
+const UserAvatarEdit = lazy(() => import('pages/Me/Update-avatar'))
 
-const QuotesAdd = lazy(() => import('../pages/Me/Myquote'))
-const QuotesEdit = lazy(() => import('../pages/Me/Myquote/Edit'))
-const QuotesDelete = lazy(() => import('../pages/Me/Myquote/Delete'))
-const QuotesEditSuccess = lazy(() => import('../pages/Me/Myquote/Edit/success'))
+const QuotesAdd = lazy(() => import('pages/Me/Myquote'))
+const QuotesEdit = lazy(() => import('pages/Me/Myquote/Edit'))
 
 /* Restricted routes */
-const Login = lazy(() => import('../pages/Login'))
-const Register = lazy(() => import('../pages/Register'))
+const Login = lazy(() => import('pages/Login'))
+const Register = lazy(() => import('pages/Register'))
 
 /* Error routes */
-const Page404 = lazy(() => import('../pages/Page404'))
+const Page404 = lazy(() => import('pages/Page404'))
 
 export const AppRoutes: AppRoute[] = [
   // Restricted Routes
@@ -85,11 +83,6 @@ export const AppRoutes: AppRoute[] = [
   },
   {
     type: RouteType.PRIVATE,
-    path: '/me/delete-account',
-    children: <DeleteAcc />,
-  },
-  {
-    type: RouteType.PRIVATE,
     path: '/me/myquote',
     children: <QuotesAdd />,
   },
@@ -97,16 +90,6 @@ export const AppRoutes: AppRoute[] = [
     type: RouteType.PRIVATE,
     path: '/me/myquote/edit/:id',
     children: <QuotesEdit />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/me/myquote/delete/:id',
-    children: <QuotesDelete />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/me/myquote/edit/success',
-    children: <QuotesEditSuccess />,
   },
   {
     type: RouteType.PRIVATE,
@@ -123,6 +106,12 @@ export const AppRoutes: AppRoute[] = [
     type: RouteType.PUBLIC,
     path: '/',
     children: <Home />,
+  },
+  // Success Popup
+  {
+    type: RouteType.PUBLIC,
+    path: '/',
+    children: <Success />,
   },
   // 404 Error
   {

@@ -4,7 +4,6 @@ export enum routes {
   HOME = '/',
   USERINFO = '/me',
   USEREDIT = '../me/edit',
-  USERDELETE = 'me/delete-account',
   USERPASSWORDEDIT = '../me/update-password',
   USERAVATAREDIT = '../me/update-avatar',
   ADDNEWQUOTE='../me/myquote',

@@ -1,12 +1,12 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { Button, Toast, ToastContainer } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { StatusCode } from 'constants/errorConstants'
 import { routes } from 'constants/routesConstants'
 import { QuoteType } from 'models/quote'
 import authStore from 'stores/auth.store'
-import QuotesDelete from './Me/Myquote/Delete'
 import * as API from 'api/Api'
+import SuccessPopup from './Success'
 
 interface Props {
   userQuote: QuoteType
@@ -154,7 +154,7 @@ const QuoteBlock: FC<Props> = ({
                   </svg>
                 </div>
                 {isOpen && (
-                  <QuotesDelete
+                  <SuccessPopup
                     content={
                       <>
                         <h1 className="text display-6 mb-4">Are you sure?</h1>
@@ -163,33 +163,31 @@ const QuoteBlock: FC<Props> = ({
                           action.
                         </p>
                         <div className="d-flex justify-content-start">
-                          <div className="justify-content-center">
-                            <Button
-                              className="btnRegister col-md-3"
-                              style={{ borderColor: '#DE8667' }}
-                              onClick={(e) => {
-                                deleteQuote(userQuote.id)
-                                togglePopup()
-                                toggleSuccess()
-                              }}
-                            >
-                              Delete
-                            </Button>
-                            <p
-                              className="text-decoration-none col-md-3 mx-3"
-                              style={{ color: '#000000' }}
-                              onClick={togglePopup}
-                            >
-                              Cancel
-                            </p>
-                          </div>
+                          <Button
+                            className="btnRegister col-md-3"
+                            style={{ borderColor: '#DE8667' }}
+                            onClick={() => {
+                              deleteQuote(userQuote.id)
+                              togglePopup()
+                              toggleSuccess()
+                            }}
+                          >
+                            Delete
+                          </Button>
+                          <p
+                            className="text-decoration-none col-md-3 mx-3"
+                            style={{ color: '#000000' }}
+                            onClick={togglePopup}
+                          >
+                            Cancel
+                          </p>
                         </div>
                       </>
                     }
                   />
                 )}
                 {successDelete && (
-                  <QuotesDelete
+                  <SuccessPopup
                     content={
                       <>
                         <p className="text fs-5">
