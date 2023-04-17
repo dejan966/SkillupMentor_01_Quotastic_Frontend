@@ -43,23 +43,22 @@ const Home: FC = () => {
     setQuotesKarma(quotesKarma)
   }
 
-  /*   const { data: randomQuote, isLoading: isLoadingRandom } = useQuery(
+  const { data: randomQuote, isLoading: isLoadingRandom } = useQuery(
     ['randomQuote'],
     () => API.fetchRandomQuote(),
+    {
+      refetchOnWindowFocus: false,
+    },
+  )
+
+  useQuery(['allQuotes'], () => API.fetchQuotes(), 
     {
       onSuccess(data) {
         grabQuotes(data)
       },
       refetchOnWindowFocus: false,
-    },
+    }
   )
- */
-  useQuery(['allQuotes'], () => API.fetchQuotes(), {
-    onSuccess(data) {
-      grabQuotes(data)
-    },
-    refetchOnWindowFocus: false,
-  })
 
   const { data: mostLiked, isLoading: isLoadingMostLiked } = useQuery(
     ['quote'],
@@ -112,27 +111,6 @@ const Home: FC = () => {
       return obj.id === quoteId
     })
 
-    /* if(vote === 'upvote'){
-      if(likeState === '#DE8667'){
-        likedStrokeCopy[index] = 'black'
-        likedQuotes[index].karma = likedQuotes[index].karma--
-        setLikedQuotes(likedQuotes)
-      } else if(likeState === 'black'){
-        likedStrokeCopy[index] = '#DE8667'
-        if(dislikeState === '#DE8667'){
-          dislikedStrokeCopy[index] = 'black'
-          likedQuotes[index].karma = likedQuotes[index].karma+=2
-          setLikedQuotes(likedQuotes)
-          setDislikedStroke(dislikedStrokeCopy)
-          handleUpvote(quoteId)
-          return
-        }
-        likedQuotes[index].karma = likedQuotes[index].karma++
-      }
-      setLikedStroke(likedStrokeCopy)
-      setLikedQuotes(likedQuotes)
-      handleUpvote(quoteId)
-    } */
     if(vote === 'upvote'){
       if(likeState === '#DE8667'){
         likedStrokeCopy[index] = 'black'
@@ -182,16 +160,33 @@ const Home: FC = () => {
                 Quote of the day is a randomly chosen quote
               </p>
             </div>
-            <div className="quoteBorder mb-5 mx-auto" style={{ width: 400 }}>
-              <div className="m-4">
-                <div
-                  className="text-center"
-                  style={{ fontSize: 18, fontFamily: 'raleway' }}
-                >
-                  There are no quotes available.
+            {isLoadingRandom ? (
+              <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                <div className='m-4'>
+                  <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>Loading...</div>
                 </div>
               </div>
-            </div>
+            ):(
+              <>
+                {randomQuote ? (
+                  <div className='myQuotes mx-auto mb-5' style={{width:420}}>
+                    <QuoteBlock
+                      userQuote={randomQuote.data} 
+                      likedQuote={likedQuotes}
+                      likeColor={likedStroke}
+                      dislikeColor={dislikedStroke}
+                      voting={voting}
+                    />
+                  </div>
+                  ):(
+                  <div className="quoteBorder mb-5 mx-auto" style={{width:400}}>
+                    <div className='m-4'>
+                      <div className='text-center' style={{fontSize:18, fontFamily:'raleway'}}>There are no quotes available.</div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </div>
           <div className="mb-5">
             <div className="text-center mx-auto" style={{ width: 420 }}>
