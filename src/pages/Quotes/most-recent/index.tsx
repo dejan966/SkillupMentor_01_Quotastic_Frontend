@@ -13,7 +13,7 @@ const QuotesMostRecent: FC = () => {
   const [showError, setShowError] = useState(false)
   const navigate = useNavigate()
 
-  const [likedQuotes, setLikedQuotes] = useState<QuoteType[]>([])
+  const [allQuotes, setAllQuotes] = useState<QuoteType[]>([])
   const [likedStroke, setLikedStroke] = useState<string[]>([])
   const [dislikedStroke, setDislikedStroke] = useState<string[]>([])
 
@@ -31,11 +31,11 @@ const QuotesMostRecent: FC = () => {
         likedStroke.push('black')
         dislikedStroke.push('black')
       }
-      likedQuotes.push(data.data[i])
+      allQuotes.push(data.data[i])
     }
     setLikedStroke(likedStroke)
     setDislikedStroke(dislikedStroke)
-    setLikedQuotes(likedQuotes)
+    setAllQuotes(allQuotes)
   }
 
   const { data: recentQuotes, isLoading: isLoadingMostRecent } = useQuery(
@@ -86,42 +86,42 @@ const QuotesMostRecent: FC = () => {
     const likedStrokeCopy = { ...likedStroke }
     const dislikedStrokeCopy = { ...dislikedStroke }
 
-    const index = likedQuotes.findIndex((obj) => {
+    const index = allQuotes.findIndex((obj) => {
       return obj.id === quoteId
     })
 
     if (vote === 'upvote') {
       if (likeState === '#DE8667') {
         likedStrokeCopy[index] = 'black'
-        likedQuotes[index].karma--
+        allQuotes[index].karma--
       } else if (likeState === 'black') {
         likedStrokeCopy[index] = '#DE8667'
         if (dislikeState === '#DE8667') {
           dislikedStrokeCopy[index] = 'black'
           setDislikedStroke(dislikedStrokeCopy)
-          likedQuotes[index].karma += 2
+          allQuotes[index].karma += 2
         } else {
-          likedQuotes[index].karma++
+          allQuotes[index].karma++
         }
       }
-      setLikedQuotes(likedQuotes)
+      setAllQuotes(allQuotes)
       setLikedStroke(likedStrokeCopy)
       handleUpvote(quoteId)
     } else if (vote === 'downvote') {
       if (dislikeState === '#DE8667') {
         dislikedStrokeCopy[index] = 'black'
-        likedQuotes[index].karma++
+        allQuotes[index].karma++
       } else if (dislikeState === 'black') {
         dislikedStrokeCopy[index] = '#DE8667'
         if (likeState === '#DE8667') {
           likedStrokeCopy[index] = 'black'
           setLikedStroke(likedStrokeCopy)
-          likedQuotes[index].karma -= 2
+          allQuotes[index].karma -= 2
         } else {
-          likedQuotes[index].karma--
+          allQuotes[index].karma--
         }
       }
-      setLikedQuotes(likedQuotes)
+      setAllQuotes(allQuotes)
       setDislikedStroke(dislikedStrokeCopy)
       handleDownvote(quoteId)
     }
@@ -151,7 +151,7 @@ const QuotesMostRecent: FC = () => {
                 <QuoteBlock
                   key={index}
                   userQuote={item}
-                  likedQuote={likedQuotes}
+                  quotes={allQuotes}
                   likeColor={likedStroke}
                   dislikeColor={dislikedStroke}
                   voting={voting}

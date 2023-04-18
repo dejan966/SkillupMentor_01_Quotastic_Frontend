@@ -10,7 +10,7 @@ import SuccessPopup from './Success'
 
 interface Props {
   userQuote: QuoteType
-  likedQuote?: QuoteType[]
+  quotes?: QuoteType[]
   likeColor?: string[]
   dislikeColor?: string[]
   voting?: (
@@ -23,7 +23,7 @@ interface Props {
 
 const QuoteBlock: FC<Props> = ({
   userQuote,
-  likedQuote,
+  quotes,
   likeColor,
   dislikeColor,
   voting,
@@ -55,11 +55,13 @@ const QuoteBlock: FC<Props> = ({
   }
 
   const handleProceedUser = () => {
-    if (userQuote.user.id === authStore.user?.id) {
-      navigate('me/quotes')
-      return
+    if(userQuote.user){
+      if (userQuote.user.id === authStore.user?.id) {
+        navigate('../me/quotes')
+        return
+      }
+      navigate(`../users/${userQuote.user.id}/quotes`)
     }
-    navigate(`users/${userQuote.user.id}/quotes`)
   }
 
   return (
@@ -223,7 +225,7 @@ const QuoteBlock: FC<Props> = ({
                 <>
                   <div className="myQuotes" style={{ width: 400 }}>
                     <div className="m-4">
-                      {likedQuote?.reduce((result: any[], element, i) => {
+                      {quotes?.reduce((result: any[], element, i) => {
                         if (element.id === userQuote.id && userQuote) {
                           result.push(
                             <>
@@ -319,7 +321,7 @@ const QuoteBlock: FC<Props> = ({
             <>
               <div className="myQuotes" style={{ width: 400 }}>
                 <div className="m-4">
-                  {likedQuote?.reduce((result: any[], element, i) => {
+                  {quotes?.reduce((result: any[], element, i) => {
                     if (element.id === userQuote.id && userQuote) {
                       result.push(
                         <>

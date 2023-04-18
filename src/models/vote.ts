@@ -1,7 +1,7 @@
-import { QuoteType } from "./quote"
+import { QuoteType } from './quote'
 
 export type VoteType = {
-    id:number
-    value:boolean
-    quote:QuoteType
+  id: number
+  value: boolean
+  quote: QuoteType
 }

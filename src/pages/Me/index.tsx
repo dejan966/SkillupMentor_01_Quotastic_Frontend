@@ -31,6 +31,21 @@ const UserInfo: FC = () => {
     setIsOpen(!isOpen)
   }
 
+  const signout = async () => {
+    const response = await API.signout()
+    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else {
+      handleDeleteAcc(user.data.data.id)
+      authStore.signout()
+      navigate(routes.HOME)
+    }
+  }
+
   const handleDeleteAcc = async (id: number) => {
     const response = await API.deleteUser(id)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
@@ -39,9 +54,6 @@ const UserInfo: FC = () => {
     } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
       setApiError(response.data.message)
       setShowError(true)
-    } else {
-      authStore.signout()
-      navigate('/')
     }
   }
 
@@ -153,7 +165,7 @@ const UserInfo: FC = () => {
                         <Button
                           className="btnRegister col-md-3"
                           style={{ borderColor: '#DE8667' }}
-                          onClick={() => handleDeleteAcc(user.data.data.id)}
+                          onClick={signout}
                         >
                           Delete
                         </Button>

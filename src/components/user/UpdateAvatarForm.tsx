@@ -173,7 +173,11 @@ const UpdateAvatarForm: FC<Props> = ({ defaultValues }) => {
                 )}
               </div>
             </Form>
-          ) : null}
+          ) : (
+            <div className='text'>
+              Unable to get any data.
+            </div>
+          )}
         </>
       )}
       {showError && (
