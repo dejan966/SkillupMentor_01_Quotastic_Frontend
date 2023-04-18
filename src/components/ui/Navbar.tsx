@@ -348,12 +348,12 @@ const Navbar: FC = () => {
                       </a>
                     </li>
                     <li className="nav-item pe-4">
-                      <a
+                      <p
                         className="text-decoration-none reverseTextColor"
                         onClick={signout}
                       >
                         Sign out
-                      </a>
+                      </p>
                     </li>
                     <li className="nav-item pe-4">
                       <a
@@ -487,12 +487,12 @@ const Navbar: FC = () => {
                     </Link>
                   </li>
                   <li className="nav-item pe-4">
-                    <a
+                    <p
                       className="text-decoration-none reverseTextColor"
                       onClick={signout}
                     >
                       Sign out
-                    </a>
+                    </p>
                   </li>
                   <li className="nav-item pe-4 mb-2">
                     <a
@@ -659,7 +659,7 @@ const Navbar: FC = () => {
                     </Link>
                   </div>
                   <div>
-                    <span className="close-icon" onClick={toggleHamburger}>
+                    <span className="close-icon cursor-pointer" onClick={toggleHamburger}>
                       x
                     </span>
                   </div>
@@ -682,12 +682,12 @@ const Navbar: FC = () => {
                       </Link>
                     </li>
                     <li className="nav-item pe-4">
-                      <a
+                      <p
                         className="text-decoration-none textColor"
                         onClick={signout}
                       >
                         Sign out
-                      </a>
+                      </p>
                     </li>
                     <li className="nav-item pe-4 mb-2">
                       <a
@@ -777,12 +777,12 @@ const Navbar: FC = () => {
                         </a>
                       </li>
                       <li className="nav-item pe-4">
-                        <a
+                        <p
                           className="text-decoration-none textColor"
                           onClick={signout}
                         >
                           Sign out
-                        </a>
+                        </p>
                       </li>
                       <li className="nav-item pe-4">
                         <a
